@@ -15,7 +15,10 @@
    - Practical intro to programming in Rust
    - High-level concepts
 3. Common Programming Concepts
-   - Features similar to other languages
+   - Variables and Mutability
+   - Constants
+   - Shadowing
+   - Data Types
 4. Ownership System
    - Rust's ownership system
    - Safety mechanisms
@@ -44,7 +47,7 @@
     - Search texts within files
 13. Iterators and Closures
     - Features from functional programming
-14. Cargo and Crates.io
+14. *Cargo* and *Crates.io*
     - Module system in depth
     - Best practices for sharing libraries
 15. Smart Pointers

@@ -3,14 +3,14 @@
 ---
 
 - [Installation](#installation)
+  - [`rustup`](#rustup)
+  - [`cargo`](#cargo)
   - [Installation For Linux/MacOs](#installation-for-linuxmacos)
   - [Installation For Windows](#installation-for-windows)
   - [Installation Profiles](#installation-profiles)
 - [Post-Installation Checks](#post-installation-checks)
-  - [Check Installed Compiler Version](#check-installed-compiler-version)
-  - [Check Local Documentation](#check-local-documentation)
-- [Update](#update)
-- [Uninstallation](#uninstallation)
+  - [`rustup docs`](#rustup-docs)
+- [Additional `rustup` Commands](#additional-rustup-commands)
 - [Hello World](#hello-world)
   - [Compiling Rust Code](#compiling-rust-code)
 - [Hello Cargo](#hello-cargo)
@@ -29,14 +29,23 @@
 
 - **Install via `rustup`**
   - Command-line tool for managing Rust versions
-  - Installs both *Rust*, *Cargo*, and additional tools
-- `rustup`
-  - Home Directory `~/.rustup`
-  - Can be modified via `RUSTUP_HOME` environment variable
-- `cargo`
-  - Home Directory `~/.cargo`
-  - Can be modified via `CARGO_HOME` environment variable
-- Paths added to
+  - Installs *Rust*, *Cargo*, and additional dev tools
+
+### `rustup`
+
+Settings|Value
+:-|:-
+Home Directory|`~/.rustup`
+Environment Variable|`RUSTUP_HOME`
+
+### `cargo`
+
+Settings|Value
+:-|:-
+Home Directory|`~/.cargo`
+Environment Variable|`CARGO_HOME`
+
+- Paths are added to:
   - `~/.profile`
   - `~/.bash_profile`
   - `~/.bashrc`
@@ -44,60 +53,63 @@
 
 ### Installation For Linux/MacOs
 
-- Need a *C-Compiler/Linker*
+- Need a *C-Compiler & Linker*
   - Used to join compiled outputs into one file
-- For Linux: `gcc` or `clang`
+  - For Linux, install `gcc` or `clang`
 
 ```sh
 # GCC
 # ---
 # Check if already installed
 gcc --version
-# If not, install with build-essential
+# If not, install via build-essential
 sudo apt-get install build-essential
+```
 
+```sh
 # Clang
 # -----
 # Check if already installed
 clang --version
 # If not, search available versions
 apt-cache search clang
-# Install latest available: In this case, v15
+# Install latest version available: In this case, v15
 sudo apt-get install clang-15 --install-suggests
 ```
 
-- For MacOS: Install XCode's compiler
+- For MacOS, install XCode's compiler
 
 ```sh
 xcode-select --install
 ```
 
-- Check if rustup is installed
+- Check if `rustup` is already installed
 
 ```sh
-# Check if rustup is installed
+# Check if rustup is already installed
 rustup --version
 ```
 
 - If not, install `rustup` via `curl`
+- This also bootstraps the installation of the Rust dev tools via `rustup`
 
 ```sh
-# Install rustup via curl
+# Install rustup via curl, then Rust dev tools
 curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 ```
 
 ### Installation For Windows
 
-- Need a *C-Compiler/Linker*
+- Need a *C-Compiler & Linker*
   - Used to join compiled outputs into one file
-  - Need to install *MSVC Build Tools For Visual Studio 2013 or later* via *Visual Studio Installer*
+  - For Windows, need to install *MSVC Build Tools For Visual Studio 2013 or later* via *Visual Studio Installer*
     - Install Visual Studio
     - Choose *Desktop Development with C++*
     - Choose *Windows 10 or Windows 11 SDK*
 - Check if rustup is installed
 
 ```sh
-# Check if rustup is installed
+# Check if rustup is already installed
 rustup --version
 ```
 
@@ -107,9 +119,9 @@ rustup --version
 
 Installation Profile|Included
 :-|:-
-*Minimal*|`rustc`,`rust-std`,`cargo`
-*Default*|*Minimal* + `rust-docs`, `rustfmt`, `clippy`
-*Complete*|All components available through `rustup`:<br>- Every component ever included in the metadata<br>- *This option should never be used except for maintainers maybe*
+**Minimal**|`rustc`,`rust-std`,`cargo`
+**Default**|*Minimal* + `rust-docs`, `rustfmt`, `clippy`
+**Complete**|All components available through `rustup: Every component ever included in the metadata<br>*This option should never be used except for maintainers maybe*
 
 ## Post-Installation Checks
 
@@ -123,67 +135,69 @@ rustup component list --installed
 
 Component|Description
 :-|:-
-`cargo`|Rust's package manager and build tool
+`cargo`|Rust package manager and build tool
 `clippy`|A collection of lints to catch common mistakes
-`rust-docs`|Rust Docs: Access via `rustup docs`
+`rust-docs`|All Rust Docs installed for offline: Access via `rustup docs` command
 `rust-std`|Rust Standard Library
 `rustc`|Rust Compiler
-`rustfmt`|Rust Formatter to style guidelines
+`rustfmt`|Rust Formatter to follow style guidelines
 
-- A copy of multiple Rust docs are also available via `rustup docs`
+### `rustup docs`
+
+- Allows to access Rust Docs offline
+- There are multiple options available
 
 Command|Docs For
 :-|:-
 `rustup docs`|Rust Documentation Index
-`--alloc`|The Rust core allocation and collections library
-`--book`|*The Rust Programming Book*
+`--alloc`|The Rust Core Allocation and Collections library
+`--book`|The Rust Programming Book (*The Book*)
 `--cargo`|The Cargo Book
 `--core`|The Rust Core Library
 `--edition-guide`|The Rust Edition Guide
 `--embedded-book`|The Embedded Rust Book
 `--help`|Prints help information
-`--nomicon`|The Dark Arts of Advanced and Unsafe Rust Programming
+`--nomicon`|The Rustonomicon: The Dark Arts of Advanced and Unsafe Rust Programming
 `--path`|Only print the path to the documentation
 `--proc_macro`|A support library for macro authors when defining new macros
 `--reference`|The Rust Reference
 `--rust-by-example`|A collection of runnable examples that illustrate various Rust concepts and standard libraries
-`--rustc`|The compiler for the Rust programming language
-`--rustdoc`|Generate documentation for Rust projects
+`--rustc`|The Rust Compiler Book
+`--rustdoc`|The `rustdoc` Book: Rust Documentation Generation tool
 `--std`|Standard library API documentation
-`--test`|Support code for rustc's built in unit-test and micro-benchmarking framework
+`--test`|Library to support code for `rustc`'s built in unit-test and micro-benchmarking framework
 `--unstable-book`|The Rust Unstable Book
 `--toolchain <toolchain>`|Toolchain name
 
-### Check Installed Compiler Version
+## Additional `rustup` Commands
 
-```sh
-rustc --version
-```
-
-### Check Local Documentation
-
-```sh
-rustup doc
-```
-
-## Update
-
-```sh
-# Updatee all installed rustup components
-rustup update
-```
-
-## Uninstallation
-
-```sh
-rustup self uninstall
-```
+Command|Description
+:-|:-
+`rustc --version`|Check Installed Compiler Version
+`rustup doc`|Check Local Documentation
+`rustup update`|Update all installed `rustup` components
+`rustup self uninstall`|Uninstall Rust and all components
 
 ## Hello World
 
 - Create a `hello-world` project folder
+
+```sh
+mkdir hello-world && cd hello-world
+```
+
 - Add a `src` folder
-- Create a `main.rs` file in `src`
+
+```sh
+mkdir src && cd src
+```
+
+- Create a `main.rs` file in `src` and open in editor
+
+```sh
+touch main.rs && code main.rs
+```
+
 - Add the following codes to `main.rs`
 
 ```rs
@@ -191,39 +205,54 @@ rustup self uninstall
  * Print "Hello, world!" to the console.
  */
 
+// The entry-point of the program.
 fn main() {
     println!("Hello, world!");
 }
 
 // ON LINUX:
-//  Compile $> rustc src/main.rs -o target/main
-//  Execute $> ./target/main
+//  Compile: $ rustc src/main.rs -o target/main
+//  Execute: $ ./target/main
 // ON WINDOWS:
-//  Compile $> rustc src\main.rs -o target\main.exe
-//  Execute $> .\target\main.exe
-
+//  Compile: $ rustc src\main.rs -o target\main.exe
+//  Execute: $ .\target\main.exe
 ```
 
-- **`main()` is the entrance in every executable Rust program**
+- **`main()` is the entry-point in every executable Rust program**
   - No parameters
   - No return values
-- Rust requires curly brackets around all function bodies
+- **Rust requires curly brackets around all function bodies**
   - Good style to place the opening curly bracket on the same line as the function declaration
-  - Automatic formatter tool: `rustfmt` use with `cargo`
+  - Automatic formatter tool `rustfmt` is used with `cargo`
   - **Rust style is to indent with 4 spaces, not a tab**
-- **`identifier!()` is a macro**
+- **`ident!()` is a macro**
   - Functions and Macros are different in Rust
-  - Macros don’t always follow the same rules as Functions
+  - Macros do not always follow the same rules as Functions
   - `println!()` is a macro / `println()` is a function
-  - Most lines of Rust code end with a semicolon
+- **Most lines of Rust code end with a semicolon**
 
 ### Compiling Rust Code
 
 - Rust is *Ahead-Of-Time (AOT)*-compiled language
+  - Similar to C, C++, Go
 - Compiler: `rustc`
-- On Windows, also outputs debugging info as `.pdb` file
-- **`rustc` is not enough for larger programs**
+- On Windows, compiling also outputs `.pdb` file for debugging info
+- **`rustc` is not enough for larger projects**
   - **We use `cargo` instead**
+
+```sh
+# Compile on Linux
+rustc src/main.rs -o target/main
+# Executing on Linux
+./target/main
+```
+
+```ps1
+# Compile on Windows
+rustc src\main.rs -o target\main.exe
+# Executing on Linux
+.\target\main
+```
 
 ## Hello Cargo
 
@@ -231,7 +260,7 @@ fn main() {
 - Allows to manage projects
   - Build codes
   - Download dependencies
-  - Building libraries
+  - Build libraries
 - It is better to start a project using `cargo`
   - The vast majority of Rust projects are built with `cargo`
 - Cargo comes with Rust when installing via `rustup`
@@ -241,10 +270,13 @@ fn main() {
 
 The commands are the same no matter which operating system
 
-- `cargo new`
-- `cargo build`
-- `cargo run`
-- `cargo check`
+Command|Description
+:-|:-
+`cargo new`|Create a new project
+`cargo build`|Compile the source codes in the current project (debug mode)
+`cargo build --release`|Compile with optimizations (release mode)
+`cargo run`|Build + Run the project
+`cargo check`|Check compile status without compiling
 
 ### Check `cargo` Version
 
@@ -263,10 +295,10 @@ cd hello-cargo
 
 ```tree
 hello-cargo/
-|- .gitignore
-|- Cargo.toml
-|- src/
-   |- main.rs
+|-- .gitignore
+|-- Cargo.toml
+|-- src/
+    |-- main.rs
 ```
 
 Folder or File|Description
@@ -280,10 +312,14 @@ Folder or File|Description
 - `Cargo.toml` has multiple sections but the following are defaulted
   - `package`
     - Configure the project as package and compiler info
+    - Name of the Package
+    - Version of the Package
     - `edition` is the edition of Rust to use
+    - See more keys and their definitions at [Cargo Reference](https://doc.rust-lang.org/cargo/reference/manifest.html)
+
   - `dependencies`
     - List of crates dependencies for the project
-    - If none is listed, then the project will install no additional crates
+    - If none is listed, then the project will install no additional dependency crates
 - **All source codes should live in `src`**
 - Except for non-source code files, which can be in top-level project directory:
   - README files
