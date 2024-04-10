@@ -6,8 +6,7 @@ use std::io;
 // The entry-point of the program.
 fn main() {
     // Generate the secret number
-    let secret_num = rand::thread_rng()
-                          .gen_range(1..=100);
+    let secret_num = rand::thread_rng().gen_range(1..=100);
 
     loop {
         // Ask for user input
@@ -18,8 +17,8 @@ fn main() {
 
         // Check that the input is in the expected form
         io::stdin()
-        .read_line(&mut guess)
-        .expect("Failed to read line");
+            .read_line(&mut guess)
+            .expect("Failed to read line");
 
         // Set explicit cast to u32
         // Handle user input errors
@@ -28,7 +27,7 @@ fn main() {
             Ok(num) => num,
             Err(_) => {
                 println!("That was not a valid number!");
-                continue
+                continue;
             }
         };
 
