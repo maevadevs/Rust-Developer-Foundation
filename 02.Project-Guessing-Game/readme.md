@@ -86,7 +86,7 @@ fn main() {
 
 - ***Macro* that prints a string to the screen**
 - **It supports *String Interpolation* with `{}`**
-  - In the string, `{}` are considered *Placholders* for variables
+  - In the string, `{}` are considered *Placeholders* for variables
   - Variables inside `{}` will be evaluated
   - **However, it only supports variables, not expressions**
 
@@ -234,6 +234,10 @@ rand = "^0.8.5"
   - If `Cargo.lock` file exists, Rust uses the versions specified rather than doing all the work of figuring out versions again
 - Allows to have a reproducible build automatically
 - **`Cargo.lock` is often checked into source control**
+  - Check-in for binaries/applications
+  - Ignore for libraries
+  - **When in doubt, check `Cargo.lock` in version control**
+  - For details: [Why have `Cargo.lock` in version control?](https://doc.rust-lang.org/cargo/faq.html#why-have-cargolock-in-version-control)
 
 ### Updating a Crate to Get a New Version
 
@@ -353,9 +357,9 @@ fn main() {
     - User press `Enter` when submitting the guess
     - This creates a `\n` in the user input
     - We need to remove the extra `\n` before converting to `u32`
-- When comparing `guess` and `secret_num`, Rust will infer that `secret_num` should be a `u32` as well
+- **When comparing `guess` and `secret_num`, Rust will infer that `secret_num` should be a `u32` as well**
   - Comparison between 2 values of the same type
-- `parse()` only works on characters that can logically be converted into numbers
+- **`parse()` only works on characters that can logically be converted into numbers**
   - Will fail if the string is not a number
   - It returns a `Result` type
   - Same as with `read_line()`
@@ -422,7 +426,7 @@ Ordering::Equal => {
 ## Handling Invalid Inputs
 
 - Avoid crashing the program on bad input
-- Ignore the input and allow user to `continue` to guess
+- Ignore the bad input and allow user to `continue` to guess
 
 ```rs
 let guess: u32 = match guess.trim().parse() {
@@ -435,7 +439,7 @@ let guess: u32 = match guess.trim().parse() {
 ```
 
 - `expect` will crash the application
-- **`match` allows to handle the error wit the variant of `Result` enum from `parse()`**
+- **`match` allows to handle the error with the variant of `Result` enum from `parse()`**
   - If `Ok`, grab and use the value captured in `Ok`
   - If `Err`, we `continue` the loop to the next iteration
   - `_` is a catch-all value: *Catch any error regardless of the contained value*
