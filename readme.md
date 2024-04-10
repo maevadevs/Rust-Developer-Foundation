@@ -11,7 +11,7 @@
    - Installation
    - Hello World
    - Cargo
-2. Project - *Guessing Game*
+2. [Project - *Guessing Game*](./02.Project-Guessing-Game/)
    - Practical intro to programming in Rust
    - High-level concepts
 3. Common Programming Concepts
