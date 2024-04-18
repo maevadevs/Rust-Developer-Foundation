@@ -280,8 +280,9 @@ Command|Description
 `cargo new`|Create a new project
 `cargo build`|Compile the source codes in the current project (debug mode)
 `cargo build --release`|Compile with optimizations (release mode)
-`cargo run`|Build + Run the project
-`cargo check`|Check compile status without compiling
+`cargo run`|Build + Run the project (debug mode)
+`cargo  --release`|Build + Run the project (release mode)
+`cargo check`|Check compile status without compiling (debug mode)
 
 - **NOTE: Always use `--release` when building for final production**
   - Can greatly improves the size of binary
@@ -367,6 +368,7 @@ cargo build
 
 - We can run `cargo run` to build and run at once
 - Convenience for *`cargo build` + run binaries*
+- We can also use `--release` for the release option
 
 ```sh
 cd hello-cargo
