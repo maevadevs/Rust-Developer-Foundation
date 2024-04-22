@@ -14,7 +14,7 @@
 2. [Project - *Guessing Game*](./02.Project-Guessing-Game/)
    - Practical intro to programming in Rust
    - High-level concepts
-3. Common Programming Concepts
+3. [Common Programming Concepts](./03.Common-Concepts/)
    - Variables and Mutability
    - Constants
    - Shadowing
