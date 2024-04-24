@@ -19,6 +19,7 @@
    - Constants
    - Shadowing
    - Data Types
+   - Functions
 4. Ownership System
    - Rust's ownership system
    - Safety mechanisms

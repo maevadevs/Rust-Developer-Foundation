@@ -18,6 +18,9 @@
     - [Arrays](#arrays)
       - [Accessing Array Elements](#accessing-array-elements)
 - [Functions](#functions)
+  - [Parameters](#parameters)
+  - [Statements and Expressions](#statements-and-expressions)
+  - [Functions With Return Values](#functions-with-return-values)
 
 ---
 
@@ -375,9 +378,9 @@ let equal_z: bool = z == tup.2;
   - Allocating data on the Stack (instead of Heap)
   - To ensure we always have a fixed number of elements
 - The array's type is specified with square brackets `[]` with:
-  - The type of each element
+  - The type of the contained elements
   - A semicolon
-  - The number of elements in the array (length)
+  - The number of elements in the array (array-length)
 
 ```rs
 // Example of an Array
@@ -421,7 +424,154 @@ let second = some_nums[1];
 
 - **NOTE: Entering index beyond the end of the array result in *Runtime `panic` with `index out of bounds` error***
   - Rust checks for index bounds during runtime
-  - In other low-level languages, this checks is non-existent
-  - Rust ensure proper memory safety principles
+  - In other low-level languages, this check is non-existent
+  - Rust ensures proper memory safety principles
 
 ## Functions
+
+- Functions are prevalent in Rust
+- `main()` is one of the most important function in Rust
+  - The entry-point of any executable program
+- **`fn` allows to declare a new function**
+- Functions are in `snake_case` format
+  - Similar to variables
+- **Functions defined in the same file as `main()` can be called directly in `main()`**
+  - Rust does not care where the functions are defined
+  - As long as they are accessible in the scope of the caller
+
+```rs
+fn <func_name>() {
+    // Function body defined here
+}
+```
+
+```rs
+fn main() {
+    println!("Example of Function:");
+    some_func();
+}
+
+/// Example of a Function.
+fn some_func() {
+    println!("This is printing from some_func().");
+}
+```
+
+### Parameters
+
+- Functions can have parameters
+  - Special variables that are part of a function’s signature
+  - When calling the function, we can pass it concrete values as *arguments* to the *parameters*
+- **In function declaration, we must declare the type of each parameter**
+  - This helps the compiler to be more performant
+  - Able to give more helpful error messages
+
+```rs
+fn main() {
+    println!("Example of Function With Parameter:");
+    param_func(5);
+    print_labeled_measurement(5, 'h');
+}
+
+fn param_func(x: i32) {
+    println!("The value of param is: {x}");
+}
+
+fn print_labeled_measurement(value: i32, unit_label: char) {
+    println!("The measurement is: {value}{unit_label}");
+}
+```
+
+### Statements and Expressions
+
+- Function bodies are made up of a series of statements
+  - Optionally ending in an expression
+  - Expressions can be part of a statement
+- Rust is an expression-based language
+  - *It is important to understand the difference in Rust*
+
+Term|Definition
+:-|:-
+**Expressions**|Evaluate and *result in a value*
+**Statements**|Instructions that perform some action and *do not return a value*
+
+```rs
+// Example of statements
+let y = 6;
+println!("The value of y is {y}");
+```
+
+- Function-definitions are also statements
+- **Statements do not return values**
+  - We cannot assign a `let` statement to another variable
+  - There would be nothing for the variable to bind to
+  - **Statements end with semi-colons**
+
+```rs
+// This is an error: (let y = 6) returns no value to bind to x
+let x = (let y = 6);
+```
+
+- **Expressions awlays evaluate to a value**
+  - Most of Rust codes are expressions
+  - Expressions can be part of a statement
+  - Any math operation is an expression
+  - Calling a function/macro is also an expression
+  - A new scope block created with curly brackets is also an expression
+- **Expressions do not end with semicolons**
+  - *An expression with a semicolon is a statement*
+  - *Statements do not return a value*
+
+```rs
+// Example of expressions
+let exp = {
+    let y = 3;
+    y + 1
+};
+
+println!("The value of exp is: {exp}");
+```
+
+### Functions With Return Values
+
+- Functions can return values to the code that calls them
+- **The *return type* of the function must be declared with `-> <type>`**
+- **The return value of the function is the value of the final expression in the function body**
+  - Or we can return earlier by specifying a `return` and a value
+  - But most functions return the last expression implicitly
+- The value returned from a function can be used as any other value
+
+```rs
+// Example of function that return a value.
+fn get_thousand() -> i32 {
+    1000
+}
+
+fn main() {
+    // Calling a function with return.
+    let res = get_thousand();
+    println!("Value from calling get_thousand() is {res}");
+}
+```
+
+- **Any expression can be a return-value of a function**
+
+```rs
+// Example of function that return a value.
+fn plus_one(x: i32) -> i32 {
+    x + 1
+}
+```
+
+- **If we change the expression into a statement with `;`, we get an error**
+  - Error at compile-time: `mismatched types`
+  - Expecting a return value but statement evaluate to `()` (*Unit Type*)
+  - Rust often provides messages to possibly help rectify the issue
+
+```rs
+// Example of function that return nothing.
+// This will throw an error as the return is still expteced to be i32.
+fn plus_one(x: i32) -> i32 {
+    x + 1; // This is a statement
+}
+```

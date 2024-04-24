@@ -1,50 +1,5 @@
-// Example of global constants
-const HOUR_IN_SECONDS: u32 = 60 * 60;
-const PI: f64 = 3.14159265359;
-
+/// The main entry of the program.
 fn main() {
-    // Variables and Immutability
-    // --------------------------
-    // Variable is immutable by default
-    let x = 55;
-    println!("The value of x is: {x}");
-    println!();
-
-    // Reassigning to an immutable variable is a compile-time error
-    // This line will generate an error
-    // x = 6;
-    // error[E0384]: cannot assign twice to immutable variable `x`
-
-    // Variable is immutable by default
-    // But adding keyword `mut` makes it mutable
-    let mut y = 78;
-    println!("The value of y is: {y}");
-
-    // This line will not generate an error
-    y = 1024;
-    println!("Now, the value of y is: {y}");
-    println!();
-
-    // Constants are always immutable
-    // They are basically always read-only
-    println!("1 Hour = {HOUR_IN_SECONDS} seconds");
-    println!("PI = {PI}");
-    println!();
-
-    // Variable Shadowing is not the same as `mut`
-    // Variable Shadowing redeclares the variable with `let`
-    // The variable itself does not mutate:
-    // We are creating a new variable each time
-    let x = x + 6;
-    println!("Local-Scope: The value of x is now: {x}");
-    {
-        // In a different scope, this also shadows the same x
-        let x = x * 2;
-        println!("Inside-Scope: The value of x in the inner scope is: {x}");
-    }
-    // After the scope ends, the shadowing also ends
-    // This one is back to the previous shadow
-    println!("Local-Scope: The value of x is back to: {x}");
     println!();
 
     // Examples of Signed Integers
@@ -64,6 +19,7 @@ fn main() {
     println!();
 
     // Examples of Unsigned Integers
+    // -----------------------------
     let ubyte: u8 = 255;
     let ushort: u16 = 65_535;
     let uint: u32 = 4_294_967_295;
@@ -182,7 +138,5 @@ fn main() {
     println!("some_nums = {some_nums:?}");
     println!("first = {first}");
     println!("second = {second}");
-    println!()
-
-    
+    println!();
 }
