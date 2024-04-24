@@ -20,6 +20,7 @@
    - Shadowing
    - Data Types
    - Functions
+   - Comments
 4. Ownership System
    - Rust's ownership system
    - Safety mechanisms
