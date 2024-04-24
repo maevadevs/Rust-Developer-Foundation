@@ -21,6 +21,8 @@
   - [Parameters](#parameters)
   - [Statements and Expressions](#statements-and-expressions)
   - [Functions With Return Values](#functions-with-return-values)
+  - [Comments](#comments)
+  - [Control Flow](#control-flow)
 
 ---
 
@@ -570,8 +572,61 @@ fn plus_one(x: i32) -> i32 {
 
 ```rs
 // Example of function that return nothing.
-// This will throw an error as the return is still expteced to be i32.
+// This will throw an error as the return is still exptected to be i32.
 fn plus_one(x: i32) -> i32 {
     x + 1; // This is a statement
 }
 ```
+
+### Comments
+
+- Comments are ignored by the compiler
+- Mainly helpful for reading codes and for documentation
+- There are 3 types of comments in Rust
+  - **Inline Comment**
+    - Start with `//`
+    - Ignore until the end of the line
+  - **Block Comment**
+    - Start with `/*`
+    - Ignore until `*/`
+    - Does not nest
+  - **Doc Comment**
+    - Used for documenting functions and "objects"
+    - Start with `///`
+    - Same effect as *Inline Comments*
+    - These are picked-up by `rustdoc` and compiled into documentations
+
+```rs
+// Inline Comment
+// hello, world
+
+/*
+So we’re doing something complicated here, long enough that we need
+multiple lines of comments to do it! Whew! Hopefully, this comment will
+explain what’s going on.
+*/
+
+/// A human being is represented here.
+pub struct Person {
+    /// A person must have a name, no matter how much Juliet may hate it.
+    name: String,
+}
+
+/// Creates a person with the given name.
+///
+/// # Examples
+///
+/// ```
+/// // You can have rust code between fences inside the comments
+/// // If you pass --test to `rustdoc`, it will even test it for you!
+/// use doc::Person;
+/// let person = Person::new("name");
+/// ```
+pub fn new(name: &str) -> Person {
+    Person {
+        name: name.to_string(),
+    }
+}
+```
+
+### Control Flow
