@@ -22,7 +22,13 @@
   - [Statements and Expressions](#statements-and-expressions)
   - [Functions With Return Values](#functions-with-return-values)
   - [Comments](#comments)
-  - [Control Flow](#control-flow)
+- [Control Flow](#control-flow)
+  - [`if-else` Expression](#if-else-expression)
+    - [`else if` Expression](#else-if-expression)
+    - [Using `if` in `let` Statement](#using-if-in-let-statement)
+  - [Repetition With Loops](#repetition-with-loops)
+    - [Using `loop`](#using-loop)
+    - [Returning Values From Loops](#returning-values-from-loops)
 
 ---
 
@@ -514,7 +520,7 @@ println!("The value of y is {y}");
 let x = (let y = 6);
 ```
 
-- **Expressions awlays evaluate to a value**
+- **Expressions always evaluate to a value**
   - Most of Rust codes are expressions
   - Expressions can be part of a statement
   - Any math operation is an expression
@@ -629,4 +635,116 @@ pub fn new(name: &str) -> Person {
 }
 ```
 
-### Control Flow
+## Control Flow
+
+- The ability to run some code depending on whether a condition is `true`
+- The ability to run some code repeatedly as long as a condition is `true`
+
+### `if-else` Expression
+
+- Allows to branch code depending on conditions
+- Blocks of code associated with the conditions are called *arms*
+- We can give an optional `else` expression
+  - An alternative block of code to execute if the condition evaluate to `false`
+  - `else` block is optional: If not given, the execution just move on
+
+```rs
+// Example of If-Else Expression
+// -----------------------------
+let number = 3;
+
+if number < 5 {
+    println!(">> Condition was true");
+} else {
+    println!(">> Condition was false");
+}
+```
+
+- ***NOTE: The condition code must be a bool***
+  - If not, we get a compile-time error
+  - I.e. The value of the expression needs to be a boolean
+  - **Rust will not automatically try to convert non-Boolean types to a Boolean**
+
+#### `else if` Expression
+
+- `else if` expressions allow to specify additional conditions
+  - Checks each `if` expression in turn
+  - Executes the **first** body for which the condition evaluates to `true`
+  - ***No cascades*: Exits the forks once a path is determined**
+    - Only one result is allowed
+    - Whichever comes first that satisfies the condition is used
+
+```rs
+// Example of else if Expression
+// -----------------------------
+let number = 6;
+
+if number % 4 == 0 {
+    println!(">> number is divisible by 4");
+} else if number % 3 == 0 {
+    println!(">> number is divisible by 3");
+} else if number % 2 == 0 {
+    println!(">> number is divisible by 2");
+} else {
+    println!(">> number is not divisible by 4, 3, or 2");
+}
+```
+
+- **NOTE: Too many `if/else if/else` can clutter code**
+  - If so, maybe using `match` is a better option
+
+#### Using `if` in `let` Statement
+
+- **`if` is an expression**
+- We can use it on the right-side of `let`
+- This looks like a *Conditional Expression* in other languages (e.g. Python)
+
+```rs
+// Example of Using if With let
+// ----------------------------
+let condition = true;
+let number = if condition { 5 } else { 6 };
+
+println!("The value of number is: {number}");
+```
+
+- `number` will be bound to a value based on the outcome of the `if` expression
+- `{ 5 }` and `{ 6 }` are blocks with expressions `5` and `6`
+  - The value of the whole `if` expression depends on which block of code executes
+  - **Values that have the potential to be results from each arm of the `if` must be the same type**
+  - In this case, they are both `i32`
+  - If the types do not match, we get an error
+
+```rs
+// This is an error: `if` and `else` have incompatible types
+let number = if condition { 5 } else { "six" };
+```
+
+- Variables must have a single type
+- Rust needs to know at compile time what type `number` is
+- Knowing the type of `number` lets the compiler verify the type is valid everywhere we use `number`
+
+### Repetition With Loops
+
+- Rust provides several loop structures
+  - `loop`
+  - `while`
+  - `for`
+
+#### Using `loop`
+
+- Allows to execute a block of code forever or until explicitly told to stop
+- **The program will not stop until interupted with `ctrl+c`**
+
+```rs
+// Example of Infinite Loops Using `loop`
+// --------------------------------------
+loop {
+    println!("again!");
+}
+```
+
+- We can break out of the infinite loop using `break`
+- We can also use `continue` to skip an iteration
+
+#### Returning Values From Loops

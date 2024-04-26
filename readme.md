@@ -21,6 +21,8 @@
    - Data Types
    - Functions
    - Comments
+   - Control Flow
+   - Loops
 4. Ownership System
    - Rust's ownership system
    - Safety mechanisms
