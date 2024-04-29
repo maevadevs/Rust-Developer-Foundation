@@ -29,6 +29,9 @@
   - [Repetition With Loops](#repetition-with-loops)
     - [Using `loop`](#using-loop)
     - [Returning Values From Loops](#returning-values-from-loops)
+    - [Loop Labels: Disambiguate Between Multiple Loops](#loop-labels-disambiguate-between-multiple-loops)
+    - [Conditional Loops with `while`](#conditional-loops-with-while)
+    - [Looping Through a Collection with `for`](#looping-through-a-collection-with-for)
 
 ---
 
@@ -495,7 +498,7 @@ fn print_labeled_measurement(value: i32, unit_label: char) {
 - Function bodies are made up of a series of statements
   - Optionally ending in an expression
   - Expressions can be part of a statement
-- Rust is an expression-based language
+- **Rust is an expression-based language**
   - *It is important to understand the difference in Rust*
 
 Term|Definition
@@ -735,6 +738,7 @@ let number = if condition { 5 } else { "six" };
 
 - Allows to execute a block of code forever or until explicitly told to stop
 - **The program will not stop until interupted with `ctrl+c`**
+- *This is basically an Infinite Loop*
 
 ```rs
 // Example of Infinite Loops Using `loop`
@@ -748,3 +752,129 @@ loop {
 - We can also use `continue` to skip an iteration
 
 #### Returning Values From Loops
+
+- With `loop`, we can retry an operation we know might fail
+  - E.g. Checking whether a thread has completed its job
+- We might want to capture values out of the loop
+- **We can add the value to return from the loop after the `break` expression**
+- This value will be returned from the loop
+
+```rs
+// Example of Returning Values From Loop
+// -------------------------------------
+let mut counter = 0;
+
+// Capture the value from the loop
+let result = loop {
+    counter += 1;
+    if counter == 10 {
+        // Return the value from the loop
+        break counter * 2;
+    }
+};
+
+println!("The result from the loop is {result}");
+```
+
+#### Loop Labels: Disambiguate Between Multiple Loops
+
+- For nested loops, `break` and `continue` apply to the innermost loop
+- **To apply them to outer loops instead, we use labels to specify the loop**
+- **Loop labels must begin with a single quote `'`**
+
+```rs
+// Example of Using Loop Label
+// ---------------------------
+let mut count = 0;
+
+// Loop label for outer loop
+'counting_up: loop {
+    println!("count = {count}");
+    let mut remaining = 10;
+    // Inner loop
+    loop {
+        println!("remaining = {remaining}");
+        if remaining == 9 {
+            // Break from the inner loop
+            break;
+        }
+        if count == 2 {
+            // Break from the outer loop
+            break 'counting_up;
+        }
+        remaining -= 1;
+    }
+
+    count += 1;
+}
+println!("End count = {count}");
+```
+
+#### Conditional Loops with `while`
+
+- **While the condition is `true`, the loop will run**
+- When the condition ceases to be `true`, the program calls `break`
+- We could use a combination of `loop`, `if`, `else`, and `break`
+- **But Rust has `while` loop**
+  - Eliminates unecessary nesting from using `loop`, `if`, `else`, and `break`
+  -
+
+```rs
+// Example of while loop
+// ---------------------
+let mut number = 3;
+
+while number != 0 {
+    println!("{number}!");
+    number -= 1;
+}
+
+println!("LIFTOFF!!!");
+```
+
+#### Looping Through a Collection with `for`
+
+- `while` can be used to loop over the elements of a collection
+
+```rs
+// Example of while loop Over Array
+// --------------------------------
+let a = [10, 20, 30, 40, 50];
+let mut index = 0;
+
+while index < 5 {
+    println!("the value is: {}", a[index]);
+    index += 1;
+}
+```
+
+- However, this approach is error prone
+  - Can cause the program to panic if the index value or test condition is incorrect
+  - Also slow: Compiler adds runtime code to perform the conditional check
+- More concise alterntive: Use `for` loop
+  - Execute some code for each item in a collection
+  - Increase the safety of the code
+  - Eliminated possible bugs from overindexing or underindexing
+  - Easier to maintain in case the array changes
+- Most Rustaceans would use a `for` loop over `while` loop
+
+```rs
+// Example of for loop Over Array
+// ------------------------------
+let a = [10, 20, 30, 40, 50];
+for el in a {
+    println!("The value is: {el}");
+}
+```
+
+- We could also use `Range` from the standard library with `for`
+  - Generates all numbers in sequence
+
+```rs
+// Using Range With for-loops
+// --------------------------
+for num in (1..4).rev() {
+    println!("{num}!");
+}
+println!("LIFTOFF!!!");
+```
