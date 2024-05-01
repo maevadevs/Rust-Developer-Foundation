@@ -43,12 +43,12 @@
 
 #### Stack
 
-- Last-In, Firt-Out (LIFO) data structure
-- Stores values in the order it gets them
-- Removes the values in the opposite order
+- Last-In, First-Out (LIFO) data structure
+  - Stores values in the order it gets them
+  - Removes the values in the opposite order
 - Adding/Removing from the middle would not work well
-- Adding data == Pushing onto the Stack
-- Removing data == Popping from the Stack
+  - Adding data == Pushing onto the Stack
+  - Removing data == Popping from the Stack
 - **All data stored on the Stack must have a known and fixed-size**
   - Else, store the data in the Heap instead
 
@@ -56,7 +56,7 @@
 
 - Less organized than the Stack
 - The memory allocator finds an empty spot in the heap that is big enough
-  - Marked as *being used* and store the value there
+  - Mark it as *being used* and store the value there
   - Return a *pointer/address* to that location
   - This process is called *Allocating* the Heap
   - *NOTE: Pushing value unto the Stack is not considered Allocating*
@@ -69,7 +69,7 @@
 - **Pushing unto the Stack is faster than allocating unto the Heap**
   - The allocator never has to search for a place to store new data in the Stack
   - Location is always at the top of the Stack
-  - For Heap, the allocator must find a big enough space to hold the data
+  - For Heap, the allocator must first find a big enough space to hold the data
   - Then perform bookkeeping to prepare for the next allocation
 - **Accessing data in the Heap is slower than in the Stack**
   - Have to follow a pointer to get to the value
@@ -84,7 +84,7 @@
 
 ### Ownerhsip Rules
 
-- **Each value in Rust has an owner**
+- **Each value in Rust has a dedicated owner**
 - **There can only be one owner at a time**
 - **When the owner goes out of scope, the value will be dropped**
 
