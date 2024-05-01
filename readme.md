@@ -23,7 +23,7 @@
    - Comments
    - Control Flow
    - Loops
-4. Ownership System
+4. [Ownership System](./04-Ownership/)
    - Rust's ownership system
    - Safety mechanisms
 5. Structs and Methods
