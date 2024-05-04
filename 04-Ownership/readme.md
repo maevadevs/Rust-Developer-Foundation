@@ -22,7 +22,7 @@
 
 ## What Is Ownership
 
-- **A set of rules that govern how a Rust program manages memory**
+- **A set of rules that governs how a Rust program manages memory**
   - Some languages use GC to clear memory during runtime
   - Other languages must have their memory managed explicitly
 - Rust uses a different approach
@@ -89,3 +89,63 @@
 - **When the owner goes out of scope, the value will be dropped**
 
 ### Variable Scope
+
+- **A *scope* is the range within a program for which an item is valid**
+- A variable is valid from the point at which it is declared until the end of the current scope
+
+```rust
+{
+    let s = "hello";
+    // s is valid in this block from this point forward
+    // do stuff with s
+}
+// This scope is now over, and s is no longer valid
+```
+
+- There are 2 important points in time
+  - When the variable comes into scope, it is valid
+  - It remains valid until it goes out of scope
+- **NOTE: Rust is a *block-scoped* language**
+  - We can create a block with `{}`
+  - `{}` blocks can also be standalone
+
+### `String` Type
+
+- A data type that is more complex than the primitives
+- Previous Data Types so far are of known-size
+  - Can be stored on the Stack
+  - Popped off the Stack when their scope is over
+  - Can be quickly and trivially copied to make a new independent instance
+- **`String` is a data type of unknown (dynamic) type**
+  - Stored on the Heap
+  - We can explore it to learn how Rust cleanup data in memory
+  - For now, we concentrate on the parts of `String` that relate to *Ownership*
+  - Concepts here also applies to other complex data types
+- String literals allow to hard-code string values
+  - Convenient, but not suitable for every situations
+  - **String literals are immutable**
+  - Also, not every string value can be known when we write our code
+- For these other situations, we have `String`
+  - Manages data allocated on the Heap
+  - Can store an amount of text that is unknown at compile time
+  - Can be created using the `String::from()` function
+  - Better than using some sort of name like `string_from()`
+- **`String` can be mutated**
+  - Difference with string literal
+  - `st.push_str()` appends a literal to a `String`
+- `::` operator allows to namespace a particular function under the type
+
+```rs
+// Example of Creating a String
+// ----------------------------
+// NOTE: String can be mutated
+let mut st = String::from("Hello World!");
+// push_str() appends a literal to a String
+st.push_str(" ");
+st.push_str("Hello everyone!");
+println!("{}", st);
+```
+
+- The difference between `String` and string literals is how they deal with memory
+
+### Memory and Allocation
