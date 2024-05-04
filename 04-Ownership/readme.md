@@ -12,7 +12,7 @@
 
 ---
 
-- Rust’s most unique feature
+- Rust's most unique feature
 - Has deep implications for the rest of the language
 - Allows to make memory safety guarantees without needing a GC
 - Other related features
