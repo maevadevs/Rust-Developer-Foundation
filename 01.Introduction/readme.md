@@ -165,7 +165,7 @@ Command|Docs For
 `--rustc`|The Rust Compiler Book
 `--rustdoc`|The `rustdoc` Book: Rust Documentation Generation tool
 `--std`|Standard library API documentation
-`--test`|Library to support code for `rustc`'s built in unit-test and micro-benchmarking framework
+`--test`|Library to support code for `rustc`'s built-in unit-test and micro-benchmarking framework
 `--unstable-book`|The Rust Unstable Book
 `--toolchain <toolchain>`|Toolchain name
 
@@ -225,7 +225,7 @@ fn main() {
   - Good style to place the opening curly bracket on the same line as the function declaration
   - Automatic formatter tool `rustfmt` is used with `cargo`
   - **Rust style is to indent with 4 spaces, not a tab**
-- **`ident!()` is a macro**
+- **`someident!()` is a macro**
   - Functions and Macros are different in Rust
   - Macros do not always follow the same rules as Functions
   - `println!()` is a macro / `println()` is a function
@@ -233,21 +233,23 @@ fn main() {
 
 ### Compiling Rust Code
 
-- Rust is *Ahead-Of-Time (AOT)*-compiled language
+- **Rust is *Ahead-Of-Time (AOT)*-compiled language**
   - Similar to C, C++, Go
-- Compiler: `rustc`
+  - Compiler: `rustc`
 - On Windows, compiling also outputs `.pdb` file for debugging info
 
 ```sh
-# Compile on Linux
+# Compiling on Linux
 rustc src/main.rs -o target/main
+
 # Executing on Linux
 ./target/main
 ```
 
 ```ps1
-# Compile on Windows
+# Compiling on Windows
 rustc src\main.rs -o target\main.exe
+
 # Executing on Linux
 .\target\main
 ```
@@ -257,7 +259,7 @@ rustc src\main.rs -o target\main.exe
 
 ## Hello Cargo
 
-- Build System and Package Manager for Rust
+- **Cargo is the Build System and Package Manager for Rust**
 - Allows to manage projects
   - Build codes
   - Download dependencies
@@ -273,15 +275,15 @@ rustup docs --cargo
 
 ### Main Commands
 
-The commands are the same no matter which operating system
+- The commands are the same no matter which operating system
 
 Command|Description
 :-|:-
 `cargo new`|Create a new project
 `cargo build`|Compile the source codes in the current project (debug mode)
-`cargo build --release`|Compile with optimizations (release mode)
+`cargo build --release`|Compile the source codes with optimizations (release mode)
 `cargo run`|Build + Run the project (debug mode)
-`cargo  --release`|Build + Run the project (release mode)
+`cargo run --release`|Build + Run the project (release mode)
 `cargo check`|Check compile status without compiling (debug mode)
 
 - **NOTE: Always use `--release` when building for final production**
@@ -309,6 +311,7 @@ cd hello-cargo
 
 ```tree
 hello-cargo/
+|-- .git/
 |-- .gitignore
 |-- Cargo.toml
 |-- src/
@@ -319,19 +322,20 @@ Folder or File|Description
 :-|:-
 `Cargo.toml`|Manage project configs and dependencies/crates
 `src/main.rs`|The entrance of the program
-`.git`|Default VCS: Can override with `--vcs` flag
-`.gitignore`|Default VCS is `git`: Can override with `--vcs` flag
+`.git`|Default VCS<br>Not generated if already in a Git project<br>Can override with `--vcs` flag
+`.gitignore`|Default VCS is Git<br>Not generated if already in a Git project<br>Can override with `--vcs` flag
 
 - **NOTE: Git files are not generated if already within an existing Git repository**
-- `Cargo.toml` has multiple sections but the following are defaulted
-  - `package`
-    - Configure the project as package and compiler info
-    - Name of the Package
-    - Version of the Package
-    - `edition` is the edition of Rust to use
+- `Cargo.toml` can have multiple sections but the following are defaulted
+  - `[package]`
+    - Configure the project as package
+    - Also adds compiler info
+      - `name`: Name of the Package
+      - `version`: Version of the Package
+      - `edition`: The Rust edition to use
     - See more keys and their definitions at [Cargo Reference](https://doc.rust-lang.org/cargo/reference/manifest.html)
-
-  - `dependencies`
+    - See more details about Rust Editions at [The Rust Edition Guide](https://doc.rust-lang.org/edition-guide/editions/)
+  - `[dependencies]`
     - List of crates dependencies for the project
     - If none is listed, then the project will install no additional dependency crates
 - **All source codes should live in `src`**

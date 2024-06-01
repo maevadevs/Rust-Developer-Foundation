@@ -8,8 +8,8 @@ fn main() {
 }
 
 // Check:           $ cargo check
-// Compile:         $ cargo build
+// Build:           $ cargo build
 // Build + Run:     $ cargo run
 // Execute:         $ ./target/debug/hello-cargo
-// Build-Release:   $ cargo build --release
+// Build Release:   $ cargo build --release
 // Execute Release: $ ./target/release/hello-cargo
