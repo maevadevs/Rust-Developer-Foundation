@@ -3,7 +3,7 @@
 ---
 
 - This is a list of summarized notes from reading [*The Book*](https://doc.rust-lang.org/book)
-- Helpful videos at [The Rust Lang Book Video Series](https://www.youtube.com/playlist?list=PLai5B987bZ9CoVR-QEIN9foz4QCJ0H2Y8)
+- Additional helpful videos at [The Rust Lang Book Video Series](https://www.youtube.com/playlist?list=PLai5B987bZ9CoVR-QEIN9foz4QCJ0H2Y8)
 
 ## Contents
 
