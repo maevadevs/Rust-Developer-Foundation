@@ -8,8 +8,8 @@ fn main() {
 }
 
 // ON LINUX:
-//  Compile: rustc src/main.rs -o target/main
-//  Execute: ./target/main
+//      Compile: rustc src/main.rs -o target/main
+//      Execute: ./target/main
 // ON WINDOWS:
-//  Compile: rustc src\main.rs -o target\main.exe
-//  Execute: .\target\main.exe
+//      Compile: rustc src\main.rs -o target\main.exe
+//      Execute: .\target\main.exe

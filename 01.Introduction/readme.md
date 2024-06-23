@@ -5,7 +5,7 @@
 - [Installation](#installation)
   - [`rustup`](#rustup)
   - [`cargo`](#cargo)
-  - [Installation For Linux/MacOs](#installation-for-linuxmacos)
+  - [Installation For Linux/MacOS](#installation-for-linuxmacos)
   - [Installation For Windows](#installation-for-windows)
   - [Installation Profiles](#installation-profiles)
 - [Post-Installation Checks](#post-installation-checks)
@@ -51,7 +51,7 @@ Environment Variable|`CARGO_HOME`
   - `~/.bashrc`
   - Environment Variables
 
-### Installation For Linux/MacOs
+### Installation For Linux/MacOS
 
 - Need a *C-Compiler & Linker*
   - Used to join compiled outputs into one file
@@ -121,7 +121,7 @@ Installation Profile|Included
 :-|:-
 **Minimal**|`rustc`,`rust-std`,`cargo`
 **Default**|*Minimal* + `rust-docs`, `rustfmt`, `clippy`
-**Complete**|All components available through `rustup:<br>Every component ever included in the metadata<br>*This option should never be used except for maintainers maybe*
+**Complete**|All components available through `rustup`:<br>Every component ever included in the metadata<br>*This option should never be used except for maintainers maybe*
 
 ## Post-Installation Checks
 
@@ -173,7 +173,7 @@ Command|Docs For
 
 Command|Description
 :-|:-
-`rustc --version`|Check Installed Compiler Version
+`rustc --version`|Check Installed Rust Compiler Version
 `rustup doc`|Check Local Documentation
 `rustup update`|Update all installed `rustup` components
 `rustup self uninstall`|Uninstall Rust and all components
@@ -211,11 +211,11 @@ fn main() {
 }
 
 // ON LINUX:
-//  Compile: $ rustc src/main.rs -o target/main
-//  Execute: $ ./target/main
+//      Compile: $ rustc src/main.rs -o target/main
+//      Execute: $ ./target/main
 // ON WINDOWS:
-//  Compile: $ rustc src\main.rs -o target\main.exe
-//  Execute: $ .\target\main.exe
+//      Compile: $ rustc src\main.rs -o target\main.exe
+//      Execute: $ .\target\main.exe
 ```
 
 - **`main()` is the entry-point in every executable Rust program**
@@ -254,12 +254,12 @@ rustc src\main.rs -o target\main.exe
 .\target\main
 ```
 
-- **`rustc` is not enough for larger projects**
+- **NOTE: `rustc` is not enough for larger projects**
   - **We use `cargo` instead**
 
 ## Hello Cargo
 
-- **Cargo is the Build System and Package Manager for Rust**
+- **Cargo is the *Build System* and *Package Manager* for Rust**
 - Allows to manage projects
   - Build codes
   - Download dependencies
@@ -289,7 +289,7 @@ Command|Description
 - **NOTE: Always use `--release` when building for final production**
   - Can greatly improves the size of binary
   - Also adds additional optimizations
-  - E.g. `Hello-World`: From 3.64 MiB (`debug`) to 410 KiB (`release`)
+  - E.g. `Hello-World`: From 3.45 MiB (`debug`) to 400 KiB (`release`)
 
 ### Check `cargo` Version
 
@@ -311,28 +311,28 @@ cd hello-cargo
 
 ```tree
 hello-cargo/
-|-- .git/
-|-- .gitignore
-|-- Cargo.toml
-|-- src/
-    |-- main.rs
+├── .git/
+├── .gitignore
+├── Cargo.toml
+└── src/
+    └── main.rs
 ```
 
 Folder or File|Description
 :-|:-
-`Cargo.toml`|Manage project configs and dependencies/crates
-`src/main.rs`|The entrance of the program
 `.git`|Default VCS<br>Not generated if already in a Git project<br>Can override with `--vcs` flag
 `.gitignore`|Default VCS is Git<br>Not generated if already in a Git project<br>Can override with `--vcs` flag
+`Cargo.toml`|Manage project configs and dependencies/crates
+`src/main.rs`|The entrance of the program
 
-- **NOTE: Git files are not generated if already within an existing Git repository**
+- **NOTE: Git-related files are not generated if already within an existing Git repository**
 - `Cargo.toml` can have multiple sections but the following are defaulted
   - `[package]`
     - Configure the project as package
     - Also adds compiler info
-      - `name`: Name of the Package
-      - `version`: Version of the Package
-      - `edition`: The Rust edition to use
+      - `name` - Name of the Package
+      - `version` - Version of the Package
+      - `edition` - The Rust edition to use
     - See more keys and their definitions at [Cargo Reference](https://doc.rust-lang.org/cargo/reference/manifest.html)
     - See more details about Rust Editions at [The Rust Edition Guide](https://doc.rust-lang.org/edition-guide/editions/)
   - `[dependencies]`
@@ -342,7 +342,7 @@ Folder or File|Description
   - Except for non-source code files, which can be in top-level project directory:
     - README files
     - License information
-    - Configuration files
+    - Configuration files: `Cargo.toml`, `Cargo.lock`
     - Anything else not related to code
 - Cargo helps organize projects
   - There is a place for everything
@@ -379,7 +379,7 @@ cd hello-cargo
 cargo run
 ```
 
-- **NOTE: Cargo will only rebuild if there are changes detected**
+- **NOTE: Cargo will only rebuild if there are diff changes detected**
 
 #### Check Pre-Build
 
