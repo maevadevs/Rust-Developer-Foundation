@@ -56,6 +56,7 @@ Environment Variable|`CARGO_HOME`
 - Need a *C-Compiler & Linker*
   - Used to join compiled outputs into one file
   - For Linux, install `gcc` or `clang`
+  - `build-essential` = `dpkg-dev`, `g++`, `gcc`, `libc6-dev`, `make`
 
 ```sh
 # GCC
@@ -121,7 +122,7 @@ Installation Profile|Included
 :-|:-
 **Minimal**|`rustc`,`rust-std`,`cargo`
 **Default**|*Minimal* + `rust-docs`, `rustfmt`, `clippy`
-**Complete**|All components available through `rustup`:<br>Every component ever included in the metadata<br>*This option should never be used except for maintainers maybe*
+**Complete**|*Default* + All components available through `rustup`:<br>Every component ever included in the metadata<br>*This option should never be used except for maintainers maybe*
 
 ## Post-Installation Checks
 
@@ -174,7 +175,7 @@ Command|Docs For
 Command|Description
 :-|:-
 `rustc --version`|Check Installed Rust Compiler Version
-`rustup doc`|Check Local Documentation
+`rustup docs`|Check Local Documentation
 `rustup update`|Update all installed `rustup` components
 `rustup self uninstall`|Uninstall Rust and all components
 
@@ -250,8 +251,8 @@ rustc src/main.rs -o target/main
 # Compiling on Windows
 rustc src\main.rs -o target\main.exe
 
-# Executing on Linux
-.\target\main
+# Executing on Windows
+.\target\main.exe
 ```
 
 - **NOTE: `rustc` is not enough for larger projects**
@@ -287,7 +288,7 @@ Command|Description
 `cargo check`|Check compile status without compiling (debug mode)
 
 - **NOTE: Always use `--release` when building for final production**
-  - Can greatly improves the size of binary
+  - Can greatly improve the size of binary
   - Also adds additional optimizations
   - E.g. `Hello-World`: From 3.45 MiB (`debug`) to 400 KiB (`release`)
 
@@ -303,7 +304,7 @@ cargo --version
 cargo new hello-cargo
 ```
 
-- Creates a new directory and project: `hello-cargo`
+- Creates a new project directory: `hello-cargo`
 
 ```sh
 cd hello-cargo
