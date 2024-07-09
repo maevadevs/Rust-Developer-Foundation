@@ -38,6 +38,9 @@ Settings|Value
 Home Directory|`~/.rustup`
 Environment Variable|`RUSTUP_HOME`
 
+- Default `RUSTUP_HOME`: `~/.rustup`
+  - Can be used to customize installation
+
 ### `cargo`
 
 Settings|Value
@@ -45,6 +48,8 @@ Settings|Value
 Home Directory|`~/.cargo`
 Environment Variable|`CARGO_HOME`
 
+- Default `CARGO_HOME`: `~/.cargo`
+  - Can be used to customize installation
 - Paths are added to:
   - `~/.profile`
   - `~/.bash_profile`
@@ -56,7 +61,7 @@ Environment Variable|`CARGO_HOME`
 - Need a *C-Compiler & Linker*
   - Used to join compiled outputs into one file
   - For Linux, install `gcc` or `clang`
-  - `build-essential` = `dpkg-dev`, `g++`, `gcc`, `libc6-dev`, `make`
+  - `build-essential` => `dpkg-dev`, `g++`, `gcc`, `libc6-dev`, `make`
 
 ```sh
 # GCC
@@ -114,7 +119,7 @@ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 rustup --version
 ```
 
-- If not, download and run `rustup-init.exe` from [rust-lang.org](rust-lang.org/tools/install)
+- If not, download and run `rustup-init.exe` from [rust-lang.org](https://rust-lang.org/tools/install)
 
 ### Installation Profiles
 
