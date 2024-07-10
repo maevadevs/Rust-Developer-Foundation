@@ -5,6 +5,7 @@
 - [Installation](#installation)
   - [`rustup`](#rustup)
   - [`cargo`](#cargo)
+  - [C-Compiler](#c-compiler)
   - [Installation For Linux/MacOS](#installation-for-linuxmacos)
   - [Installation For Windows](#installation-for-windows)
   - [Installation Profiles](#installation-profiles)
@@ -27,7 +28,7 @@
 
 ## Installation
 
-- **Install via `rustup`**
+- **`rustup`**
   - Command-line tool for managing Rust versions
   - Installs *Rust*, *Cargo*, and additional dev tools
 
@@ -56,12 +57,15 @@ Environment Variable|`CARGO_HOME`
   - `~/.bashrc`
   - Environment Variables
 
-### Installation For Linux/MacOS
+### C-Compiler
 
 - Need a *C-Compiler & Linker*
-  - Used to join compiled outputs into one file
-  - For Linux, install `gcc` or `clang`
-  - `build-essential` => `dpkg-dev`, `g++`, `gcc`, `libc6-dev`, `make`
+- Used to join compiled outputs into one file
+
+### Installation For Linux/MacOS
+
+- For Linux, install `gcc` or `clang`
+- `build-essential` => `dpkg-dev`, `g++`, `gcc`, `libc6-dev`, `make`
 
 ```sh
 # GCC
@@ -106,12 +110,10 @@ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 
 ### Installation For Windows
 
-- Need a *C-Compiler & Linker*
-  - Used to join compiled outputs into one file
-  - For Windows, need to install *MSVC Build Tools For Visual Studio 2013 or later* via *Visual Studio Installer*
-    - Install Visual Studio
-    - Choose *Desktop Development with C++*
-    - Choose *Windows 10 or Windows 11 SDK*
+- For Windows, need to install *MSVC Build Tools For Visual Studio 2013 or later* via *Visual Studio Installer*
+  - Install Visual Studio
+  - Choose *Desktop Development with C++*
+  - Choose *Windows 10 or Windows 11 SDK*
 - Check if rustup is installed
 
 ```sh
@@ -234,12 +236,12 @@ fn main() {
 - **`someident!()` is a macro**
   - Functions and Macros are different in Rust
   - Macros do not always follow the same rules as Functions
-  - `println!()` is a macro / `println()` is a function
+  - `println!()` is a macro
 - **Most lines of Rust code end with a semicolon**
 
 ### Compiling Rust Code
 
-- **Rust is *Ahead-Of-Time (AOT)*-compiled language**
+- **Rust is *Ahead-Of-Time (AOT)* compiled language**
   - Similar to C, C++, Go
   - Compiler: `rustc`
 - On Windows, compiling also outputs `.pdb` file for debugging info
@@ -260,7 +262,7 @@ rustc src\main.rs -o target\main.exe
 .\target\main.exe
 ```
 
-- **NOTE: `rustc` is not enough for larger projects**
+- **NOTE: `rustc` alone is not enough for larger projects**
   - **We use `cargo` instead**
 
 ## Hello Cargo
@@ -333,17 +335,27 @@ Folder or File|Description
 
 - **NOTE: Git-related files are not generated if already within an existing Git repository**
 - `Cargo.toml` can have multiple sections but the following are defaulted
-  - `[package]`
-    - Configure the project as package
+  - **`[package]`**
+    - Configure the project as a package
     - Also adds compiler info
       - `name` - Name of the Package
       - `version` - Version of the Package
       - `edition` - The Rust edition to use
     - See more keys and their definitions at [Cargo Reference](https://doc.rust-lang.org/cargo/reference/manifest.html)
     - See more details about Rust Editions at [The Rust Edition Guide](https://doc.rust-lang.org/edition-guide/editions/)
-  - `[dependencies]`
+  - **`[dependencies]`**
     - List of crates dependencies for the project
     - If none is listed, then the project will install no additional dependency crates
+
+```toml
+[package]
+name = "hello-cargo"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+```
+
 - **All source codes should live in `src`**
   - Except for non-source code files, which can be in top-level project directory:
     - README files
@@ -414,7 +426,7 @@ cargo build --release
 - Creates an executable file in `target/release`
 - Makes Rust code run faster
 - But longer build-time is needed
-- Only use this for building the final program
+- **Only use this for building the final program**
 
 ### Cargo As Convention
 
