@@ -1,10 +1,8 @@
-/**
- * Print "Hello, world!" to the console.
- */
+/// Print "Hello, world!" to the console.
 
-// The entry-point of the program.
+/// The entry-point of the program.
 fn main() {
-    println!("Hello, world!");
+    println!("Hello world!");
 }
 
 // ON LINUX:

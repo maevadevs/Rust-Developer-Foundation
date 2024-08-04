@@ -28,29 +28,27 @@
 
 ## Installation
 
-- **`rustup`**
+- Using **`rustup`**
   - Command-line tool for managing Rust versions
   - Installs *Rust*, *Cargo*, and additional dev tools
 
 ### `rustup`
 
-Settings|Value
-:-|:-
-Home Directory|`~/.rustup`
-Environment Variable|`RUSTUP_HOME`
+Settings|Value|Default Value
+:-|:-|:-
+Home Directory|`~/.rustup`|
+Environment Variable|`RUSTUP_HOME`|`~/.rustup`
 
-- Default `RUSTUP_HOME`: `~/.rustup`
-  - Can be used to customize installation
+- `RUSTUP_HOME` can be used to customize installation
 
 ### `cargo`
 
-Settings|Value
-:-|:-
-Home Directory|`~/.cargo`
-Environment Variable|`CARGO_HOME`
+Settings|Value|Default Value
+:-|:-|:-
+Home Directory|`~/.cargo`|
+Environment Variable|`CARGO_HOME`|`~/.cargo`
 
-- Default `CARGO_HOME`: `~/.cargo`
-  - Can be used to customize installation
+- `CARGO_HOME` can be used to customize installation
 - Paths are added to:
   - `~/.profile`
   - `~/.bash_profile`
@@ -209,13 +207,11 @@ touch main.rs && code main.rs
 - Add the following codes to `main.rs`
 
 ```rs
-/**
- * Print "Hello, world!" to the console.
- */
+/// Print "Hello, world!" to the console.
 
-// The entry-point of the program.
+/// The entry-point of the program.
 fn main() {
-    println!("Hello, world!");
+    println!("Hello world!");
 }
 
 // ON LINUX:
@@ -230,10 +226,10 @@ fn main() {
   - No parameters
   - No return values
 - **Rust requires curly brackets around all function bodies**
-  - Good style to place the opening curly bracket on the same line as the function declaration
+  - Recommended style to place the opening curly bracket on the same line as the function declaration
   - Automatic formatter tool `rustfmt` is used with `cargo`
   - **Rust style is to indent with 4 spaces, not a tab**
-- **`someident!()` is a macro**
+- **`macroname!()` is a macro**
   - Functions and Macros are different in Rust
   - Macros do not always follow the same rules as Functions
   - `println!()` is a macro
@@ -243,6 +239,7 @@ fn main() {
 
 - **Rust is *Ahead-Of-Time (AOT)* compiled language**
   - Similar to C, C++, Go
+  - Produces a single executable file
   - Compiler: `rustc`
 - On Windows, compiling also outputs `.pdb` file for debugging info
 
@@ -297,7 +294,7 @@ Command|Description
 - **NOTE: Always use `--release` when building for final production**
   - Can greatly improve the size of binary
   - Also adds additional optimizations
-  - E.g. `Hello-World`: From 3.45 MiB (`debug`) to 400 KiB (`release`)
+  - E.g. `Hello-World`: From 3.45 MiB (`debug`) down to 400 KiB (`release`)
 
 ### Check `cargo` Version
 
@@ -328,15 +325,15 @@ hello-cargo/
 
 Folder or File|Description
 :-|:-
-`.git`|Default VCS<br>Not generated if already in a Git project<br>Can override with `--vcs` flag
-`.gitignore`|Default VCS is Git<br>Not generated if already in a Git project<br>Can override with `--vcs` flag
+`.git`|Default *Version Control System (VCS)*<br>Not generated if already in a Git project<br>Can override with `--vcs` flag
+`.gitignore`|Default *Version Control System (VCS)* is Git<br>Not generated if already in a Git project<br>Can override with `--vcs` flag
 `Cargo.toml`|Manage project configs and dependencies/crates
 `src/main.rs`|The entrance of the program
 
 - **NOTE: Git-related files are not generated if already within an existing Git repository**
 - `Cargo.toml` can have multiple sections but the following are defaulted
   - **`[package]`**
-    - Configure the project as a package
+    - **Configure the project as a package**
     - Also adds compiler info
       - `name` - Name of the Package
       - `version` - Version of the Package
@@ -344,7 +341,7 @@ Folder or File|Description
     - See more keys and their definitions at [Cargo Reference](https://doc.rust-lang.org/cargo/reference/manifest.html)
     - See more details about Rust Editions at [The Rust Edition Guide](https://doc.rust-lang.org/edition-guide/editions/)
   - **`[dependencies]`**
-    - List of crates dependencies for the project
+    - **List of crates dependencies for the project**
     - If none is listed, then the project will install no additional dependency crates
 
 ```toml
@@ -369,6 +366,23 @@ edition = "2021"
   - Move the project code into the `src` directory
   - Create an appropriate `Cargo.toml` file
 
+```rs
+/// Print "Hello, world!" to the console.
+
+/// The entry-point of the program.
+fn main() {
+    println!("Hello, world!");
+}
+
+// Check:               $ cargo check
+// Build:               $ cargo build
+// Build + Run:         $ cargo run
+// Execute:             $ ./target/debug/hello-cargo
+// Build Release:       $ cargo build --release
+// Build + Run Release: $ cargo run --release
+// Execute Release:     $ ./target/release/hello-cargo
+```
+
 ### Building A Project
 
 - Simply `cd` into the project and run `cargo build`
@@ -380,11 +394,11 @@ cargo build
 
 - It builds from `src` folder
   - Creates an executable file in `target/debug`
-  - **Default build is *Debug Build* (`dev [unoptimized + debuginfo]`)**
-- First-time run also creates `Cargo.lock`
+  - **Default build is *Debug Build* `dev [unoptimized + debuginfo]`**
+- First-time build also creates `Cargo.lock`
   - Keeps track of the exact versions of dependencies/crates in the project
   - *Managed by Cargo: This file is automatically generated by Cargo*
-  - **Never need to change this file manually: It is not intended for manual editing**
+  - ***Never need to change this file manually: It is not intended for manual editing***
 
 #### Build And Run At Once
 
