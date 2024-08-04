@@ -7,9 +7,10 @@ fn main() {
     println!("Hello, world!");
 }
 
-// Check:           $ cargo check
-// Build:           $ cargo build
-// Build + Run:     $ cargo run
-// Execute:         $ ./target/debug/hello-cargo
-// Build Release:   $ cargo build --release
-// Execute Release: $ ./target/release/hello-cargo
+// Check:               $ cargo check
+// Build:               $ cargo build
+// Build + Run:         $ cargo run
+// Execute:             $ ./target/debug/hello-cargo
+// Build Release:       $ cargo build --release
+// Build + Run Release: $ cargo run --release
+// Execute Release:     $ ./target/release/hello-cargo

@@ -272,7 +272,7 @@ rustc src\main.rs -o target\main.exe
   - Build codes
   - Download dependencies
   - Build libraries
-- It is better to start a project using `cargo`
+- **It is better to start a project using `cargo`**
   - The vast majority of Rust projects are built with `cargo`
 - Cargo comes with Rust when installing via `rustup`
 - Full documentation for `cargo` is available in the [Cargo Book Online](https://doc.rust-lang.org/cargo/) or Offline
@@ -362,7 +362,7 @@ edition = "2021"
     - License information
     - Configuration files: `Cargo.toml`, `Cargo.lock`
     - Anything else not related to code
-- Cargo helps organize projects
+- **Cargo helps organize projects**
   - There is a place for everything
   - Everything is in its place
 - ***It is possible to convert a manually-managed project to Cargo project***
