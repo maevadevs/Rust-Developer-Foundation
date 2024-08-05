@@ -1,19 +1,21 @@
+/// Guessing Game: Try to guess a randomly-generate number.
+
 // Import libraries/modules
 use rand::Rng;
 use std::cmp::Ordering;
 use std::io;
 
-// The entry-point of the program.
+/// The entry-point of the program.
 fn main() {
-    // Generate the secret number
-    let secret_num = rand::thread_rng().gen_range(1..=100);
+    // Generate a random integer between 1 and 100
+    let secret_num: u32 = rand::thread_rng().gen_range(1..=100);
 
     loop {
-        // Ask for user input
+        // Prompt the player to enter a guess
         println!("Take a guess, what number between 1 and 100?");
 
         // Process the user input
-        let mut guess = String::new();
+        let mut guess: String = String::new();
 
         // Check that the input is in the expected form
         io::stdin()
@@ -34,22 +36,30 @@ fn main() {
         // Confirm user's guess
         println!("You guessed: {guess}");
 
+        // Handle when the number is too big or too small
+        if guess < 1 || guess > 100 {
+            println!("Your guess is outside of the accepted range.");
+            continue;
+        }
+
+        // Indicate whether the guess is too low, too high, or correct
         // Compare guess vs secret_num
         match guess.cmp(&secret_num) {
             Ordering::Less => println!("Too small!"),
             Ordering::Greater => println!("Too big!"),
             Ordering::Equal => {
+                // Print a congratulatory message and exit
                 println!("You win!!!");
-                // Break the loop when number is guessed
                 break;
             }
         }
     }
 }
 
-// Check:           $ cargo check
-// Compile:         $ cargo build
-// Build + Run:     $ cargo run
-// Execute:         $ ./target/debug/guessing-game
-// Build-Release:   $ cargo build --release
-// Execute Release: $ ./target/release/guessing-game
+// Check:               $ cargo check
+// Build:               $ cargo build
+// Build + Run:         $ cargo run
+// Execute:             $ ./target/debug/guessing-game
+// Build Release:       $ cargo build --release
+// Build + Run Release: $ cargo run --release
+// Execute Release:     $ ./target/release/guessing-game

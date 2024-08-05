@@ -29,7 +29,7 @@ This is a *Project Chapter*
 
 - Generate a random integer between 1 and 100
 - Prompt the player to enter a guess
-- After a guess is entered, indicate whether the guess is too low or too high
+- After a guess is entered, indicate whether the guess is too low, too high, or correct
 - If the guess is correct, print a congratulatory message and exit
 
 ## Project Setup
@@ -47,16 +47,18 @@ cd guessing-game
 1. Confirm the user's guess
 
 ```rs
+/// Guessing Game: Try to guess a randomly-generate number.
+
 // Import libraries/modules
 use std::io;
 
-// The entry-point of the program.
+/// The entry-point of the program.
 fn main() {
-    // Ask for user input
-    println!("Take a guess, what number?");
+    // Prompt the player to enter a guess
+    println!("Take a guess, what number between 1 and 100?");
 
     // Process the user input
-    let mut guess = String::new();
+    let mut guess: String = String::new();
 
     // Check that the input is in the expected form
     io::stdin()
@@ -70,25 +72,28 @@ fn main() {
 
 ### `use std::io;`
 
-- For input/ouput operations, we use `std::io` package
+- **For input/ouput operations, we use `std::io` package**
 - **Rust Prelude**
-  - By default, Rust brings into the scope of every program a set of items defined in the `std` library
-  - But this does not include all of `std`, only a portion called *Preclude*
+  - By default, Rust brings *a set of items predefined in the `std` library* into the scope of every program
+  - But this does not include all of `std`, only a portion called *Prelude*
   - [The list of *Rust Prelude* can be found here](https://doc.rust-lang.org/std/prelude)
   - **For things not in the *Prelude*, we have to manually import with `use` statements**
 
 ### `fn main()`
 
 - `main()` is the entry to execution
+  - No parameters
+  - No return values
 - **`fn` declares a new function**
 
 ### `println!()`
 
 - ***Macro* that prints a string to the screen**
-- **It supports *String Interpolation* with `{}`**
+- **Supports *String Interpolation* with `{}`**
   - In the string, `{}` are considered *Placeholders* for variables
   - Variables inside `{}` will be evaluated
-  - **However, it only supports variables, not expressions**
+  - **However, it only supports *variables*, not *expressions***
+  - To interpolate expressions, assign to variables first
 
 ```rs
 let x = 5;
@@ -97,8 +102,7 @@ let res = y + 2;
 
 println!("x = {x} and y + 2 = {res}");
 
-// The following will result in error:
-// Trying to interpolate an expression
+// The following will result in error: Trying to interpolate an expression
 // println!("x = {x} and y + 2 = {y + 2}");
 ```
 
@@ -119,9 +123,9 @@ let apple = 5;
 
 - **In Rust, variables are *immutable* by default**
   - Once we give the variable a value, the value will not change
-  - It is almost like a constant, but a constant does not necessarily guarantee immutability
+  - **It is almost like a constant, but a constant does not necessarily guarantee immutability**
     - `const` is evaluated during compile-time
-    - Immutability is evaluated during runtime
+    - Immutability is evaluated and assured even during runtime
   - *To make a variable mutable, add `mut` before the variable name when defining it*
 
 ```rs
@@ -131,18 +135,24 @@ let mut apple = 5;
 
 - `String::new()`
   - A function that returns a new instance of a `String`
-  - A string type provided by the standard library
-  - Growable
-  - UTF-8
-- `::` is similar to `.`
-  - **`.` is used for *Value-member Access***
-  - **`::` is used for *Namespace-member Access***
+  - A *growable* string type provided by the standard library
+  - Encoded in UTF-8
+- **`::` is similar to `.`**
+
+Token|Usage
+:-:|:-
+`.`|Used for *Value-member Access*
+`::`|Used for *Namespace-member Access*
+
 - `new()` is an *Associated Function* of `String`
   - **An *Associated Function* is a function that is implemented on a type**
-  - `new()` is a common function on many types
-  - `String::new()` creates an empty string
-    - **`""` is of type `str` which is *immutable***
-    - **`String::new()` is of type `String` which is *mutable***
+  - `new()` is a common function on many types to create an *object* based on that type
+  - `String::new()` creates an empty mutable string
+
+Type|Value|Description
+:-|:-:|:-
+`str`|`""`|*Immutable* string
+`String`|`String::new()`|*Mutable* string
 
 ### Getting User Input
 
@@ -152,7 +162,7 @@ io::stdin()
     .expect("Failed to read line");
 ```
 
-- We use the `stdin()` function from the `io` module
+- We use the `stdin()` function from the `std::io` module
   - Fullname: `std::io::stdin()`
   - Returns an instance of `std::io::Stdin`
   - Represents a handle to the standard input
@@ -168,7 +178,7 @@ io::stdin()
       - `&guess`: Immutable
       - `&mut guess`: Mutable
 - **Handling Potential Failure with `Result`**
-  - `read_line()` also returns a `Result` value
+  - `read_line()` also returns a `Result<usize, Error>` value
   - `Result` is an *Enum*
     - Can be in one of multiple possible states
     - Each possible state is a *Variant*
@@ -180,15 +190,15 @@ io::stdin()
     - `expect()` Method
     - If `Err`: Crash the program and display the message argument
     - If `Ok`: Return the value in `Ok` (Number of bytes in the user’s input)
-  - **If you do not call `expect`, the program will compile, but you will get a warning**
+  - **If we do not call `expect`, the program will compile, but we will get a warning**
     - This is part of Rust's *Error Handling*
     - The proper way to handle this is with *Error Handling*
 
 ## Generating a Secret Number
 
 - Generate a secret number that the user will try to guess
-- The secret number should be different every time
-- Use a random number between 1 and 100
+  - The secret number should be different every time
+  - Use a random number between 1 and 100
 - *Random number generator is not part of Rust's Standard Library*
   - But there are some third-party crates that we can use
   - We can use the `rand` crate
@@ -197,6 +207,7 @@ io::stdin()
 
 - **Crate**
   - Collection of Rust source code files
+  - Similar to *Module* in Python
 - **Binary Crate**
   - An executable crate
 - **Library Crate**
@@ -214,9 +225,9 @@ io::stdin()
 rand = "^0.8.5"
 ```
 
-- Everything that follows a header is part of that section that continues until another section starts
+- Everything that follows a `[header]` is part of that section that continues until another section starts
 - **Run `cargo build` after changing `Cargo.toml`**
-  - Cargo fetches the latest (compatible) versions of everything that the dependency needs from the *registry*
+  - Cargo fetches the latest compatible versions of everything that the dependency needs from the *registry*
   - The *registry* is a copy of data from [Crates.io](https://crates.io/)
   - Collection of open-sourced Rust projects
 - **After updating the registry, Cargo checks the `[dependencies]` section**
@@ -231,13 +242,15 @@ rand = "^0.8.5"
   - Only use the specified versions of the dependencies
   - **Rust creates the `Cargo.lock` file for the first time `cargo build` is run**
   - All the versions of the dependencies that fit the criteria
-  - If `Cargo.lock` file exists, Rust uses the versions specified rather than doing all the work of figuring out versions again
+  - **If `Cargo.lock` file exists, Rust uses the versions specified rather than doing all the work of figuring out versions again**
 - Allows to have a reproducible build automatically
 - **`Cargo.lock` is often checked into source control**
   - Check-in for binaries/applications
   - Ignore for libraries
   - **When in doubt, check `Cargo.lock` in version control**
   - For details: [Why have `Cargo.lock` in version control?](https://doc.rust-lang.org/cargo/faq.html#why-have-cargolock-in-version-control)
+- **To force to redownload all dependencies, delete `Cargo.lock` and re-run `cargo build`**
+  - Or run `cargo update`
 
 ### Updating a Crate to Get a New Version
 
@@ -257,14 +270,14 @@ use rand::Rng;
 use std::io;
 
 fn main() {
-    // Generate the secret number
-    let secret_num = rand::thread_rng().gen_range(1..=100);
+    // Generate a random integer between 1 and 100
+    let secret_num: u32 = rand::thread_rng().gen_range(1..=100);
 
     // Ask for user input
     println!("Take a guess, what number?");
 
     // Process the user input
-    let mut guess = String::new();
+    let mut guess: String = String::new();
 
     // Check that the input is in the expected form
     io::stdin()
@@ -286,7 +299,7 @@ fn main() {
   - Call the `gen_range(start..=end)` method on the random number generator
     - Takes a *range* expression as an argument
     - Generates a random number in the range
-    - `start..=end` is inclusive on both end
+    - `start..=end` is *inclusive on both end*
 
 ## Comparing Guess vs Secret Number
 
@@ -311,12 +324,12 @@ fn main() {
   - Returns a variant of the `Ordering` enum
 - **`match` expression**
   - Similar to `switch` in other languages
-  - Based on the variant of `Ordering` returned from the call to `cmp`
+  - Based on the variant of `Ordering` returned from the call to `.cmp()`
   - `match` expression is made up of *arms*
     - **Arm** - A *pattern* to match against + the *code* that should be run if the value fits the pattern
     - Format: `Pattern => Code`
   - *Patterns* and the *match* construct are powerful Rust features
-  - **The `match` expression *breaks* on the first successful match**
+  - **NOTE: The `match` expression *breaks* on the first successful match**
 - **`guess.cmp(&secret_num)` will return any of the possible enum values**
   - If `guess > secret_num`, it returns `Ordering::Greater`
   - If `guess < secret_num`, it returns `Ordering::Less`
@@ -327,7 +340,7 @@ fn main() {
   - It infered the type of `guess` as `String`
   - It infered the type of `secret_num` as `i32`
   - **Rust cannot compare a string and a number type**
-  - We need to have an explicit cast
+    - We need to have an explicit cast
 
 ```rs
 fn main() {
@@ -347,7 +360,7 @@ fn main() {
 }
 ```
 
-- We (re)create a variable `guess: u32`
+- We (re)declare a variable `guess: u32`
   - **Rust allows to shadow the previous value of a variable with a new one**
   - *Shadowing* allows to reuse same variable name with different data type
   - This feature is often used when wanting to convert a value from one type to another type
@@ -360,11 +373,10 @@ fn main() {
 - **When comparing `guess` and `secret_num`, Rust will infer that `secret_num` should be a `u32` as well**
   - Comparison between 2 values of the same type
 - **`parse()` only works on characters that can logically be converted into numbers**
-  - Will fail if the string is not a number
-  - It returns a `Result` type
-  - Same as with `read_line()`
-  - `parse()` returns an `Err Result` variant if it **cannot** create a number from the string
-  - `parse()` returns an `Ok Result` variant if it **can** create a number from the string
+  - It will fail if the string is not a number
+  - Same as with `read_line()`, it returns a `Result` type
+    - `parse()` returns an `Err Result` variant if it **cannot** create a number from the string
+    - `parse()` returns an `Ok Result` variant if it **can** create a number from the string
 
 ## Loop: Allowing Multiple Guesses
 
@@ -372,21 +384,20 @@ fn main() {
 
 ```rs
 //...
-// Generate the secret number
-let secret_num = rand::thread_rng()
-                      .gen_range(1..=100);
+// Generate a random integer between 1 and 100
+let secret_num: u32 = rand::thread_rng().gen_range(1..=100);
 
 loop {
-    // Ask for user input
+    // Prompt the player to enter a guess
     println!("Take a guess, what number between 1 and 100?");
 
     // Process the user input
-    let mut guess = String::new();
+    let mut guess: String = String::new();
 
     // Check that the input is in the expected form
     io::stdin()
-       .read_line(&mut guess)
-       .expect("Failed to read line");
+        .read_line(&mut guess)
+        .expect("Failed to read line");
 
     // Set explicit cast to u32
     let guess: u32 = guess.trim().parse().expect("Please type a number!");
@@ -415,7 +426,8 @@ loop {
 
 ```rs
 Ordering::Equal => {
-    println!("You win!");
+    // Print a congratulatory message and exit
+    println!("You win!!!");
     break;
 }
 ```
@@ -429,11 +441,14 @@ Ordering::Equal => {
 - Ignore the bad input and allow user to `continue` to guess
 
 ```rs
+// Set explicit cast to u32
+// Handle user input errors
+// let guess: u32 = guess.trim().parse().expect("Please type a number!");
 let guess: u32 = match guess.trim().parse() {
     Ok(num) => num,
     Err(_) => {
-        println!("That was not a valid number");
-        continue
+        println!("That was not a valid number!");
+        continue;
     }
 };
 ```
@@ -442,33 +457,34 @@ let guess: u32 = match guess.trim().parse() {
 - **`match` allows to handle the error with the variant of `Result` enum from `parse()`**
   - If `Ok`, grab and use the value captured in `Ok`
   - If `Err`, we `continue` the loop to the next iteration
-  - `_` is a catch-all value: *Catch any error regardless of the contained value*
+  - **`_` is a catch-all value: *Catch any error regardless of the contained value***
 
 ## Final Program Overall
 
 ```rs
+/// Guessing Game: Try to guess a randomly-generate number.
+
 // Import libraries/modules
 use rand::Rng;
 use std::cmp::Ordering;
 use std::io;
 
-// The entry-point of the program.
+/// The entry-point of the program.
 fn main() {
-    // Generate the secret number
-    let secret_num = rand::thread_rng()
-                          .gen_range(1..=100);
+    // Generate a random integer between 1 and 100
+    let secret_num: u32 = rand::thread_rng().gen_range(1..=100);
 
     loop {
-        // Ask for user input
+        // Prompt the player to enter a guess
         println!("Take a guess, what number between 1 and 100?");
 
         // Process the user input
-        let mut guess = String::new();
+        let mut guess: String = String::new();
 
         // Check that the input is in the expected form
         io::stdin()
-        .read_line(&mut guess)
-        .expect("Failed to read line");
+            .read_line(&mut guess)
+            .expect("Failed to read line");
 
         // Set explicit cast to u32
         // Handle user input errors
@@ -477,20 +493,27 @@ fn main() {
             Ok(num) => num,
             Err(_) => {
                 println!("That was not a valid number!");
-                continue
+                continue;
             }
         };
 
         // Confirm user's guess
         println!("You guessed: {guess}");
 
+        // Handle when the number is too big or too small
+        if guess < 1 || guess > 100 {
+            println!("Your guess is outside of the accepted range.");
+            continue;
+        }
+
+        // Indicate whether the guess is too low, too high, or correct
         // Compare guess vs secret_num
         match guess.cmp(&secret_num) {
             Ordering::Less => println!("Too small!"),
             Ordering::Greater => println!("Too big!"),
             Ordering::Equal => {
+                // Print a congratulatory message and exit
                 println!("You win!!!");
-                // Break the loop when number is guessed
                 break;
             }
         }
