@@ -5,34 +5,39 @@ fn main() {
     // Example of Function
     // -------------------
     println!("Example of Function:");
+    println!("--------------------");
     some_func();
     println!();
 
     // Example of Function With One Parameter
     // --------------------------------------
-    println!("Example of Function With Parameter:");
+    println!("Example of Function With One Parameter:");
+    println!("---------------------------------------");
     param_func(5);
     println!();
 
     // Example of Function With Multiple Parameters
     // --------------------------------------------
     println!("Example of Function With Multiple Parameters:");
+    println!("---------------------------------------------");
     print_labeled_measurement(5, "cm");
     println!();
 
     // Example of Statements
     // ---------------------
     println!("Example of Statements:");
-    let y = 6;
+    println!("----------------------");
+    let y: i32 = 6;
     println!("The value of y is {y}");
     println!();
 
     // Example of Expressions
     // ----------------------
     println!("Example of Expressions:");
-    let exp = {
-        let y = 3;
-        y + 1
+    println!("-----------------------");
+    let exp: i32 = {
+        let y: i32 = 3;
+        y + 1 // Expressions do not end with semicolons
     };
 
     println!("The value of exp is {exp}");
@@ -41,8 +46,9 @@ fn main() {
     // Example of Function That Return a Value
     // ---------------------------------------
     println!("Example of Function That Return a Value:");
-    let res = get_thousand();
-    let res2 = plus_one(res);
+    println!("----------------------------------------");
+    let res: i32 = get_thousand();
+    let res2: i32 = plus_one(res);
     println!("Value from calling get_thousand() is {res}");
     println!("Value from calling plus_one(res) is {res2}");
     println!();
@@ -70,5 +76,13 @@ fn get_thousand() -> i32 {
 
 /// Another Example of function that return a value.
 fn plus_one(x: i32) -> i32 {
-    x + 1
+    return x + 1;
 }
+
+// Check:               $ cargo check
+// Build:               $ cargo build
+// Build + Run:         $ cargo run
+// Execute:             $ ./target/debug/functions
+// Build Release:       $ cargo build --release
+// Build + Run Release: $ cargo run --release
+// Execute Release:     $ ./target/release/functions

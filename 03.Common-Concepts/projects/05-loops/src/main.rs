@@ -4,22 +4,39 @@ fn main() {
     // Example of Infinite Loops Using `loop`
     // --------------------------------------
     // println!("Example of Infinite Loops Using `loop`:");
+    // println!("---------------------------------------");
     // loop {
-    //     println!("again!");
+    //     println!("run again!");
     // }
     // println!();
 
+    // Example of Controlled Loops Using `loop` and `break`
+    // ----------------------------------------------------
+    println!("Example of Controlled Loops Using `loop` and `break`:");
+    println!("-----------------------------------------------------");
+    let mut i: i32 = 0;
+    loop {
+        if i == 10 {
+            break;
+        }
+        println!("run again!");
+        i += 1;
+    }
+    println!();
+
     // Example of Returning Values From Loop
     // -------------------------------------
-    let mut counter = 0;
+    println!("Example of Returning Values From Loop");
+    println!("-------------------------------------");
+    let mut counter: i32 = 0;
 
-    // Capture the value from the loop
-    let result = loop {
-        counter += 1;
+    // Capture the returned value from the loop
+    let result: i32 = loop {
         if counter == 10 {
             // Return the value from the loop
             break counter * 2;
         }
+        counter += 1;
     };
 
     println!("The result from the loop is {result}");
@@ -27,16 +44,19 @@ fn main() {
 
     // Example of Using Loop Label
     // ---------------------------
-    let mut count = 0;
+    println!("Example of Using Loop Label");
+    println!("---------------------------");
+    let mut count: i32 = 0;
 
     // Loop label for outer loop
     'counting_up: loop {
         println!("count = {count}");
-        let mut remaining = 10;
+        let mut remaining: i32 = 10;
+
         // Inner loop
         loop {
-            println!("remaining = {remaining}");
-            if remaining == 9 {
+            println!("\tremaining = {remaining}");
+            if remaining == 5 {
                 // Break from the inner loop
                 break;
             }
@@ -52,31 +72,59 @@ fn main() {
     println!("End count = {count}");
     println!();
 
-    // Example of while loop
+    // Example of while Loop
     // ---------------------
-    let mut number = 3;
+    println!("Example of while Loop");
+    println!("---------------------");
+    let mut number: i32 = 5;
 
     while number != 0 {
-        println!("{number}!");
+        print!("{number}... ");
         number -= 1;
     }
 
     println!("LIFTOFF!!!");
     println!();
 
-    // Example of for loop Over Array
-    // ------------------------------
-    let a = [10, 20, 30, 40, 50];
-    for el in a {
+    // Example of Using while Loop Over Array
+    // --------------------------------------
+    println!("Example of Using while Loop Over Array");
+    println!("--------------------------------------");
+    let arr: [i32; 5] = [10, 20, 30, 40, 50];
+    let mut index: usize = 0;
+
+    while index < 5 {
+        println!("The value is: {}", arr[index]);
+        index += 1;
+    }
+    println!();
+
+    // Example of Using for Loop Over Array
+    // ------------------------------------
+    println!("Example of Using for Loop Over Array");
+    println!("------------------------------------");
+    let arr: [i32; 5] = [10, 20, 30, 40, 50];
+
+    for el in arr {
         println!("The value is: {el}");
     }
     println!();
 
-    // Using Range With for-loops
+    // Using Range With for-Loops
     // --------------------------
-    for num in (1..4).rev() {
-        println!("{num}!");
+    println!("Using Range With for-Loops");
+    println!("--------------------------");
+    for num in (1..6).rev() {
+        print!("{num}... ");
     }
     println!("LIFTOFF!!!");
     println!();
 }
+
+// Check:               $ cargo check
+// Build:               $ cargo build
+// Build + Run:         $ cargo run
+// Execute:             $ ./target/debug/loops
+// Build Release:       $ cargo build --release
+// Build + Run Release: $ cargo run --release
+// Execute Release:     $ ./target/release/loops
