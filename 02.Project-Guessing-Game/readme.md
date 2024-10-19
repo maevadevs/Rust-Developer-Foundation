@@ -81,7 +81,7 @@ fn main() {
 
 ### `fn main()`
 
-- `main()` is the entry to execution
+- `main()` is the entry-point to execution
   - No parameters
   - No return values
 - **`fn` declares a new function**
@@ -147,7 +147,7 @@ Token|Usage
 - `new()` is an *Associated Function* of `String`
   - **An *Associated Function* is a function that is implemented on a type**
   - `new()` is a common function on many types to create an *object* based on that type
-  - `String::new()` creates an empty mutable string
+  - `String::new()` creates an empty **mutable** string
 
 Type|Value|Description
 :-|:-:|:-
@@ -260,7 +260,7 @@ cargo update
 
 - Ignores the `Cargo.lock` file
 - Figure out all the latest versions that fit the specifications in `Cargo.toml`
-- **To update to higher versions, modify the requirments in `Cargo.toml`**
+- **To update to higher versions, modify the requirements in `Cargo.toml`**
 
 ### Generating A Random Number
 
