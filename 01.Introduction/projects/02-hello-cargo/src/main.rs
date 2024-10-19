@@ -2,7 +2,8 @@
 
 /// The entry-point of the program.
 fn main() {
-    println!("Hello, world!");
+    println!("Hello world!");
+    println!();
 }
 
 // Check:               $ cargo check

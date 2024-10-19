@@ -70,6 +70,7 @@ Environment Variable|`CARGO_HOME`|`~/.cargo`
 # ---
 # Check if already installed
 gcc --version
+
 # If not, install via build-essential
 sudo apt-get install build-essential
 ```
@@ -79,8 +80,10 @@ sudo apt-get install build-essential
 # -----
 # Check if already installed
 clang --version
+
 # If not, search available versions
 apt-cache search clang
+
 # Install latest version available: In this case, v15
 sudo apt-get install clang-15 --install-suggests
 ```
@@ -112,7 +115,7 @@ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
   - Install Visual Studio
   - Choose *Desktop Development with C++*
   - Choose *Windows 10 or Windows 11 SDK*
-- Check if rustup is installed
+- Check if `rustup` is installed
 
 ```sh
 # Check if rustup is already installed
@@ -127,7 +130,7 @@ Installation Profile|Included
 :-|:-
 **Minimal**|`rustc`,`rust-std`,`cargo`
 **Default**|*Minimal* + `rust-docs`, `rustfmt`, `clippy`
-**Complete**|*Default* + All components available through `rustup`:<br>Every component ever included in the metadata<br>*This option should never be used except for maintainers maybe*
+**Complete**|*Default* + All components available through `rustup`:<br>Every component ever included in the metadata<br>*This option should never be used except for maintainers*
 
 ## Post-Installation Checks
 
@@ -141,7 +144,7 @@ rustup component list --installed
 
 Component|Description
 :-|:-
-`cargo`|Rust package manager and build tool
+`cargo`|Package Manager / Build Tool
 `clippy`|A collection of lints to catch common mistakes
 `rust-docs`|All Rust Docs installed for offline:<br>Access via `rustup docs` command
 `rust-std`|Rust Standard Library
@@ -169,7 +172,7 @@ Command|Docs For
 `--reference`|The Rust Reference
 `--rust-by-example`|A collection of runnable examples that illustrate various Rust concepts and standard libraries
 `--rustc`|The Rust Compiler Book
-`--rustdoc`|The `rustdoc` Book: Rust Documentation Generation tool
+`--rustdoc`|The `rustdoc` Book: Documentation Generation tool
 `--std`|Standard library API documentation
 `--test`|Library to support code for `rustc`'s built-in unit-test and micro-benchmarking framework
 `--unstable-book`|The Rust Unstable Book
@@ -189,19 +192,22 @@ Command|Description
 - Create a `hello-world` project folder
 
 ```sh
-mkdir hello-world && cd hello-world
+mkdir hello-world
+cd hello-world
 ```
 
 - Add a `src` folder
 
 ```sh
-mkdir src && cd src
+mkdir src
+cd src
 ```
 
 - Create a `main.rs` file in `src` and open in editor
 
 ```sh
-touch main.rs && code main.rs
+touch main.rs
+code main.rs
 ```
 
 - Add the following codes to `main.rs`
@@ -212,17 +218,19 @@ touch main.rs && code main.rs
 /// The entry-point of the program.
 fn main() {
     println!("Hello world!");
+    println!();
 }
 
 // ON LINUX:
-//      Compile: $ rustc src/main.rs -o target/main
-//      Execute: $ ./target/main
+//      Compile: rustc src/main.rs -o target/main
+//      Execute: ./target/main
 // ON WINDOWS:
-//      Compile: $ rustc src\main.rs -o target\main.exe
-//      Execute: $ .\target\main.exe
+//      Compile: rustc src\main.rs -o target\main.exe
+//      Execute: .\target\main.exe
+
 ```
 
-- **`main()` is the entry-point in every executable Rust program**
+- **`main()` function is the entry-point in every executable Rust program**
   - No parameters
   - No return values
 - **Rust requires curly brackets around all function bodies**
@@ -233,7 +241,7 @@ fn main() {
   - Functions and Macros are different in Rust
   - Macros do not always follow the same rules as Functions
   - `println!()` is a macro
-- **Most lines of Rust code end with a semicolon**
+- **Most lines in Rust end with a semicolon (`;`)**
 
 ### Compiling Rust Code
 
@@ -261,6 +269,7 @@ rustc src\main.rs -o target\main.exe
 
 - **NOTE: `rustc` alone is not enough for larger projects**
   - **We use `cargo` instead**
+  - `cargo` allows to better manage a larger project
 
 ## Hello Cargo
 
@@ -294,7 +303,7 @@ Command|Description
 - **NOTE: Always use `--release` when building for final production**
   - Can greatly improve the size of binary
   - Also adds additional optimizations
-  - E.g. `Hello-World`: From 3.45 MiB (`debug`) down to 400 KiB (`release`)
+  - E.g. `Hello-World`: From 3.5 MiB (`debug`) down to 400 KiB (`release`)
 
 ### Check `cargo` Version
 
@@ -371,7 +380,8 @@ edition = "2021"
 
 /// The entry-point of the program.
 fn main() {
-    println!("Hello, world!");
+    println!("Hello world!");
+    println!();
 }
 
 // Check:               $ cargo check
@@ -404,7 +414,6 @@ cargo build
 
 - We can run `cargo run` to build and run at once
 - Convenience for *`cargo build` + run binaries*
-- We can also use `--release` for the release option
 
 ```sh
 cd hello-cargo
@@ -412,6 +421,7 @@ cargo run
 ```
 
 - **NOTE: Cargo will only rebuild if there are diff changes detected**
+- **NOTE: We can also use `cargo run --release` for the release option**
 
 #### Check Pre-Build
 
