@@ -29,16 +29,16 @@ fn main() {
     // ----------------
     // Variable is immutable by default
     // But adding keyword `mut` makes it mutable
-    let mut another_int: i32 = 78;
+    let mut mut_int: i32 = 78;
 
     println!("Mutable Variable:");
     println!("-----------------");
-    println!("mutable another_int = {another_int}");
+    println!("mutable mut_int = {mut_int}");
 
     // This line will not generate an error
-    another_int = 1024;
+    mut_int = 1024;
 
-    println!("Now, mutable another_int = {another_int}");
+    println!("Now, mutable mut_int = {mut_int}");
     println!();
 
     // Examples of Constants
@@ -75,9 +75,9 @@ fn main() {
 
     println!("Example of Changing Variable Type While Shadowing:");
     println!("--------------------------------------------------");
-    let spaces: &str = "   x    ";          // String type
+    let spaces: &str = "   x    ";          // String type: Non-mutable
     println!("Before: spaces = {spaces}");
-    let spaces: usize = spaces.len();       // Number type
+    let spaces: usize = spaces.len();       // Number type: Non-mutable
     println!("After: spaces = {spaces}");
 
     println!();

@@ -66,7 +66,7 @@ fn main() {
 ```
 
 - **We can still change variables to be mutable when needed**
-  - But we have to explicitly make a variable mutable
+  - But we have to ***explicitly*** make a variable mutable
   - **Add `mut` keyword**
   - Explicitly conveys intent that other parts of the code will change this variable
   - Deciding to use mutability is up to you
@@ -78,16 +78,16 @@ fn main() {
     // ----------------
     // Variable is immutable by default
     // But adding keyword `mut` makes it mutable
-    let mut another_int: i32 = 78;
+    let mut mut_int: i32 = 78;
 
     println!("Mutable Variable:");
     println!("-----------------");
-    println!("mutable another_int = {another_int}");
+    println!("mutable mut_int = {mut_int}");
 
     // This line will not generate an error
-    another_int = 1024;
+    mut_int = 1024;
 
-    println!("Now, mutable another_int = {another_int}");
+    println!("Now, mutable mut_int = {mut_int}");
 }
 ```
 
@@ -169,7 +169,7 @@ fn main() {
   - **The variable itself does not mutate: We are creating a new variable each time**
   - We can apply some transformation on the *value* without affecting the *variable*
 - **We can also change the type of the variable while shadowing the same name**
-  - Because we are essentially creating a new variable anyway
+  - Because we are essentially creating a new variable each time anyway
   - *Shadowing allows to reuse the name without a need to create a new variable name*
   - However, the old value is gone (unless in a different scope)
 
@@ -177,9 +177,9 @@ fn main() {
 fn main() {
     println!("Example of Changing Variable Type While Shadowing:");
     println!("--------------------------------------------------");
-    let spaces: &str = "   x    ";          // String type
+    let spaces: &str = "   x    ";          // String type: Non-mutable
     println!("Before: spaces = {spaces}");
-    let spaces: usize = spaces.len();       // Number type
+    let spaces: usize = spaces.len();       // Number type: Non-mutable
     println!("After: spaces = {spaces}");
 }
 ```
@@ -200,7 +200,7 @@ let mut spaces = "   ";         // String type
   - **Every value in Rust is of a specific data type**
   - **All types of all variables must be known at compile time**
 - Compiler can infer the type based on the value
-  - *However, when many types are possible (E.g. integers), we must add a type annotation*
+  - *However, when many types are possible (E.g. integers), we must specify a type annotation*
 
 ```rs
 // Explicit type: Unsigned Integer-32
@@ -400,7 +400,8 @@ println!("is_reply = {is_reply}");
 
 #### Characters
 
-- Represent a single character: Rust's most primitive alphabetic type
+- Represent a single character
+- Rust's most primitive alphabetic type
 - **Represented as a *Unicode Scalar Value***
   - **4-bytes in size**
   - Range from `U+0000` to `U+D7FF` and `U+E000` to `U+10FFFF` inclusive
@@ -653,7 +654,7 @@ Term|Definition
 // ---------------------
 println!("Example of Statements:");
 println!("----------------------");
-let y: i32 = 6;
+let y: i32 = 6; // This is a statement
 println!("The value of y is {y}");
 ```
 
@@ -665,7 +666,8 @@ println!("The value of y is {y}");
 
 ```rs
 // This is an error:
-// (let y = 6) is a statement: Returns no value to bind to x
+// (let y = 6) is a statement
+// It returns no value to bind to x
 let x = (let y = 6);
 ```
 
@@ -674,7 +676,7 @@ let x = (let y = 6);
   - Expressions can be part of a statement
   - Any math operation is an expression
   - Calling a function/macro is also an expression
-  - *A new scope block created with curly-braces is also an expression*
+  - *A new scope block created with curly-braces `{}` is also an expression*
 - **Expressions do not end with semicolons**
   - *An expression with a semicolon is a statement*
   - *Statements do not return a value*
@@ -686,7 +688,9 @@ println!("Example of Expressions:");
 println!("-----------------------");
 let exp: i32 = {
     let y: i32 = 3;
-    y + 1 // Expressions do not end with semicolons
+    // Expressions do not end with semicolons
+    // Else, it is considered a statement and does not return a value
+    y + 1
 };
 
 println!("The value of exp is {exp}");
@@ -696,22 +700,24 @@ println!("The value of exp is {exp}");
 
 - Functions can return values to the code that calls them
 - **The *return type* of the function must be declared with `-> <type>`**
+  - If it is unspecified, that means the function returns nothing
 - **The return value of the function is the value of the final expression in the function body**
   - Or we can return earlier by specifying a `return` and a value
   - But most functions return the last expression implicitly
 - The value returned from a function can be used as any other value
+  - It is the value of calling the function
 
 ```rs
-/// Example of function that return a value.
+/// Example of function that returns a value.
 fn get_thousand() -> i32 {
     1000
 }
 
 fn main() {
-    // Example of Function That Return a Value
-    // ---------------------------------------
-    println!("Example of Function That Return a Value:");
-    println!("----------------------------------------");
+    // Example of Function That Returns a Value
+    // ----------------------------------------
+    println!("Example of Function That Returns a Value:");
+    println!("-----------------------------------------");
     let res: i32 = get_thousand();
     println!("Value from calling get_thousand() is {res}");
 }
@@ -721,16 +727,16 @@ fn main() {
 - It can be implicit, or explicitly use `return`
 
 ```rs
-/// Another Example of function that return a value.
+/// Another Example of function that returns a value.
 fn plus_one(x: i32) -> i32 {
     return x + 1;
 }
 
 fn main() {
-    // Example of Function That Return a Value
-    // ---------------------------------------
-    println!("Example of Function That Return a Value:");
-    println!("----------------------------------------");
+    // Example of Function That Returns a Value
+    // ----------------------------------------
+    println!("Example of Function That Returns a Value:");
+    println!("-----------------------------------------");
     let res2: i32 = plus_one(res);
     println!("Value from calling plus_one(res) is {res2}");
 }
@@ -742,7 +748,7 @@ fn main() {
   - Rust often provides messages to possibly help rectify the issue
 
 ```rs
-/// Example of function that return nothing.
+/// Example of function that returns nothing.
 fn plus_one(x: i32) -> i32 {
     x + 1; // This is a statement: This will throw an error as the return is still exptected to be i32.
 }
@@ -758,18 +764,22 @@ Type|Description
 :-|:-
 **Inline Comment**|- Start with `//`<br>- Ignore until the end of the line
 **Block Comment**|- Start with `/*`<br>- Ignore until `*/`<br>- Does not nest
-**Docstring Comment**|- Used for documenting functions and "objects"<br>- Start with `///`<br>- Same effect as *Inline Comments*<br>- These are picked-up by `rustdoc` and compiled into documentations<br>- Rust codes can be put inside ```
+**Docstring Comment**|- Used for documenting functions and "objects"<br>- Start with `///`<br>- Same effect as *Inline Comments*<br>- These are picked-up by `rustdoc` and compiled into documentations<br>- Rust codes can be put inside triple-ticks <code>```</code>
 
 ```rs
 // Inline Comment
 // hello, world
+```
 
+```rs
 /*
-So we’re doing something complicated here, long enough that we need
+So we're doing something complicated here, long enough that we need
 multiple lines of comments to do it! Whew! Hopefully, this comment will
 explain what’s going on.
 */
+```
 
+```rs
 /// A human being is represented here.
 pub struct Person {
     /// A person must have a name, no matter how much Juliet may hate it.
@@ -803,8 +813,8 @@ pub fn new(name: &str) -> Person {
 - Allows to branch code depending on conditions
 - Blocks of code associated with the conditions are called *arms*
 - We can give an optional `else` expression
-  - An alternative block of code to execute if the condition evaluate to `false`
-  - `else` block is optional: If not given, the execution just move on
+  - An alternative block of code to execute if the condition evaluates to `false`
+  - `else` block is optional: If not given, the execution just moves on
 
 ```rs
 // Example of If-Else Expression
@@ -868,26 +878,26 @@ if number % 4 == 0 {
 println!("Example of Using if With let:");
 println!("-----------------------------");
 let condition: bool = true;
-let number: i32 = if condition { 5i32 } else { 6i32 };
+let number: i32 = if condition { 5000i32 } else { 9000i32 };
 
 println!(">> The value of number is: {number}");
 ```
 
 - `number` will be bound to a value based on the outcome of the `if` expression
-- `{ 5 }` and `{ 6 }` are blocks with expressions `5` and `6`
+- `{ 5000i32 }` and `{ 6000i32 }` are blocks with expressions `5000` and `6000`
   - The value of the whole `if` expression depends on the block of code that executes
   - **Values that have the potential to be results from each arm of the `if` must be of the same type**
   - In this case, they are both `i32`
-  - If the types do not match, we get an error
+  - **If the types do not match, we get an `mismatched type` error**
 
 ```rs
 // This is an error: `if` and `else` have incompatible types
 let number: i32 = if condition { 5i8 } else { 6i32 };
 ```
 
-- Variables must have a single type
-  - Rust needs to know at compile time what type is assigned to `number`
-  - Knowing the type of `number` lets the compiler verify the type is valid everywhere we use `number`
+- **Variables must have a single type**
+  - Rust needs to know *at compile time* what type is assigned to `number`
+  - Knowing the type of `number` allows the compiler to verify that the type is valid everywhere we use `number`
 
 ### Repetition With Loops
 
@@ -900,7 +910,7 @@ let number: i32 = if condition { 5i8 } else { 6i32 };
 
 - Allows to execute a block of code forever or until explicitly told to stop
 - **The program will not stop until interupted with `ctrl+c`**
-- *This is basically an Infinite Loop*
+- *This is basically an Infinite Loop, a `while true` without warnings*
 
 ```rs
 // Example of Infinite Loops Using `loop`
@@ -925,9 +935,10 @@ loop {
     if i == 10 {
         break;
     }
-    println!("run again!");
+    println!("run again! {i}");
     i += 1;
 }
+println!();
 ```
 
 #### Returning Values From Loops
@@ -936,7 +947,7 @@ loop {
   - E.g. Checking whether a thread has completed its job
 - We might want to capture values out of the loop
   - **We can add the value to return from the loop after the `break` expression**
-  - This value will be returned from the loop
+  - This value will be returned from the loop as the value of the the `loop` expression
 
 ```rs
 // Example of Returning Values From Loop
@@ -949,7 +960,7 @@ let mut counter: i32 = 0;
 let result: i32 = loop {
     if counter == 10 {
         // Return the value from the loop
-        break counter * 2;
+        break counter * 2
     }
     counter += 1;
 };
@@ -963,8 +974,8 @@ println!("The result from the loop is {result}");
 
 #### Loop Labels: Disambiguate Between Multiple Loops
 
-- For nested loops, `break` and `continue` apply to the innermost loop
-- **To apply them to outer loops instead, we use labels to specify the loop**
+- For nested loops, `break` and `continue` apply to the *innermost* loop
+- **To apply them to outer loops instead, we use labels to specify the loop tp apply to**
 - **Loop labels must begin with a single quote `'`**
 
 ```rs
@@ -981,14 +992,14 @@ let mut count: i32 = 0;
 
     // Inner loop
     loop {
+        if count == 2 {
+            // Break from the outer loop
+            break 'counting_up;
+        }
         println!("\tremaining = {remaining}");
         if remaining == 5 {
             // Break from the inner loop
             break;
-        }
-        if count == 2 {
-            // Break from the outer loop
-            break 'counting_up;
         }
         remaining -= 1;
     }
@@ -1011,7 +1022,7 @@ println!("End count = {count}");
 // ---------------------
 println!("Example of while Loop");
 println!("---------------------");
-let mut number: i32 = 5;
+let mut number: i32 = 10;
 
 while number != 0 {
     print!("{number}... ");
@@ -1042,13 +1053,13 @@ while index < 5 {
 - **However, this approach is error prone and slow**
   - Can cause the program to panic if the index value or test condition is incorrect
   - Compiler adds runtime code to perform the conditional check
-- **More concise alterntive: Use `for` loop**
+- **More concise alternative: Use `for`-loop**
   - Execute some code for each item in a collection
   - Increase the safety of the code
-  - Eliminated possible bugs from *overindexing* or *underindexing*
+  - Eliminate possible bugs from *overindexing* or *underindexing*
   - Easier to maintain in case the array changes
-- **Most Rustaceans would use a `for` loop over `while` loop**
-  - The safety and conciseness of `for` loops make them the most commonly used loop construct in Rust
+- **Most Rustaceans would use a `for`-loop over `while`-loop**
+  - The safety and conciseness of `for`-loops make them the most commonly used loop construct in Rust
 
 ```rs
 // Example of Using for Loop Over Array
@@ -1074,7 +1085,7 @@ for el in arr {
 // --------------------------
 println!("Using Range With for-Loops");
 println!("--------------------------");
-for num in (1..6).rev() {
+for num in (1..11).rev() {
     print!("{num}... ");
 }
 println!("LIFTOFF!!!");

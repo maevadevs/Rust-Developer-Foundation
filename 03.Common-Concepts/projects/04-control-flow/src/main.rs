@@ -36,7 +36,7 @@ fn main() {
     println!("Example of Using if With let:");
     println!("-----------------------------");
     let condition: bool = true;
-    let number: i32 = if condition { 5i32 } else { 6i32 };
+    let number: i32 = if condition { 5000i32 } else { 9000i32 };
 
     println!(">> The value of number is: {number}");
     println!();

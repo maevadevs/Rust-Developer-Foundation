@@ -27,7 +27,7 @@ fn main() {
     // ---------------------
     println!("Example of Statements:");
     println!("----------------------");
-    let y: i32 = 6;
+    let y: i32 = 6; // This is a statement
     println!("The value of y is {y}");
     println!();
 
@@ -37,16 +37,18 @@ fn main() {
     println!("-----------------------");
     let exp: i32 = {
         let y: i32 = 3;
-        y + 1 // Expressions do not end with semicolons
+        // Expressions do not end with semicolons
+        // Else, it is considered a statement and does not return a value
+        y + 1
     };
 
     println!("The value of exp is {exp}");
     println!();
 
-    // Example of Function That Return a Value
-    // ---------------------------------------
-    println!("Example of Function That Return a Value:");
-    println!("----------------------------------------");
+    // Example of Function That Returns a Value
+    // ----------------------------------------
+    println!("Example of Function That Returns a Value:");
+    println!("-----------------------------------------");
     let res: i32 = get_thousand();
     let res2: i32 = plus_one(res);
     println!("Value from calling get_thousand() is {res}");
@@ -69,12 +71,12 @@ fn print_labeled_measurement(value: i32, unit_label: &str) {
     println!("The measurement is: {value} {unit_label}");
 }
 
-/// Example of function that return a value.
+/// Example of function that returns a value.
 fn get_thousand() -> i32 {
     1000
 }
 
-/// Another Example of function that return a value.
+/// Another Example of function that returns a value.
 fn plus_one(x: i32) -> i32 {
     return x + 1;
 }

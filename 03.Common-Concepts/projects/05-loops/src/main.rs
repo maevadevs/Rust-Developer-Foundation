@@ -19,7 +19,7 @@ fn main() {
         if i == 10 {
             break;
         }
-        println!("run again!");
+        println!("run again! {i}");
         i += 1;
     }
     println!();
@@ -34,7 +34,7 @@ fn main() {
     let result: i32 = loop {
         if counter == 10 {
             // Return the value from the loop
-            break counter * 2;
+            break counter * 2
         }
         counter += 1;
     };
@@ -55,14 +55,14 @@ fn main() {
 
         // Inner loop
         loop {
+            if count == 2 {
+                // Break from the outer loop
+                break 'counting_up;
+            }
             println!("\tremaining = {remaining}");
             if remaining == 5 {
                 // Break from the inner loop
                 break;
-            }
-            if count == 2 {
-                // Break from the outer loop
-                break 'counting_up;
             }
             remaining -= 1;
         }
@@ -76,7 +76,7 @@ fn main() {
     // ---------------------
     println!("Example of while Loop");
     println!("---------------------");
-    let mut number: i32 = 5;
+    let mut number: i32 = 10;
 
     while number != 0 {
         print!("{number}... ");
@@ -114,7 +114,7 @@ fn main() {
     // --------------------------
     println!("Using Range With for-Loops");
     println!("--------------------------");
-    for num in (1..6).rev() {
+    for num in (1..11).rev() {
         print!("{num}... ");
     }
     println!("LIFTOFF!!!");
