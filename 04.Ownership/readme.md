@@ -17,6 +17,7 @@
   - [Ownership and Functions](#ownership-and-functions)
   - [Return Values and Scope](#return-values-and-scope)
 - [References and Borrowing](#references-and-borrowing)
+  - [Mutable Reference](#mutable-reference)
 
 ---
 
@@ -32,13 +33,13 @@
 
 - **A set of rules that governs how a Rust program manages memory**
   - All programs must manage memory while running
-  - Some languages use GC to clear memory during runtime (e.g Go, Python, C#, Java, ECMAScript)
-  - Other languages must have their memory managed manually and explicitly (E.g. C, C++, Pascal, Fotran, Zig)
+  - Some languages use GC or ARC to clear memory during runtime: Go, Python, C#, Java, ECMAScript, Swift
+  - Other languages must have their memory managed manually and explicitly: C, C++, Pascal, Fotran, Zig
 - Rust uses a different approach
   - **Memory is managed through a system of ownership**
   - **There are a set of rules that the compiler checks**
   - **If any of the rules are violated, the program will not compile**
-  - **None of the features of ownership will slow down the program while it is running**
+  - **None of the features of ownership will slow down the program during runtime**
 - Understanding *Ownership* gives a solid foundation for understanding the features that make Rust unique
 
 ### Stack and Heap
@@ -47,7 +48,7 @@
   - Whether a value is on the Stack or the Heap affects how the language behaves
   - Also affects why you have to make certain decisions
   - *Parts of Ownership is described in relation to the Stack and the Heap*
-- **Stack and the Heap are parts of memory available during runtime**
+- **Stack and Heap are parts of memory available during runtime**
   - But they are structured in different ways
 
 #### Stack
@@ -59,7 +60,7 @@
 - Adding/Removing from the middle would not work well
   - Adding data == *Pushing* onto the Stack
   - Removing data == *Popping* from the Stack
-- **All data stored on the Stack must have a known and fixed-size**
+- **All data stored on the Stack must have a known in advanced and fixed-size**
   - Else, store the data in the Heap instead
 
 #### Heap
@@ -70,7 +71,7 @@
   - Return a *pointer/address* to that location
   - This process is called *Allocating* the Heap
   - *NOTE: Pushing value unto the Stack is not considered Allocating*
-- **The pointer to the Heap is a known and fixed-size value**
+- **The pointer to the Heap is a known and fixed-size value (Address)**
   - *This pointer is stored on the Stack as a reference to the Heap location*
   - When we want the actual data, we must follow the pointer to the Heap location
 
@@ -124,12 +125,12 @@
 ### `String` Type
 
 - A data type that is more complex than the primitives
-- Previous Data Types so far are of known-size
+- Previous Data Types so far are of known-size (fixed-size)
   - *Integers*, *Floats*, *Booleans*, *Tuples*, *Arrays*
   - Can be stored on the Stack
   - Popped off the Stack when their scope is over
   - Can be quickly and trivially copied to make a new independent instance (copied by value)
-- **String literals are *immutable***
+- **String literals `str` are *immutable***
   - Allow to hard-code string values
   - Not suitable for every situation in which we may want to use text
   - Not every string length is known at compile-time
@@ -158,7 +159,7 @@ println!("st = {st}");
 - `::` operator allows to namespace a particular function under the type
   - Better than using some sort of name like `string_from()`
 - `st.push_str()` appends a literal to a `String`
-- **The difference between `String` and string literals is how they deal with memory**
+- **The difference between `String` and string literals `str` is how they deal with memory**
 
 ### Memory and Allocation
 
@@ -236,11 +237,11 @@ let s2 = s1;
 - Reassigning a `String` to another variables copies the *pointer*, *length*, and *capacity* to the Stack
   - The Heap data is not copied
   - Else, the operation would be very expensive, especially if the Heap data is large
+- **When a variable goes out of scope, Rust automatically calls the `drop()` function**
+  - Cleans up the Heap memory for that variable
 
 <img src="./img/String-Variable-Alias.png" width="30%" />
 
-- **When a variable goes out of scope, Rust automatically calls the `drop()` function**
-  - Cleans up the Heap memory for that variable
 - **What happen when multiple variables point to the same value in Memory? (`s1` and `s2`)?**
   - When `s2` and `s1` go out of scope, they will both try to free the same memory
   - **This is known as a *double-free* error**
@@ -353,14 +354,14 @@ fn main() {
 
 fn takes_ownership(some_string: String) {
     // some_string comes into scope
-    println!("{some_string}");
+    println!("some_string = {some_string}");
 }
 // Here, some_string goes out of scope and `drop` is called.
 // The backing memory is freed.
 
 fn makes_copy(some_integer: i32) {
     // some_integer comes into scope
-    println!("{some_integer}");
+    println!("some_integer = {some_integer}");
 }
 // Here, some_integer goes out of scope.
 // Nothing special happens.
@@ -385,10 +386,8 @@ fn main() {
     println!("Example of Return Values and Ownership:");
     println!("---------------------------------------");
 
-    let s1: String = gives_ownership();         // gives_ownership() moves its return value into s1
-
-    let s2: String = String::from("hello");     // s2 comes into scope
-
+    let s1: String = gives_ownership(); // gives_ownership() moves its return value into s1
+    let s2: String = String::from("hello"); // s2 comes into scope
     let s3: String = takes_and_gives_back(s2);  // s2 is moved into takes_and_gives_back()
                                                 // which also moves its return value into s3
 
@@ -431,6 +430,69 @@ fn calculate_length(st: String) -> (String, usize) {
 ```
 
 - But this is too much ceremony and a lot of work for a concept that should be common
-  - ***Reference* - A feature for using a value without transferring ownership**
+  - We have to return the `String` to the calling function so we can still use it after the call
+  - The `String` was moved into `calculate_length()` and needs to be returned back for further usage
+- ***Reference* - A feature for using a value without transferring ownership**
 
 ## References and Borrowing
+
+- In the example above, we can provide a reference to the `String` value
+- *Reference*
+  - Similar to *Pointer*
+  - An address we can follow to access the data stored at that address
+  - The data is owned by a different variable
+  - *Unlike a Pointer, a Reference is **guaranteed to point to a valid value of a particular type for the life of that reference***
+
+```rs
+fn main() {
+    println!("Example of Borrowing With Reference:");
+    println!("------------------------------------");
+
+    let s1: String = String::from("hello");
+    let len: usize = calculate_length(&s1); // s1 is borrowed by the function via reference
+    println!("The length of '{s1}' is {len}.");
+}
+
+/// A function that borrows a reference
+fn calculate_length(s: &String) -> usize {
+    return s.len();
+}
+```
+
+- `calculate_length()` takes a `&String` and is passed `&s1` a reference to `s1`
+  - Ampersands `&` represent references
+  - **Allows to refer to some value without taking ownership of it**
+  - We also pass reference to the function when we call it
+
+<img src="./img/Reference-And-Borrowing.png" width="40%" />
+
+- **NOTE: The opposite of *referencing* with `&` is *dereferencing* with `*`**
+  - `&s1` creates a reference that refers to the value of `s1` but does not own it
+  - Without ownership, the value it points to will not be dropped when the reference stops being used
+- The signature of the function uses `&` to indicate that the type of the parameter `s` is a reference
+  - The scope in which the variable `s` is valid is the same as any function parameter's scope
+  - But the value pointed to by the reference is not dropped when `s` stops being used
+  - `s` does not have ownership
+- **When functions have references as parameters, no need to return the values in order to give back ownership**
+  - We never had ownership to begin with
+- **Borrowing** - The action of creating a reference
+  - As in real life, if a person owns something, you can borrow it from them
+  - When you are done, you have to give it back because you do not own it
+- **Trying to modify a borrowed value will create a compile-time error**
+
+```rs
+fn main() {
+    let s = String::from("hello");
+    change(&s); // Attempting to change a borrowed value
+}
+
+/// A borrowing function.
+fn change(some_string: &String) {
+    // Attempting to change a borrowed value
+    some_string.push_str(", world"); // error[E0596]: cannot borrow `*some_string` as mutable, as it is behind a `&` reference
+}
+```
+
+- **Similar to variables, by default, references are *immutable***
+
+### Mutable Reference

@@ -51,13 +51,13 @@ fn main() {
 
     let st: String = String::from("hello");  // st comes into scope
 
-    takes_ownership(st);   // st's value moves into the function
-    // println!("st = {st}");       // so st is no longer valid here
+    takes_ownership(st);    // st's value moves into the function
+    // println!("st = {st}");         // so st is no longer valid here
 
-    let x: i32 = 5;                 // x comes into scope
+    let x: i32 = 5;                   // x comes into scope
 
-    makes_copy(x);        // x would move into the function,
-    println!("x = {x}");            // but i32 is Copy, so it's okay to still use x afterward
+    makes_copy(x);         // x would move into the function,
+    println!("x = {x}");              // but i32 is Copy, so it's okay to still use x afterward
     println!();
 
     // Example of Return Values and Ownership
@@ -66,19 +66,25 @@ fn main() {
     println!("---------------------------------------");
 
     let s1: String = gives_ownership(); // gives_ownership() moves its return value into s1
-
     let s2: String = String::from("hello"); // s2 comes into scope
-
-    let s3: String = takes_and_gives_back(s2);   // s2 is moved into takes_and_gives_back()
+    let s3: String = takes_and_gives_back(s2);  // s2 is moved into takes_and_gives_back()
                                                         // which also moves its return value into s3
 
     println!("s1 = {s1}");
     // println!("s2 = {s2}"); // s2 has moved
     println!("s3 = {s3}");
     println!();
+
+    println!("Example of Borrowing With Reference:");
+    println!("------------------------------------");
+
+    let s1: String = String::from("hello");
+    let len: usize = calculate_length(&s1); // s1 is borrowed by the function via reference
+    println!("The length of '{s1}' is {len}.");
+    println!();
 }
 // Here, s3 goes out of scope and is dropped
-// s2 was moved, so nothing happens
+// s2 was moved into takes_and_gives_back(), so nothing happens
 // s1 goes out of scope and is dropped
 // Here, x goes out of scope, then st
 // But because st's value was moved, nothing special happens
@@ -97,16 +103,23 @@ fn makes_copy(some_integer: i32) {
 // Here, some_integer goes out of scope
 // Nothing special happens
 
-/// gives_ownership() will move its return value into the function that calls it
+/// gives_ownership() will move its return value into the function that calls it.
 fn gives_ownership() -> String {
     let some_string = String::from("yours"); // some_string comes into scope
     return some_string; // some_string is returned and moves out to the calling function
 }
 
-// takes_and_gives_back() takes a String and returns one
+/// takes_and_gives_back() takes a String and returns one
 fn takes_and_gives_back(a_string: String) -> String { // a_string comes into scope
     return a_string;  // a_string is returned and moves out to the calling function
 }
+
+/// A function that borrows a reference
+fn calculate_length(st: &String) -> usize {
+    return st.len();
+}
+// Here, st goes out of scope.
+// But because it does not have ownership of what it refers to, it is not dropped.
 
 // Check:               $ cargo check
 // Build:               $ cargo build
