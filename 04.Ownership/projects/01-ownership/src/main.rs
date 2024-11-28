@@ -82,6 +82,29 @@ fn main() {
     let len: usize = calculate_length(&s1); // s1 is borrowed by the function via reference
     println!("The length of '{s1}' is {len}.");
     println!();
+
+    println!("Example of Mutable Reference");
+    println!("----------------------------");
+
+    // The target variable needs to be mutable
+    let mut s2: String = String::from("hello");
+    println!("Before: s2 = {s2}");
+    change(&mut s2); // Attempting to change a mutable borrowed value
+    println!("After: s2 = {s2}");
+    println!();
+
+    {
+        let mut st: String = String::from("hello");
+
+        let mut_r1: &mut String = &mut st; // 1st Mutable Reference
+        // let mut_r2: &mut String = &mut st; // 2nd Mutable Reference: Error: Cannot borrow a 2nd time
+
+        println!("{mut_r1}");
+        println!("{mut_r1}"); // Last time the 1st Mutable Reference is used within this block. End of scope for mut_r1
+
+        let mut_r2: &mut String = &mut st; // 2nd Mutable Reference: We can now borrow as 1st mutable reference scope has ended
+        println!("{mut_r2}");
+    }
 }
 // Here, s3 goes out of scope and is dropped
 // s2 was moved into takes_and_gives_back(), so nothing happens
@@ -105,7 +128,7 @@ fn makes_copy(some_integer: i32) {
 
 /// gives_ownership() will move its return value into the function that calls it.
 fn gives_ownership() -> String {
-    let some_string = String::from("yours"); // some_string comes into scope
+    let some_string: String = String::from("yours"); // some_string comes into scope
     return some_string; // some_string is returned and moves out to the calling function
 }
 
@@ -120,6 +143,11 @@ fn calculate_length(st: &String) -> usize {
 }
 // Here, st goes out of scope.
 // But because it does not have ownership of what it refers to, it is not dropped.
+
+/// A borrowing function: Parameter is mutable.
+fn change(some_string: &mut String) {
+    some_string.push_str(", world");
+}
 
 // Check:               $ cargo check
 // Build:               $ cargo build

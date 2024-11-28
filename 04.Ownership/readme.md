@@ -18,13 +18,16 @@
   - [Return Values and Scope](#return-values-and-scope)
 - [References and Borrowing](#references-and-borrowing)
   - [Mutable Reference](#mutable-reference)
+  - [Dangling Reference](#dangling-reference)
+  - [Rules of References](#rules-of-references)
+- [The `Slice` Type](#the-slice-type)
 
 ---
 
-- Rust's most unique feature
+- *Ownership* is Rust's most unique feature
 - Has deep implications for the rest of the language
 - **Allows to make memory safety guarantees without needing a GC**
-- Other related features
+- Other related features:
   - Borrowing
   - Slices
   - How Rust lays out data in memory
@@ -60,7 +63,7 @@
 - Adding/Removing from the middle would not work well
   - Adding data == *Pushing* onto the Stack
   - Removing data == *Popping* from the Stack
-- **All data stored on the Stack must have a known in advanced and fixed-size**
+- **All data stored on the Stack must have a known-in-advanced type and fixed-size**
   - Else, store the data in the Heap instead
 
 #### Heap
@@ -130,7 +133,7 @@
   - Can be stored on the Stack
   - Popped off the Stack when their scope is over
   - Can be quickly and trivially copied to make a new independent instance (copied by value)
-- **String literals `str` are *immutable***
+- **String literals `&str` are *immutable***
   - Allow to hard-code string values
   - Not suitable for every situation in which we may want to use text
   - Not every string length is known at compile-time
@@ -159,7 +162,7 @@ println!("st = {st}");
 - `::` operator allows to namespace a particular function under the type
   - Better than using some sort of name like `string_from()`
 - `st.push_str()` appends a literal to a `String`
-- **The difference between `String` and string literals `str` is how they deal with memory**
+- **The difference between `String` and string literals `&str` is how they deal with memory**
 
 ### Memory and Allocation
 
@@ -175,11 +178,11 @@ println!("st = {st}");
   - Memory should be returned to the allocator when finished with the string
 - Memory allocation is done with `String::from()`
 - Memory deallocation
-  - In GC-based languages, it is handled by the GC
+  - In GC-based languages, this would be handled by the GC
   - Without GC, we need to tell when to free the memory
-  - Doing this correctly without GC has always been challenging
+  - Doing this correctly manually without GC has always been challenging
   - Need to pair exactly one `allocate` with exactly one `deallocate`
-- **Rust uses a different approach: The memory is automatically freed once the variable that owns it goes out of scope**
+- **Rust uses a different approach: The memory is automatically freed once the variable that *owns* it goes out of scope**
 
 ```rs
 {
@@ -192,7 +195,7 @@ println!("st = {st}");
 
 - **When a variable goes out of scope, Rust calls a special function `drop()`**
   - `drop()` defines how a `String` gets deallocated from memory
-  - Rust calls `drop()` automatically at the closing curly bracket
+  - Rust calls `drop()` automatically at the closing curly bracket (end of scope)
   - **NOTE: In C++, this pattern is called *Resource Acquisition Is Initialization (RAII)***
   - This pattern has a profound impact on the way Rust code is written
   - The behavior of code can be unexpected in more complicated situations
@@ -204,22 +207,22 @@ println!("st = {st}");
 
 ```rs
 // Bind the value 5 to x
-let x = 5;
+let x: i32 = 5;
 
 // Make a copy of the value in x and bind it to y
-let y = x;
+let y: i32 = x;
 ```
 
 - Integers are simple values with a known fixed size
-- They are copied-by-value to a different variable
+- They are **copied-by-value** to a different variable
 - Each value is pushed unto the Stack
 
 ```rs
 // Bind the value "hello" to s1
-let s1 = String::from("hello");
+let s1: String = String::from("hello");
 
 // This does not make a separate copy of s1
-let s2 = s1;
+let s2: String = s1;
 ```
 
 - A `String` is made of 3 parts
@@ -234,7 +237,7 @@ let s2 = s1;
 
 - **Length** - How much memory in bytes the contents of the `String` are currently using
 - **Capacity** - Total amount of memory in bytes that the `String` has received from the *Allocator*
-- Reassigning a `String` to another variables copies the *pointer*, *length*, and *capacity* to the Stack
+- Reassigning the `String` to another variables copies the *pointer*, *length*, and *capacity* to the Stack
   - The Heap data is not copied
   - Else, the operation would be very expensive, especially if the Heap data is large
 - **When a variable goes out of scope, Rust automatically calls the `drop()` function**
@@ -279,6 +282,7 @@ println!("s2 = {s2}");
 
 - `.clone()` allows to make a *deep-copy* of the data in Heap *by value*
 - **The Heap data itself get copied: This can be expensive**
+- Cloning does not *move* the value so both variables are still valid after the operation
 
 ```rs
 // Example of Variables and Data Interacting with *Clone*
@@ -302,10 +306,10 @@ println!("s1 = {s1}, s2 = {s2}");
 
 ```rs
 // Bind the value 5 to x
-let x = 5;
+let x: i8 = 5;
 
 // Make a copy of the value in x and bind it to y
-let y = x;
+let y: i8 = x;
 ```
 
 - **Rust has a special annotation `Copy` trait that we can place on types that are stored on the Stack**
@@ -316,7 +320,7 @@ let y = x;
   - Result into a compile-time error
 - **Types that implement the `Copy` trait**
   - As a general rule, any group of simple scalar values can implement `Copy`
-  - Anything that requires allocation (Heap) or is some form of resource cannot implement `Copy`
+  - Anything that requires allocation (Heap) or is some form of resource **cannot** implement `Copy`
   - Some of the types that implement `Copy`:
     - Integer types
     - Boolean type
@@ -401,7 +405,7 @@ fn main() {
 
 /// gives_ownership() will move its return value into the function that calls it
 fn gives_ownership() -> String {
-    let some_string = String::from("yours"); // some_string comes into scope
+    let some_string: String = String::from("yours"); // some_string comes into scope
     return some_string; // some_string is returned and moves out to the calling function
 }
 
@@ -418,14 +422,14 @@ fn takes_and_gives_back(a_string: String) -> String { // a_string comes into sco
 
 ```rs
 fn main() {
-    let s1 = String::from("hello");
+    let s1: String = String::from("hello");
     let (s2, len) = calculate_length(s1);
     println!("The length of '{s2}' is {len}.");
 }
 
 fn calculate_length(st: String) -> (String, usize) {
-    let length = st.len(); // len() returns the length of a String
-    return (s, length);
+    let length: usize = st.len(); // len() returns the length of a String
+    return (st, length);
 }
 ```
 
@@ -442,6 +446,7 @@ fn calculate_length(st: String) -> (String, usize) {
   - An address we can follow to access the data stored at that address
   - The data is owned by a different variable
   - *Unlike a Pointer, a Reference is **guaranteed to point to a valid value of a particular type for the life of that reference***
+  - ***A reference's scope starts from where it is introduced and continues through the last time that reference is used, or the end of the block, whichever is first***
 
 ```rs
 fn main() {
@@ -467,8 +472,8 @@ fn calculate_length(s: &String) -> usize {
 <img src="./img/Reference-And-Borrowing.png" width="40%" />
 
 - **NOTE: The opposite of *referencing* with `&` is *dereferencing* with `*`**
-  - `&s1` creates a reference that refers to the value of `s1` but does not own it
-  - Without ownership, the value it points to will not be dropped when the reference stops being used
+  - `&s1` creates a reference that refers to the value of `s1` ***but does not own it***
+  - **Without ownership, the value it points to will not be dropped when the reference stops being used**
 - The signature of the function uses `&` to indicate that the type of the parameter `s` is a reference
   - The scope in which the variable `s` is valid is the same as any function parameter's scope
   - But the value pointed to by the reference is not dropped when `s` stops being used
@@ -479,10 +484,11 @@ fn calculate_length(s: &String) -> usize {
   - As in real life, if a person owns something, you can borrow it from them
   - When you are done, you have to give it back because you do not own it
 - **Trying to modify a borrowed value will create a compile-time error**
+  - **Similar to variables, by default, references are *immutable***
 
 ```rs
 fn main() {
-    let s = String::from("hello");
+    let s: String = String::from("hello");
     change(&s); // Attempting to change a borrowed value
 }
 
@@ -493,6 +499,138 @@ fn change(some_string: &String) {
 }
 ```
 
-- **Similar to variables, by default, references are *immutable***
-
 ### Mutable Reference
+
+- We can change the fuction parameters references to be mutable using `&mut`
+  - This makes it very clear that the function will mutate the value it borrows
+- **But the target variable itself also needs to be `mut`**
+- This allows the borrowed value to be modified
+
+```rs
+fn main() {
+    println!("Example of Mutable Reference");
+    println!("----------------------------");
+
+    // The target variable needs to be mutable
+    let mut s2: String = String::from("hello");
+    println!("Before: s2 = {s2}");
+    change(&mut s2); // Attempting to change a mutable borrowed value
+    println!("After: s2 = {s2}");
+}
+
+/// A borrowing function: Parameter is mutable reference.
+fn change(some_string: &mut String) {
+    some_string.push_str(", world");
+}
+```
+
+- **One big restriction of mutable references: If you have a mutable reference to a value, you can have no other references to that value**
+  - A value cannot have 2 or more mutable references
+  - Only a single mutable reference is allowed
+  - **This allows Rust to prevent data races at compile time**
+  - In real-world, it is the same: An object can only be borrowed once at a time, especially if it needs to be modified
+
+```rs
+let mut st: String = String::from("hello");
+
+let ref1: &mut String = &mut st;
+let ref2: &mut String = &mut st; // => error[E0499]: cannot borrow `s` as mutable more than once at a time
+
+println!("{ref1}, {ref2}");
+```
+
+- A *Data Race* happens when 3 behaviors occur:
+  - 2 or more pointers access the same data at the same time
+  - At least 1 pointer is used to write to the data
+  - There is no mechanism used to synchronize access to the data
+- Data Races cause undefined behaviors
+  - Can be difficult to diagnose and fix at runtime
+  - Rust refuse to compile codes with Data Races
+- **Multiple mutable references can exist in different scopes**
+  - But they must not happen simultaneously
+
+```rs
+let mut st: String = String::from("hello");
+
+// Separate scope
+{
+    let r1: &mut String = &mut st;
+}
+// r1 goes out of scope here
+// So we can make a new reference with no problems
+let r2: &mut String = &mut st;
+```
+
+- **NOTE: We cannot combine mutable and immutable references**
+- We also cannot have a mutable reference while we have an immutable one to the same value
+- This allows users of an immutable reference not to expect the value to suddenly change out
+- **Multiple immutable references are allowed**
+  - No one who is just reading the data has the ability to affect anyone else reading the same data
+- **Mutable reference to an immutable variable is not allowed**
+
+- **NOTE: a reference's scope starts from where it is introduced and continues through the last time that reference is used, or the end of the block, whichever is first**
+  - These scopes do not overlap
+  - The compiler can tell that the reference is no longer being used at a point before the end of the scope
+
+```rs
+{
+    let mut st: String = String::from("hello");
+
+    let mut_r1: &mut String = &mut st; // 1st Mutable Reference
+    // let mut_r2: &mut String = &mut st; // 2nd Mutable Reference: Error: Cannot borrow a 2nd time
+
+    println!("{mut_r1}");
+    println!("{mut_r1}"); // Last time the 1st Mutable Reference is used within this block. End of scope for mut_r1
+
+    let mut_r2: &mut String = &mut st; // 2nd Mutable Reference: We can now borrow as 1st mutable reference scope has ended
+    println!("{mut_r2}");
+}
+```
+
+### Dangling Reference
+
+- A pointer that references a location in memory that may have been given to someone else
+  - Created by freeing some memory while preserving a pointer to that memory
+  - Can be easy to create in language that uses pointers
+- **Rust compiler guarantees that references will never be dangling**
+  - The compiler ensures that the data will not go out of scope before the reference to the data does
+
+```rs
+fn main() {
+    let reference_to_nothing: &String = dangle();
+}
+
+fn dangle() -> &String {
+    // s is a new String
+    let s: String = String::from("hello");
+    // we return a reference to the String s
+    &s
+}
+// Scope of s ends here so &s points to nothing (dangling)
+```
+
+- Compiling this creates an error: `error[E0515]: cannot return reference to local variable s. This function's return type contains a borrowed value, but there is no value for it to be borrowed from`
+  - This is related to Rust feature called *Lifetimes*
+- Because `s` is created inside `dangle()`, when the code of `dangle()` is finished, `s` will be deallocated
+  - The returned reference would be pointing to an invalid `String`
+  - The solution is to return the String directly, passing ownership (no borrowing)
+  - When ownership is moved out, nothing is deallocated
+
+```rs
+fn no_dangle() -> String {
+    // s is a new String
+    let s: String = String::from("hello");
+    // Return s and pass its ownership along
+    s
+}
+// End os scope of no_dangle:
+// Owenrship of s is moved out and nothing is deallocated
+```
+
+### Rules of References
+
+- At any given time, you can have either one mutable reference or any number of immutable references
+- References must always be valid
+- A reference's scope starts from where it is introduced and continues through the last time that reference is used, or the end of the block, whichever is first
+
+## The `Slice` Type

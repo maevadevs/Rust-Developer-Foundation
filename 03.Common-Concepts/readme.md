@@ -832,9 +832,9 @@ if number < 5 {
 
 - ***NOTE: The condition code must evaluate to a boolean***
   - If not, we get a compile-time error
-  - I.e. The value of the expression needs to be a boolean
   - **Rust will not automatically try to convert non-Boolean types to a Boolean**
     - Rust does not interpret *Truthy* and *Falsy* values
+    - I.e. The value of the expression needs to be a boolean
 
 #### `else if` Expression
 
@@ -870,7 +870,7 @@ if number % 4 == 0 {
 
 - **`if` is an expression: It returns a value**
   - We can use it on the right-side of `let` variable assignment
-  - This looks like a *Conditional Expression* in other languages (e.g. Python)
+  - This is similar to *Conditional Expression* in other languages (e.g. Python)
 
 ```rs
 // Example of Using if With let
@@ -910,7 +910,7 @@ let number: i32 = if condition { 5i8 } else { 6i32 };
 
 - Allows to execute a block of code forever or until explicitly told to stop
 - **The program will not stop until interupted with `ctrl+c`**
-- *This is basically an Infinite Loop, a `while true` without warnings*
+- *This is basically an Infinite Loop, equivalent to a `while true` without warnings*
 
 ```rs
 // Example of Infinite Loops Using `loop`
@@ -975,7 +975,7 @@ println!("The result from the loop is {result}");
 #### Loop Labels: Disambiguate Between Multiple Loops
 
 - For nested loops, `break` and `continue` apply to the *innermost* loop
-- **To apply them to outer loops instead, we use labels to specify the loop tp apply to**
+- **To apply them to outer loops instead, we use labels to specify the loop to apply to**
 - **Loop labels must begin with a single quote `'`**
 
 ```rs
