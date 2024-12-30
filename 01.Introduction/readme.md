@@ -111,10 +111,14 @@ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 
 ### Installation For Windows
 
-- For Windows, need to install *MSVC Build Tools For Visual Studio 2013 or later* via *Visual Studio Installer*
+- For Windows, need to install *MSVC Build Tools For Visual Studio 2013 or later*
+- It can be installed with *Visual Studio Installer*
   - Install Visual Studio
   - Choose *Desktop Development with C++*
-  - Choose *Windows 10 or Windows 11 SDK*
+  - Choose appropriate *Windows SDK*
+  - To check the version of the compiler, call with no argument:
+    - **x64**: `C:\"Program Files"\"Microsoft Visual Studio"\2022\Community\VC\Tools\MSVC\<<version>>\bin\Hostx64\x64\cl.exe`
+    - **x86**: `C:\"Program Files"\"Microsoft Visual Studio"\2022\Community\VC\Tools\MSVC\<<version>>\bin\Hostx64\x86\cl.exe`
 - Check if `rustup` is installed
 
 ```sh
@@ -129,7 +133,7 @@ rustup --version
 Installation Profile|Included
 :-|:-
 **Minimal**|`rustc`,`rust-std`,`cargo`
-**Default**|*Minimal* + `rust-docs`, `rustfmt`, `clippy`
+**Default** (Recommended)|*Minimal* + `rust-docs`, `rustfmt`, `clippy`
 **Complete**|*Default* + All components available through `rustup`:<br>Every component ever included in the metadata<br>*This option should never be used except for maintainers*
 
 ## Post-Installation Checks
@@ -146,14 +150,14 @@ Component|Description
 :-|:-
 `cargo`|Package Manager / Build Tool
 `clippy`|A collection of lints to catch common mistakes
-`rust-docs`|All Rust Docs installed for offline:<br>Access via `rustup docs` command
+`rust-docs`|All Rust Documentations installed locally for offline use:<br>Access via `rustup docs` or `rustup doc` command
 `rust-std`|Rust Standard Library
 `rustc`|Rust Compiler
-`rustfmt`|Rust Formatter to follow style guidelines
+`rustfmt`|Rust Formatter to follow standard style guidelines
 
 ### `rustup docs`
 
-- Allows to access Rust Docs offline
+- Allows to access Rust Documentations offline
 - There are multiple options available
 
 Command|Docs For
@@ -165,58 +169,49 @@ Command|Docs For
 `--core`|The Rust Core Library
 `--edition-guide`|The Rust Edition Guide
 `--embedded-book`|The Embedded Rust Book
-`--help`|Prints help information
+`--help`|Prints help about `rustup docs` commands
 `--nomicon`|The Rustonomicon: The Dark Arts of Advanced and Unsafe Rust Programming
-`--path`|Only print the path to the offline documentation
+`--path`|Print the path to the local offline documentations
 `--proc_macro`|A support library for macro authors when defining new macros
 `--reference`|The Rust Reference
 `--rust-by-example`|A collection of runnable examples that illustrate various Rust concepts and standard libraries
 `--rustc`|The Rust Compiler Book
-`--rustdoc`|The `rustdoc` Book: Documentation Generation tool
+`--rustdoc`|The `rustdoc` Book: Documentation Generation tool for Rust projects
 `--std`|Standard library API documentation
 `--test`|Library to support code for `rustc`'s built-in unit-test and micro-benchmarking framework
 `--unstable-book`|The Rust Unstable Book
-`--toolchain <toolchain>`|Toolchain name
+`--toolchain <toolchain>`|Rust documentations specific to a Toolchain (The toolchain must be installed)
 
 ## Additional `rustup` Commands
 
 Command|Description
 :-|:-
-`rustc --version`|Check Installed Rust Compiler Version
-`rustup docs`|Check Local Documentation
+`rustc --version`|Check installed Rust Compiler version
+`rustup docs` or `rustup doc`|Open local documentations index
 `rustup update`|Update all installed `rustup` components
-`rustup self uninstall`|Uninstall Rust and all components
+`rustup self uninstall`|Uninstall Rust and all its components
 
 ## Hello World
 
-- Create a `hello-world` project folder
+- Create a `hello-world` project folder with the following structure
 
-```sh
-mkdir hello-world
-cd hello-world
+```tree
+hello-world/
+├── target/
+└── src/
+    └── main.rs
 ```
 
-- Add a `src` folder
-
-```sh
-mkdir src
-cd src
-```
-
-- Create a `main.rs` file in `src` and open in editor
-
-```sh
-touch main.rs
-code main.rs
-```
-
-- Add the following codes to `main.rs`
+- Open `main.rs` in an editor and add the following codes to `main.rs`
 
 ```rs
-/// Print "Hello, world!" to the console.
+/*****************************************/
+/* Print "Hello, world!" to the console. */
+/*****************************************/
 
 /// The entry-point of the program.
 fn main() {
+    println!();
     println!("Hello world!");
     println!();
 }
@@ -236,11 +231,11 @@ fn main() {
 - **Rust requires curly brackets around all function bodies**
   - Recommended style to place the opening curly bracket on the same line as the function declaration
   - Automatic formatter tool `rustfmt` is used with `cargo`
-  - **Rust style is to indent with 4 spaces, not a tab**
+  - **Rust style is to indent with 4 spaces, not tabs**
 - **`macroname!()` is a macro**
   - Functions and Macros are different in Rust
   - Macros do not always follow the same rules as Functions
-  - `println!()` is a macro
+  - E.g. `println!()` is a macro
 - **Most lines in Rust end with a semicolon (`;`)**
 
 ### Compiling Rust Code
@@ -249,7 +244,7 @@ fn main() {
   - Similar to C, C++, Go
   - Produces a single executable file
   - Compiler: `rustc`
-- On Windows, compiling also outputs `.pdb` file for debugging info
+- On Windows, compiling also outputs a `.pdb` file for debugging info
 
 ```sh
 # Compiling on Linux
@@ -303,7 +298,6 @@ Command|Description
 - **NOTE: Always use `--release` when building for final production**
   - Can greatly improve the size of binary
   - Also adds additional optimizations
-  - E.g. `Hello-World`: From 3.5 MiB (`debug`) down to 400 KiB (`release`)
 
 ### Check `cargo` Version
 
@@ -319,10 +313,6 @@ cargo new hello-cargo
 
 - Creates a new project directory: `hello-cargo`
 
-```sh
-cd hello-cargo
-```
-
 ```tree
 hello-cargo/
 ├── .git/
@@ -334,8 +324,8 @@ hello-cargo/
 
 Folder or File|Description
 :-|:-
-`.git`|Default *Version Control System (VCS)*<br>Not generated if already in a Git project<br>Can override with `--vcs` flag
-`.gitignore`|Default *Version Control System (VCS)* is Git<br>Not generated if already in a Git project<br>Can override with `--vcs` flag
+`.git`|Default *Version Control System (VCS)*<br>Not generated if already within a Git project<br>Can override with `--vcs` flag
+`.gitignore`|Default *Version Control System (VCS)* is Git<br>Not generated if already within a Git project<br>Can override with `--vcs` flag
 `Cargo.toml`|Manage project configs and dependencies/crates
 `src/main.rs`|The entrance of the program
 
@@ -376,10 +366,13 @@ edition = "2021"
   - Create an appropriate `Cargo.toml` file
 
 ```rs
-/// Print "Hello, world!" to the console.
+/*****************************************/
+/* Print "Hello, world!" to the console. */
+/*****************************************/
 
 /// The entry-point of the program.
 fn main() {
+    println!();
     println!("Hello world!");
     println!();
 }
@@ -403,8 +396,8 @@ cargo build
 ```
 
 - It builds from `src` folder
-  - Creates an executable file in `target/debug`
   - **Default build is *Debug Build* `dev [unoptimized + debuginfo]`**
+  - Creates an executable file in `target/debug`
 - First-time build also creates `Cargo.lock`
   - Keeps track of the exact versions of dependencies/crates in the project
   - *Managed by Cargo: This file is automatically generated by Cargo*
