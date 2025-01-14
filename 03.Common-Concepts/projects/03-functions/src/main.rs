@@ -62,16 +62,26 @@ fn some_func() {
 }
 
 /// Example of function with one parameter.
+///
+/// Params:
+/// - `x: i32` - An integer parameter.
 fn param_func(x: i32) {
     println!("The value of param is: {x}");
 }
 
 /// Example of function with multiple parameters.
+///
+/// Params:
+/// - `value: i32` - An integer parameter.
+/// - `unit_label: &str` - A string parameter.
 fn print_labeled_measurement(value: i32, unit_label: &str) {
     println!("The measurement is: {value} {unit_label}");
 }
 
 /// Example of function that returns a value.
+///
+/// Returns:
+/// - `i32`: The value of calling get_thousand().
 fn get_thousand() -> i32 {
     1000
 }

@@ -118,20 +118,21 @@ fn main() {
     println!("y = {y}");
     println!("z = {z}");
     println!("x == tup.0 ? {equal_x}");
-    println!("x == tup.1 ? {equal_y}");
-    println!("x == tup.2 ? {equal_z}");
+    println!("y == tup.1 ? {equal_y}");
+    println!("z == tup.2 ? {equal_z}");
     println!();
 
     // Example of an Array
     // -------------------
     let arr: [i32; 5] = [1, 2, 3, 4, 5];
     // Example of an Array with same element repeated
-    let arr_10 = [5; 10];
+    let arr_10 = [0; 10];
     // Example of a good use of an array: Elements will not change
     const MONTHS: [&str; 12] = [
-        "January", "February", "March", "April",
-        "May", "June", "July", "August",
-        "September", "October", "November", "December"
+        "January", "February", "March",
+        "April", "May", "June",
+        "July", "August", "September",
+        "October", "November", "December"
     ];
 
     println!("Example of Array:");

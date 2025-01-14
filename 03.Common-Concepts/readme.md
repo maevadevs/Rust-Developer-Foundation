@@ -199,7 +199,7 @@ let mut spaces = "   ";         // String type
 - Rust is a statically-typed language
   - **Every value in Rust is of a specific data type**
   - **All types of all variables must be known at compile time**
-- Compiler can infer the type based on the value
+- Compiler can infer the type based on the initial value
   - *However, when many types are possible (E.g. integers), we must specify a type annotation*
 
 ```rs
@@ -244,10 +244,10 @@ archvar|`isize`|`usize`
 - *`isize` and `usize` depend on the architecture of the computer*
   - 64 bits on 64-bit architecture
   - 32 bits on 32-bit architecture
-  - **`isize` and `usize` are useful when indexing some sort of collection**
+  - **`isize` and `usize` are useful when indexing some sort of collections**
 - **The types of number literals that can be of multiple types can be specified with a suffix**
-  - `57u8`
-  - `57i32`
+  - `57` => `57u8`
+  - `57` => `57i32`
 - **Number literals can use `_` as visual separators**
   - `1_000_000`
   - `987_654_321`
@@ -255,8 +255,8 @@ archvar|`isize`|`usize`
 Supported Integer literals|Examples
 :-:|:-
 Decimal|`98222`, `98_222`
-Hex|`0xff`
-Octal|`0o77`
+Hex|`0xff`, `0xef_54_ab`
+Octal|`0o77`, `0o7_7_7`
 Binary|`0b11110000`, `0b1111_0000`
 Byte (`u8` only)|`b'A'`
 
@@ -298,8 +298,8 @@ println!("u128 = {ullong}");
 
 - ***Integer Overflow* is when we assign a value that is larger than the max of the integer type**
 - Results in one of 2 behaviors:
-  1. In *Debug* mode, checks for integer overflow will cause `panic` at runtime
-  2. In *Release* mode, no panic but performs two’s complement wrapping instead: *wrap around* to the minimum of the type
+  - In *Debug* mode, checks for integer overflow will cause `panic` at runtime
+  - In *Release* mode, no panic but performs two’s complement wrapping instead: *wrap around* to the minimum of the type
 - ***NOTE: Relying on integer overflow’s wrap-around behavior is considered an error***
   - **All possible overlfow should be handled explicitly**
 
@@ -487,8 +487,8 @@ println!("x = {x}");
 println!("y = {y}");
 println!("z = {z}");
 println!("x == tup.0 ? {equal_x}");
-println!("x == tup.1 ? {equal_y}");
-println!("x == tup.2 ? {equal_z}");
+println!("y == tup.1 ? {equal_y}");
+println!("z == tup.2 ? {equal_z}");
 ```
 
 #### Arrays
@@ -500,10 +500,10 @@ println!("x == tup.2 ? {equal_z}");
 - Useful for:
   - Allocating data on the *Stack* (instead of *Heap*)
   - To ensure we always have a fixed number of elements
-- **The array's type is specified with square brackets `[]`** with:
-  - The type of the contained elements
+- **The array's type is specified with square brackets `[<type>; <length>]`** with:
+  - `<type>`: The type of the contained elements
   - A semicolon `;`
-  - The number of elements in the array (array-length)
+  - `<length>`: The number of elements in the array (array-length)
 
 ```rs
 // Example of an Array
@@ -514,7 +514,7 @@ let arr: [i32; 5] = [1, 2, 3, 4, 5];
 
 ```rs
 // Example of an Array with same element repeated
-let arr_10: [i8; 10] = [5; 10];
+let arr_10: [i8; 10] = [0; 10];
 ```
 
 - **NOTE: A `vector` is the dynamic version of an `array`**
@@ -531,9 +531,10 @@ let arr: [i32; 5] = [1, 2, 3, 4, 5];
 let arr_10 = [5; 10];
 // Example of a good use of an array: Elements will not change
 const MONTHS: [&str; 12] = [
-    "January", "February", "March", "April",
-    "May", "June", "July", "August",
-    "September", "October", "November", "December"
+    "January", "February", "March",
+    "April", "May", "June",
+    "July", "August", "September",
+    "October", "November", "December"
 ];
 
 println!("Example of Array:");
@@ -626,11 +627,18 @@ fn main() {
 }
 
 /// Example of function with one parameter.
+///
+/// Params:
+/// - `x: i32` - An integer parameter.
 fn param_func(x: i32) {
     println!("The value of param is: {x}");
 }
 
 /// Example of function with multiple parameters.
+///
+/// Params:
+/// - `value: i32` - An integer parameter.
+/// - `unit_label: &str` - A string parameter.
 fn print_labeled_measurement(value: i32, unit_label: &str) {
     println!("The measurement is: {value} {unit_label}");
 }
@@ -661,13 +669,12 @@ println!("The value of y is {y}");
 - **Function-definitions are also statements**
 - **Statements do not return values**
   - We cannot assign a `let` statement to another variable
-  - There would be nothing for the variable to bind to
+  - There would be nothing for the variable to bind to: No value
 - **Statements end with semi-colons**
 
 ```rs
 // This is an error:
-// (let y = 6) is a statement
-// It returns no value to bind to x
+// (let y = 6) is a statement: It returns no value to bind to x
 let x = (let y = 6);
 ```
 
@@ -676,7 +683,7 @@ let x = (let y = 6);
   - Expressions can be part of a statement
   - Any math operation is an expression
   - Calling a function/macro is also an expression
-  - *A new scope block created with curly-braces `{}` is also an expression*
+  - *A new block scope created with curly-braces `{}` is also an expression*
 - **Expressions do not end with semicolons**
   - *An expression with a semicolon is a statement*
   - *Statements do not return a value*
@@ -709,6 +716,9 @@ println!("The value of exp is {exp}");
 
 ```rs
 /// Example of function that returns a value.
+///
+/// Returns:
+/// - `i32`: The value of calling get_thousand().
 fn get_thousand() -> i32 {
     1000
 }
@@ -762,9 +772,9 @@ fn plus_one(x: i32) -> i32 {
 
 Type|Description
 :-|:-
-**Inline Comment**|- Start with `//`<br>- Ignore until the end of the line
-**Block Comment**|- Start with `/*`<br>- Ignore until `*/`<br>- Does not nest
-**Docstring Comment**|- Used for documenting functions and "objects"<br>- Start with `///`<br>- Same effect as *Inline Comments*<br>- These are picked-up by `rustdoc` and compiled into documentations<br>- Rust codes can be put inside triple-ticks <code>```</code>
+**Inline Comment**|- Start with `//`<br>- Ignored until the end of the line
+**Block Comment**|- Start with `/*`<br>- Ignored until `*/`<br>- Does not nest
+**Docstring Comment**|- Used for documenting functions and "objects"<br>- Start with `///`<br>- Same effect as *Inline Comments*<br>- These are picked-up by `rustdoc` and compiled into documentations<br>- Supports Markdown<br>- Rust codes can be put inside triple-ticks <code>```</code>
 
 ```rs
 // Inline Comment
@@ -782,7 +792,7 @@ explain what’s going on.
 ```rs
 /// A human being is represented here.
 pub struct Person {
-    /// A person must have a name, no matter how much Juliet may hate it.
+    // A person must have a name, no matter how much Juliet may hate it.
     name: String,
 }
 
@@ -834,14 +844,14 @@ if number < 5 {
   - If not, we get a compile-time error
   - **Rust will not automatically try to convert non-Boolean types to a Boolean**
     - Rust does not interpret *Truthy* and *Falsy* values
-    - I.e. The value of the expression needs to be a boolean
+    - I.e. The value of the condition expression needs to be an exact boolean
 
 #### `else if` Expression
 
 - `else if` expressions allow to specify additional conditions
   - Checks each `if` expression in turn
   - Executes the **first** body for which the condition evaluates to `true`
-  - ***No cascades*: Exits the forks once a matching path has been determined**
+  - ***No cascades*: Immediately exits the forks once a matching path has been determined**
     - Only one result is allowed
     - Whichever comes first that satisfies the condition is used
 
@@ -855,8 +865,10 @@ let number: i32 = 6;
 if number % 4 == 0 {
     println!(">> {number} is divisible by 4");
 } else if number % 3 == 0 {
+    // 6 is divisible by both 3 and 2, but 3 comes first in the order and is used
     println!(">> {number} is divisible by 3");
 } else if number % 2 == 0 {
+    // 6 is divisible by both 3 and 2, but 3 comes first in the order and is used
     println!(">> {number} is divisible by 2");
 } else {
     println!(">> {number} is not divisible by 4, 3, or 2");
@@ -868,7 +880,7 @@ if number % 4 == 0 {
 
 #### Using `if` in `let` Statement
 
-- **`if` is an expression: It returns a value**
+- **`if`/`else` is an expression: It returns a value**
   - We can use it on the right-side of `let` variable assignment
   - This is similar to *Conditional Expression* in other languages (e.g. Python)
 
@@ -888,7 +900,7 @@ println!(">> The value of number is: {number}");
   - The value of the whole `if` expression depends on the block of code that executes
   - **Values that have the potential to be results from each arm of the `if` must be of the same type**
   - In this case, they are both `i32`
-  - **If the types do not match, we get an `mismatched type` error**
+  - **If the types do not match, we get a `mismatched type` error**
 
 ```rs
 // This is an error: `if` and `else` have incompatible types
@@ -896,7 +908,7 @@ let number: i32 = if condition { 5i8 } else { 6i32 };
 ```
 
 - **Variables must have a single type**
-  - Rust needs to know *at compile time* what type is assigned to `number`
+  - Rust needs to know *at compile time* what type is assigned to the variable `number`
   - Knowing the type of `number` allows the compiler to verify that the type is valid everywhere we use `number`
 
 ### Repetition With Loops
@@ -913,10 +925,10 @@ let number: i32 = if condition { 5i8 } else { 6i32 };
 - *This is basically an Infinite Loop, equivalent to a `while true` without warnings*
 
 ```rs
-// Example of Infinite Loops Using `loop`
-// --------------------------------------
-println!("Example of Infinite Loops Using `loop`:");
-println!("---------------------------------------");
+// Example of Infinite Loop Using `loop`
+// -------------------------------------
+println!("Example of Infinite Loop Using `loop`:");
+println!("--------------------------------------");
 loop {
     println!("run again!");
 }
@@ -926,10 +938,10 @@ loop {
 - We can also use `continue` to skip an iteration
 
 ```rs
-// Example of Controlled Loops Using `loop` and `break`
-// ----------------------------------------------------
-println!("Example of Controlled Loops Using `loop` and `break`:");
-println!("-----------------------------------------------------");
+// Example of Controlled Loop Using `loop` and `break`
+// ---------------------------------------------------
+println!("Example of Controlled Loop Using `loop` and `break`:");
+println!("----------------------------------------------------");
 let mut i: i32 = 0;
 loop {
     if i == 10 {
@@ -974,7 +986,7 @@ println!("The result from the loop is {result}");
 
 #### Loop Labels: Disambiguate Between Multiple Loops
 
-- For nested loops, `break` and `continue` apply to the *innermost* loop
+- For nested loops, `break` and `continue` apply to the *innermost* loop by default
 - **To apply them to outer loops instead, we use labels to specify the loop to apply to**
 - **Loop labels must begin with a single quote `'`**
 
@@ -1014,7 +1026,7 @@ println!("End count = {count}");
 - **While the condition is `true`, the loop will run**
 - When the condition ceases to be `true`, the program automatically calls `break`
 - We could use a combination of `loop`, `if`, `else`, and `break` to simulate this
-- **But Rust has dedicated `while` loop**
+- **But Rust has dedicated `while` loop for simplicity**
   - Eliminates unecessary nesting from using `loop`, `if`, `else`, and `break`
 
 ```rs
@@ -1052,7 +1064,7 @@ while index < 5 {
 
 - **However, this approach is error prone and slow**
   - Can cause the program to panic if the index value or test condition is incorrect
-  - Compiler adds runtime code to perform the conditional check
+  - Compiler adds additional runtime code to perform the conditional check
 - **More concise alternative: Use `for`-loop**
   - Execute some code for each item in a collection
   - Increase the safety of the code

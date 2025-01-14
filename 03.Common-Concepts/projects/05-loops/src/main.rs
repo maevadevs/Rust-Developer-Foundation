@@ -1,19 +1,19 @@
 fn main() {
     println!();
 
-    // Example of Infinite Loops Using `loop`
-    // --------------------------------------
-    // println!("Example of Infinite Loops Using `loop`:");
-    // println!("---------------------------------------");
+    // // Example of Infinite Loop Using `loop`
+    // // -------------------------------------
+    // println!("Example of Infinite Loop Using `loop`:");
+    // println!("--------------------------------------");
     // loop {
     //     println!("run again!");
     // }
     // println!();
 
-    // Example of Controlled Loops Using `loop` and `break`
-    // ----------------------------------------------------
-    println!("Example of Controlled Loops Using `loop` and `break`:");
-    println!("-----------------------------------------------------");
+    // Example of Controlled Loop Using `loop` and `break`
+    // ---------------------------------------------------
+    println!("Example of Controlled Loop Using `loop` and `break`:");
+    println!("----------------------------------------------------");
     let mut i: i32 = 0;
     loop {
         if i == 10 {

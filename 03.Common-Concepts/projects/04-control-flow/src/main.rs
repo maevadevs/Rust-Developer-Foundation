@@ -23,8 +23,10 @@ fn main() {
     if number % 4 == 0 {
         println!(">> {number} is divisible by 4");
     } else if number % 3 == 0 {
+        // 6 is divisible by both 3 and 2, but 3 comes first in the order and is used
         println!(">> {number} is divisible by 3");
     } else if number % 2 == 0 {
+        // 6 is divisible by both 3 and 2, but 3 comes first in the order and is used
         println!(">> {number} is divisible by 2");
     } else {
         println!(">> {number} is not divisible by 4, 3, or 2");
