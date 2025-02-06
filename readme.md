@@ -24,7 +24,7 @@
    - Comments
    - Control Flow: `if`-`else if`-`else`
    - Loops: `loop`, `while`, `for`
-4. [**Ownership System**](./04-Ownership/)
+4. [**Ownership System**](./04.Ownership/)
    - Stack vs Heap
    - Ownership Rules
    - Variable Scope
