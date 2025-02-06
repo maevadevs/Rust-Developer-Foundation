@@ -7,25 +7,33 @@
 
 ## Contents
 
-1. [Introduction](./01.Introduction/)
+1. [**Introduction**](./01.Introduction/)
    - Installation
+   - `rustup` commands
    - Hello World
    - Cargo
-2. [Project - *Guessing Game*](./02.Project-Guessing-Game/)
-   - Practical intro to programming in Rust
-   - High-level concepts
-3. [Common Programming Concepts](./03.Common-Concepts/)
+2. [**Project - *Guessing Game***](./02.Project-Guessing-Game/)
+   - Practical project intro to programming in Rust
+   - High-level concepts introductions: I/O, Variables, Random Number, Crates, `Cargo.toml`, `Cargo.lock`, Loop, Error Handling
+3. [**Common Programming Concepts**](./03.Common-Concepts/)
    - Variables and Mutability
    - Constants
    - Shadowing
-   - Data Types
+   - Data Types: Scalar and Compound
    - Functions
    - Comments
-   - Control Flow
-   - Loops
-4. [Ownership System](./04-Ownership/)
-   - Rust's ownership system
-   - Safety mechanisms
+   - Control Flow: `if`-`else if`-`else`
+   - Loops: `loop`, `while`, `for`
+4. [**Ownership System**](./04-Ownership/)
+   - Stack vs Heap
+   - Ownership Rules
+   - Variable Scope
+   - `String` Type
+   - Memory and Allocation
+   - Ownership and Functions
+   - Return Values and Scope
+   - References and Borrowing
+   - `Slice` Type
 5. Structs and Methods
    - Custom types
 6. Enums, Pattern Matching, and Control Flow

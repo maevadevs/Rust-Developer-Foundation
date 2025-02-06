@@ -114,7 +114,7 @@ fn main() {
     // --------------------------
     println!("Using Range With for-Loops");
     println!("--------------------------");
-    for num in (1..11).rev() {
+    for num in (1..=10).rev() {
         print!("{num}... ");
     }
     println!("LIFTOFF!!!");

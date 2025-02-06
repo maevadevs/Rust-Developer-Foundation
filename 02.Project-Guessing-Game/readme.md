@@ -47,7 +47,7 @@ cd guessing-game
 1. Confirm the user's guess
 
 ```rs
-/// Guessing Game: Try to guess a randomly-generate number.
+/// Guessing Game: Try to guess a randomly-generated number.
 
 // Import libraries/modules
 use std::io;
@@ -81,7 +81,7 @@ fn main() {
 
 ### `fn main()`
 
-- `main()` is the entry-point to execution
+- `main()` is the entry-point for all executables
   - No parameters
   - No return values
 - **`fn` declares a new function**
@@ -96,20 +96,21 @@ fn main() {
   - To interpolate expressions, assign to variables first
 
 ```rs
-let x = 5;
-let y = 10;
-let res = y + 2;
-
-println!("x = {x} and y + 2 = {res}");
+let x: i32 = 5;
+let y: i32 = 10;
+let res: i32 = y + 2;
 
 // The following will result in error: Trying to interpolate an expression
 // println!("x = {x} and y + 2 = {y + 2}");
+
+// This will work
+println!("x = {x} and y + 2 = {res}");
 ```
 
 ### Storing Values With Variables
 
 ```rs
-let mut guess = String::new();
+let mut guess: String = String::new();
 ```
 
 - `let`
@@ -118,7 +119,7 @@ let mut guess = String::new();
 
 ```rs
 // Immutable variable
-let apple = 5;
+let apple: i32 = 5;
 ```
 
 - **In Rust, variables are *immutable* by default**
@@ -130,7 +131,7 @@ let apple = 5;
 
 ```rs
 // Mutable variable
-let mut apple = 5;
+let mut apple: i32 = 5;
 ```
 
 - `String::new()`
@@ -175,8 +176,8 @@ io::stdin()
     - Access one piece of data without needing to copy that data into memory multiple times
     - Rust’s major advantages is how safe and easy it is to use references
     - **Like variables, references are immutable by default**
-      - `&guess`: Immutable
-      - `&mut guess`: Mutable
+      - `&guess` == Immutable
+      - `&mut guess` == Mutable
 - **Handling Potential Failure with `Result`**
   - `read_line()` also returns a `Result<usize, Error>` value
   - `Result` is an *Enum*
@@ -188,8 +189,8 @@ io::stdin()
     - `Err` - Failure and contains the failure information
   - **Values of `Result` type have methods**
     - `expect()` Method
-    - If `Err`: Crash the program and display the message argument
-    - If `Ok`: Return the value in `Ok` (Number of bytes in the user’s input)
+    - If `Err` - Crash the program and display the message argument
+    - If `Ok` - Return the value in `Ok` (Number of bytes in the user’s input)
   - **If we do not call `expect`, the program will compile, but we will get a warning**
     - This is part of Rust's *Error Handling*
     - The proper way to handle this is with *Error Handling*
@@ -216,13 +217,20 @@ io::stdin()
   - E.g. `rand` crate
 - **Cargo manages Crates**
   - Modify the `Cargo.toml` file to include the `rand` crate as a dependency
-  - `Cargo.toml` follows [*Semantic Versioning*](https://semver.org/)
+  - **NOTE: `Cargo.toml` follows [*Semantic Versioning*](https://semver.org/)**
   - The default SemVer specifier is `^`
 
 ```toml
 # Filename: Cargo.toml
+[package]
+name = "guessing-game"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
 [dependencies]
-rand = "^0.8.5"
+rand = "^0.9.0"
 ```
 
 - Everything that follows a `[header]` is part of that section that continues until another section starts
@@ -232,7 +240,7 @@ rand = "^0.8.5"
   - Collection of open-sourced Rust projects
 - **After updating the registry, Cargo checks the `[dependencies]` section**
   - Downloads any crates listed that are not already downloaded
-  - Also grabs all the dependencies of the dependencies (dependency-chain)
+  - Also grabs all the dependencies of the dependencies (all the dependency-chain)
   - Rust compiles them and then compiles the project with the dependencies available
   - **Cargo only downloads or builds when needed and what changed**
 
@@ -270,8 +278,8 @@ use rand::Rng;
 use std::io;
 
 fn main() {
-    // Generate a random integer between 1 and 100
-    let secret_num: u32 = rand::thread_rng().gen_range(1..=100);
+    // Generate a random integer between 1 and 100, inclusive
+    let secret_num: u32 = rand::rng().random_range(1..=100);
 
     // Ask for user input
     println!("Take a guess, what number?");
@@ -292,14 +300,14 @@ fn main() {
 - **`rand::Rng` is a *Trait***
   - Defines methods that random number generators implement
   - Must be in-scope to use those methods
-- `rand::thread_rng()`
+- `rand::rng()`
   - Gives the particular random number generator
-  - Local to the current thread of execution
+  - A handle to a local `ThreadRng`, the current thread of execution
   - Seeded by the operating system
-  - Call the `gen_range(start..=end)` method on the random number generator
+  - Call the `random_range(start..=end)` method on the random number generator
     - Takes a *range* expression as an argument
     - Generates a random number in the range
-    - `start..=end` is *inclusive on both end*
+    - `start..=end` means *inclusive on both end*
 
 ## Comparing Guess vs Secret Number
 
@@ -329,7 +337,7 @@ fn main() {
     - **Arm** - A *pattern* to match against + the *code* that should be run if the value fits the pattern
     - Format: `Pattern => Code`
   - *Patterns* and the *match* construct are powerful Rust features
-  - **NOTE: The `match` expression *breaks* on the first successful match**
+  - **NOTE: The `match` expression *returns* on the first successful match**
 - **`guess.cmp(&secret_num)` will return any of the possible enum values**
   - If `guess > secret_num`, it returns `Ordering::Greater`
   - If `guess < secret_num`, it returns `Ordering::Less`
@@ -340,13 +348,14 @@ fn main() {
   - It infered the type of `guess` as `String`
   - It infered the type of `secret_num` as `i32`
   - **Rust cannot compare a string and a number type**
-    - We need to have an explicit cast
+    - We need to have an explicit cast to match the types
 
 ```rs
 fn main() {
-    let secret_num = rand::thread_rng().gen_range(1..=100);
+    // Generate a random integer between 1 and 100, inclusive
+    let secret_num: u32 = rand::rng().random_range(1..=100);
     //...
-    let mut guess = String::new();
+    let mut guess: String = String::new();
 
     io::stdin()
        .read_line(&mut guess)
@@ -384,8 +393,8 @@ fn main() {
 
 ```rs
 //...
-// Generate a random integer between 1 and 100
-let secret_num: u32 = rand::thread_rng().gen_range(1..=100);
+// Generate a random integer between 1 and 100, inclusive
+let secret_num: u32 = rand::rng().random_range(1..=100);
 
 loop {
     // Prompt the player to enter a guess
@@ -462,7 +471,7 @@ let guess: u32 = match guess.trim().parse() {
 ## Final Program Overall
 
 ```rs
-/// Guessing Game: Try to guess a randomly-generate number.
+/// Guessing Game: Try to guess a randomly-generated number.
 
 // Import libraries/modules
 use rand::Rng;
@@ -471,8 +480,8 @@ use std::io;
 
 /// The entry-point of the program.
 fn main() {
-    // Generate a random integer between 1 and 100
-    let secret_num: u32 = rand::thread_rng().gen_range(1..=100);
+    // Generate a random integer between 1 and 100, inclusive
+    let secret_num: u32 = rand::rng().random_range(1..=100);
 
     loop {
         // Prompt the player to enter a guess

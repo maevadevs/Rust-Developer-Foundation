@@ -27,6 +27,8 @@ fn main() {
     let s1: String = String::from("hello");
     // This does not make a separate copy of s1
     // Only copy the pointer, length, and capacity
+    // But moves the ownership of the data in memory from s1 to s2
+    // And invalidates s1
     let s2: String = s1;
 
     // println!("s1 = {s1}"); // error[E0382]: borrow of moved value: `s1`
@@ -52,12 +54,12 @@ fn main() {
     let st: String = String::from("hello");  // st comes into scope
 
     takes_ownership(st);     // st's value moves into the function
-    // println!("st = {st}");         // so st is no longer valid here
+    // println!("st = {st}");         // so st is no longer valid here: This causes an error
 
     let x: i32 = 5;                   // x comes into scope
 
     makes_copy(x);          // x would move into the function,
-    println!("x = {x}");              // but i32 is Copy, so it's okay to still use x afterward
+    println!("x = {x}");              // but i32 is Copy-Only, so it's okay to still use x afterward
     println!();
 
     // Example of Return Values and Ownership
@@ -80,7 +82,7 @@ fn main() {
 
     let s1: String = String::from("hello");
     let len: usize = calculate_length(&s1); // s1 is borrowed by the function via reference
-    println!("The length of '{s1}' is {len}.");
+    println!("The length of '{s1}' is {len}."); // s1 was not moved: Still available here
     println!();
 
     println!("Example of Mutable Reference");
@@ -113,14 +115,14 @@ fn main() {
 // Here, x goes out of scope, then st
 // But because st's value was moved, nothing special happens
 
-fn takes_ownership(some_string: String) {
+fn takes_ownership(some_string: String) -> () {
     // some_string comes into scope
     println!("some_string = {some_string}");
 }
 // Here, some_string goes out of scope and `drop` is called
 // The backing memory is freed
 
-fn makes_copy(some_integer: i32) {
+fn makes_copy(some_integer: i32) -> () {
     // some_integer comes into scope
     println!("some_integer = {some_integer}");
 }
@@ -146,7 +148,7 @@ fn calculate_length(st: &String) -> usize {
 // But because it does not have ownership of what it refers to, it is not dropped.
 
 /// A borrowing function: Parameter is mutable.
-fn change_str(some_string: &mut String) {
+fn change_str(some_string: &mut String) -> () {
     some_string.push_str(", world");
 }
 

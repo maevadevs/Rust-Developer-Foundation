@@ -38,14 +38,17 @@
 
 ## Variables and Mutability
 
+- Variables are declared using `let` keyword
+  - Types can be explicitly declared or implicitly inferred
+  - It is better to explicitly declare the type for ease of reading
 - **By default, variables in Rust are immutable**
   - Once a value is bound to a *name*, it cannot be changed
   - **Reassigning to an immutable variable is a compile-time error**
   - Immutability ensures safety and easy-concurrency
   - *Mutability can lead to bugs if not managed properly*
   - Cause of bug can be difficult to track down after the fact
-  - Immutability makes code easier to reason with
-- **Naming Convention: *Use all-lowercase with underscores between words***
+  - Immutability-by-default makes code easier to reason with
+- **Variable Naming Convention: *Use all-lowercase with underscores between words***
 
 ```rs
 fn main() {
@@ -59,15 +62,14 @@ fn main() {
     println!("immutable my_int = {my_int}");
     println!();
 
-    // Reassigning to an immutable variable is a compile-time error
+    // Reassigning value to an immutable variable is a compile-time error
     // my_int = 6;
     // => error[E0384]: cannot assign twice to immutable variable `my_int`
 }
 ```
 
 - **We can still change variables to be mutable when needed**
-  - But we have to ***explicitly*** make a variable mutable
-  - **Add `mut` keyword**
+  - But we have to ***explicitly*** make a variable mutable: **Add `mut` keyword**
   - Explicitly conveys intent that other parts of the code will change this variable
   - Deciding to use mutability is up to you
   - Depends on what you think is clearest in that particular situation
@@ -93,14 +95,18 @@ fn main() {
 
 ### Constants
 
-- Also designed to be bound once to a name and not change
-- **Cannot be set `mut`: Constants are *always* immutable**
-- Declare using `const` keyword
+- Constants are declared using `const` keyword
   - **Type *must* be annotated**: Constant's types cannot be inferred
   - **Can be declared in any scope**, including the *global* scope
   - Useful to set globally-fixed values that all parts of an app need to know about
-- **Can only be set to a *fixed constant expression*, not results of runtime computations**
-  - The value of a constant must be determined at compile-time
+- Also designed to be bound once to a name and not change
+  - **Cannot be set `mut`: Constants are *always* immutable**
+  - Constants are basically *Always-Read-Only* values
+- Differences with *Immutable Variables*:
+  - **The value of a constant must be determined at compile-time**
+  - **Can only be set to a *limited set of fixed-constant expressions***
+  - **Cannot be the results of runtime computations**
+- **Constant Naming Convention: *Use all-uppercase with underscores between words***
 
 ```rs
 // Constants are always immutable
@@ -117,7 +123,6 @@ println!("PI = {PI}");
 println!();
 ```
 
-- **Naming Convention: *Use all-uppercase with underscores between words***
 - There is a [limited set of expressions](https://doc.rust-lang.org/reference/const_eval.html) that can be used for constants
   - Only a subset of all expressions can be evaluated at compile-time
   - Can make code easier to understand
@@ -126,16 +131,16 @@ println!();
   - **But only valid within the scope in which they were declared**
 - Useful for storing global values used throughout the app
   - Conveys the meaning of that value to future maintainers of the code
-  - Helps to have only one place to change if the hardcoded value need to change
+  - Helps to have only one place to change if the hardcoded values need to change
 
 ### Shadowing
 
-- **We can declare a new variable with the same name as a previous variable**
+- **We can declare a new variable with the same name as a previously-declared variable**
   - The first variable is *shadowed* by the second
-  - The second variable is what the compiler will see past that point
-  - The second variable takes any uses of the variable name to itself
+  - The second variable is what the compiler will see past that point in that scope
+  - The second variable takes any further uses of the variable name to itself
   - **Until either it itself is *shadowed* or the scope ends**
-- **NOTE: A scope can be created using standalone block `{}`**
+- **NOTE: A new scope can be created using any block `{}`**
 
 ```rs
 fn main() {
@@ -155,11 +160,12 @@ fn main() {
     println!("Local-Scope: my_int = {my_int}");
     {
         // In a different scope, this also shadows the same my_int above
+        // In this block, the "outside" variable temporarily halt from being seen
         let my_int: i32 = my_int * 2;
         println!("Inside-Scope: my_int = {my_int}");
     }
     // After the scope ends, the shadowing also ends
-    // This one is back to the previously-shadowed my_int
+    // This one is back to the previously-shadowed "outside" my_int
     println!("Local-Scope: my_int = {my_int}");
 }
 ```
@@ -312,7 +318,7 @@ Handling Approach|Description
 
 #### Floats
 
-- 2 primitive types for float-values
+- 2 primitive types for floating-point values
 - **Default Float Type: `f64`**
   - On modern CPUs, roughly the same speed as `f32`
   - But is capable of more precision
@@ -350,7 +356,7 @@ println!("{min_float64_repr} <= f64 <= {max_float64_repr}");
   - Multiplication
   - Division
   - Remainder
-- **Integer division truncates toward zero**
+- **Integer division always truncates toward zero**
 
 ```rs
 // Examples of Numeric Operations
@@ -403,7 +409,7 @@ println!("is_reply = {is_reply}");
 - Represent a single character
 - Rust's most primitive alphabetic type
 - **Represented as a *Unicode Scalar Value***
-  - **4-bytes in size**
+  - **4-bytes (32-bits) in size**
   - Range from `U+0000` to `U+D7FF` and `U+E000` to `U+10FFFF` inclusive
   - Represents more than just ASCII characters
 - **Specified using `char`**
@@ -500,10 +506,12 @@ println!("z == tup.2 ? {equal_z}");
 - Useful for:
   - Allocating data on the *Stack* (instead of *Heap*)
   - To ensure we always have a fixed number of elements
-- **The array's type is specified with square brackets `[<type>; <length>]`** with:
-  - `<type>`: The type of the contained elements
-  - A semicolon `;`
-  - `<length>`: The number of elements in the array (array-length)
+- **The array's type is specified with square brackets `[<type>; <length>]`**
+
+Placeholder|Meaning
+:-|:-
+`<type>`|The type of the contained elements
+`<length>`|The number of elements in the array (array-length)
 
 ```rs
 // Example of an Array
@@ -528,13 +536,12 @@ let arr_10: [i8; 10] = [0; 10];
 // -------------------
 let arr: [i32; 5] = [1, 2, 3, 4, 5];
 // Example of an Array with same element repeated
-let arr_10 = [5; 10];
+let arr_10: [i8; 10] = [0; 10];
 // Example of a good use of an array: Elements will not change
 const MONTHS: [&str; 12] = [
-    "January", "February", "March",
-    "April", "May", "June",
-    "July", "August", "September",
-    "October", "November", "December"
+    "January", "February", "March", "April",
+    "May", "June", "July", "August",
+    "September", "October", "November", "December"
 ];
 
 println!("Example of Array:");
@@ -581,7 +588,7 @@ println!("second = {second}");
   - As long as they are accessible in the scope of the caller
 
 ```rs
-fn <func_name>() {
+fn <func_name>(param: <param_type>) -> <return_type> {
     // Function body defined here
 }
 ```
@@ -650,7 +657,7 @@ fn print_labeled_measurement(value: i32, unit_label: &str) {
   - Optionally ending in an expression
   - Expressions can be part of a statement
 - **Rust is an expression-based language**
-  - *It is important to understand the difference in Rust*
+  - *It is important to understand the difference between expression and statement in Rust*
 
 Term|Definition
 :-|:-
@@ -667,10 +674,12 @@ println!("The value of y is {y}");
 ```
 
 - **Function-definitions are also statements**
+  - However, calling a function is not a statement but an expression
+  - Function-calls return a value
 - **Statements do not return values**
   - We cannot assign a `let` statement to another variable
   - There would be nothing for the variable to bind to: No value
-- **Statements end with semi-colons**
+- **Statements end with semi-colons `;`**
 
 ```rs
 // This is an error:
@@ -678,7 +687,7 @@ println!("The value of y is {y}");
 let x = (let y = 6);
 ```
 
-- **Expressions always evaluate to a returned value**
+- **Expressions always evaluate to a value**
   - Most of Rust codes are expressions
   - Expressions can be part of a statement
   - Any math operation is an expression
@@ -707,9 +716,9 @@ println!("The value of exp is {exp}");
 
 - Functions can return values to the code that calls them
 - **The *return type* of the function must be declared with `-> <type>`**
-  - If it is unspecified, that means the function returns nothing
+  - If it is unspecified, that means the function returns an empty tuple `-> ()`
 - **The return value of the function is the value of the final expression in the function body**
-  - Or we can return earlier by specifying a `return` and a value
+  - Or we can return earlier by specifying a `return` keyword and a value
   - But most functions return the last expression implicitly
 - The value returned from a function can be used as any other value
   - It is the value of calling the function
@@ -844,7 +853,7 @@ if number < 5 {
   - If not, we get a compile-time error
   - **Rust will not automatically try to convert non-Boolean types to a Boolean**
     - Rust does not interpret *Truthy* and *Falsy* values
-    - I.e. The value of the condition expression needs to be an exact boolean
+    - I.e. The value of the condition expression needs to evaluate an exact boolean
 
 #### `else if` Expression
 
@@ -896,7 +905,7 @@ println!(">> The value of number is: {number}");
 ```
 
 - `number` will be bound to a value based on the outcome of the `if` expression
-- `{ 5000i32 }` and `{ 6000i32 }` are blocks with expressions `5000` and `6000`
+- `{ 5000i32 }` and `{ 9000i32 }` are blocks with expressions `5000` and `9000`
   - The value of the whole `if` expression depends on the block of code that executes
   - **Values that have the potential to be results from each arm of the `if` must be of the same type**
   - In this case, they are both `i32`
@@ -1088,8 +1097,9 @@ for el in arr {
 - **We could also use `Range` from the standard library with `for` loops**
   - Generates all numbers in sequence
   - This is similar to `range` in Python and Go
-  - However, the syntax is different
-  - *`Stop` is Up-to-but-not-including*
+  - However, the syntax is different: `Start..Stop` or `Start..=Stop`
+    - *`Stop` is Up-to-but-not-including*
+    - *`=Stop` is Up-to-and-including*
   - `.rev()` allows to *reverse* the range
 
 ```rs
@@ -1097,7 +1107,7 @@ for el in arr {
 // --------------------------
 println!("Using Range With for-Loops");
 println!("--------------------------");
-for num in (1..11).rev() {
+for num in (1..=10).rev() {
     print!("{num}... ");
 }
 println!("LIFTOFF!!!");

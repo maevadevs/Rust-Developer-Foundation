@@ -65,14 +65,17 @@ fn main() {
     println!("Local-Scope: my_int = {my_int}");
     {
         // In a different scope, this also shadows the same my_int above
+        // In this block, the "outside" variable temporarily halt from being seen
         let my_int: i32 = my_int * 2;
         println!("Inside-Scope: my_int = {my_int}");
     }
     // After the scope ends, the shadowing also ends
-    // This one is back to the previously-shadowed my_int
+    // This one is back to the previously-shadowed "outside" my_int
     println!("Local-Scope: my_int = {my_int}");
     println!();
 
+    // Example of Changing Variable Type While Shadowing:
+    // --------------------------------------------------
     println!("Example of Changing Variable Type While Shadowing:");
     println!("--------------------------------------------------");
     let spaces: &str = "   x    ";          // String type: Non-mutable

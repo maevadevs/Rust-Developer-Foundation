@@ -1,4 +1,4 @@
-/// Guessing Game: Try to guess a randomly-generate number.
+/// Guessing Game: Try to guess a randomly-generated number.
 
 // Import libraries/modules
 use rand::Rng;
@@ -7,8 +7,8 @@ use std::io;
 
 /// The entry-point of the program.
 fn main() {
-    // Generate a random integer between 1 and 100
-    let secret_num: u32 = rand::thread_rng().gen_range(1..=100);
+    // Generate a random integer between 1 and 100, inclusive
+    let secret_num: u32 = rand::rng().random_range(1..=100);
 
     loop {
         // Prompt the player to enter a guess

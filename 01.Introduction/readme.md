@@ -30,7 +30,7 @@
 
 - Using **`rustup`**
   - Command-line tool for managing Rust versions
-  - Installs *Rust*, *Cargo*, and additional dev tools
+  - Installs *Rust*, *Cargo*, and additional developer tools
 
 ### `rustup`
 
@@ -205,9 +205,9 @@ hello-world/
 - Open `main.rs` in an editor and add the following codes to `main.rs`
 
 ```rs
-/*****************************************/
-/* Print "Hello, world!" to the console. */
-/*****************************************/
+/****************************************/
+/* Print "Hello world!" to the console. */
+/****************************************/
 
 /// The entry-point of the program.
 fn main() {
@@ -222,10 +222,9 @@ fn main() {
 // ON WINDOWS:
 //      Compile: rustc src\main.rs -o target\main.exe
 //      Execute: .\target\main.exe
-
 ```
 
-- **`main()` function is the entry-point in every executable Rust program**
+- **`main()` function is the entry-point in every *executable* Rust program**
   - No parameters
   - No return values
 - **Rust requires curly brackets around all function bodies**
@@ -236,13 +235,13 @@ fn main() {
   - Functions and Macros are different in Rust
   - Macros do not always follow the same rules as Functions
   - E.g. `println!()` is a macro
-- **Most lines in Rust end with a semicolon (`;`)**
+- **Most lines in Rust end with a semicolon (`;`), but not all of them (see expression vs statement)**
 
 ### Compiling Rust Code
 
 - **Rust is *Ahead-Of-Time (AOT)* compiled language**
-  - Similar to C, C++, Go
   - Produces a single executable file
+  - Similar to C, C++, Go
   - Compiler: `rustc`
 - On Windows, compiling also outputs a `.pdb` file for debugging info
 
@@ -363,7 +362,7 @@ edition = "2021"
   - Everything is in its place
 - ***It is possible to convert a manually-managed project to Cargo project***
   - Move the project code into the `src` directory
-  - Create an appropriate `Cargo.toml` file
+  - Create an appropriate `Cargo.toml` file: Can be done by running `cargo init`
 
 ```rs
 /*****************************************/

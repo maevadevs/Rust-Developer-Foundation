@@ -87,6 +87,9 @@ fn get_thousand() -> i32 {
 }
 
 /// Another Example of function that returns a value.
+///
+/// Returns:
+/// - `i32`: The value of calling plus_one().
 fn plus_one(x: i32) -> i32 {
     return x + 1;
 }
