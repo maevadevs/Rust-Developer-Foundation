@@ -1,4 +1,4 @@
-# Ownership System
+# Ownership, Borrowing, and Slices
 
 ---
 
@@ -21,12 +21,23 @@
   - [Dangling Reference](#dangling-reference)
   - [Rules of References](#rules-of-references)
 - [The `Slice` Type](#the-slice-type)
+  - [Example of a Problem](#example-of-a-problem)
+  - [Solving Problem Without Using `Slice`](#solving-problem-without-using-slice)
+  - [Solving Problem Using `String Slice`](#solving-problem-using-string-slice)
+    - [NOTE: Range Syntax](#note-range-syntax)
+    - [Rewriting `first_word()` With Slice](#rewriting-first_word-with-slice)
+  - [String Literals As Slices](#string-literals-as-slices)
+  - [String Slices As Parameters](#string-slices-as-parameters)
+  - [Other Slices](#other-slices)
+  - [Slice Similarities In Other Languages](#slice-similarities-in-other-languages)
 
 ---
 
+- *Ownership*, *Borrowing*, and *Slices* ensure memory safety in Rust programs at compile time
 - *Ownership* is Rust's most unique feature
   - Has deep implications for the rest of the language
   - **Allows to make memory-safety guarantees without needing a GC**
+  - Affects how lots of other parts of Rust work
 - Other related features:
   - Borrowing
   - Slices
@@ -659,7 +670,378 @@ fn no_dangle() -> String {
 
 ## The `Slice` Type
 
-- Allows to reference a contiguous sequence of elements in a collection
+- Allows to reference a *contiguous sequence* of elements in a collection
   - Instead of the whole collection
   - i.e. it is like a window within the collection
-  - A reference, not an ownership
+  - **A Slice is a reference: no an ownership**
+- **NOTE: *Collections***
+  - Data structures that can contain multiple values
+  - Part of Rust's Standard Library
+  - Data is stored on the Heap
+  - The amount of data does not need to be known at compile time
+  - Can grow or shrink as the program runs
+  - Most used collections in Rust:
+    - *Vector* - Store a variable number of values next to each other
+    - *String* - Collection of characters
+    - *Hash Map* - Associate a *value* with a specific *key*
+
+### Example of a Problem
+
+- Write a function that takes a string of words separated by spaces
+  - Return the first word it finds in that string
+  - If there is no space in the string, return the entire string
+  - E.g. `Hello World!` => `Hello`
+  - E.g. `Anonymous` => `Anonymous`
+
+### Solving Problem Without Using `Slice`
+
+```rs
+fn first_word(st: &String) -> ?
+```
+
+- We do not need ownership of the String: Just borrowing
+- But what should be returned? *Part* of a String?
+- We could return the index of the end of the word
+
+```rs
+fn main() {
+    // Example of Solving Problem Without Using Slice
+    // ----------------------------------------------
+    // NOTE: String can be mutated
+    println!("Example of Solving Problem Without Using Slice:");
+    println!("-----------------------------------------------");
+
+    let hello: usize = first_word(&String::from("Hello World!"));
+    println!("Hello World! -> {hello}"); // => 5
+
+    let abraca: usize = first_word(&String::from("Abracadabra!"));
+    println!("Abracadabra! -> {abraca}"); // => 12
+}
+
+/// Get the ending index of the first word of a string,
+/// or the end of the string if it is a single word.
+fn first_word(st: &String) -> usize {
+    // Convert the string to bytes
+    let bytes: &[u8] = st.as_bytes();
+
+    // Loop through the bytes
+    for (i, &item) in bytes.iter().enumerate() {
+        // If ' ' found, return the index
+        if item == b' ' {
+            return i;
+        }
+    }
+
+    // If no ' ' found, index is at the end of the string
+    st.len()
+}
+```
+
+- We convert the `String` to an array of `bytes`: `st.as_bytes()`
+- We iterate over the array of `bytes`: `bytes.iter().enumerate()`
+  - `iter()` returns each element in a collection
+  - `enumerate()` wraps the result of `iter()` and returns each element as a `tuple` of `(index, &byte)`
+  - We use *tuple pattern destructuring* with the `for` loop
+  - The resulting element is a reference so we use `&`
+  - *NOTE: These approaches are familiar to Python*
+  - In the loop, we search for the byte representing `' '` using a *byte-literal* syntax `b' '`
+- **Issue with this approach**
+  - We are returning a `i: usize` index on its own
+  - ***That is only a meaningful number in the context of the `&String`, as in `&String[i: usize]`***
+  - Because it is a separate value from the `&String`, we cannot guarantee that it will still be valid in the future
+
+```rs
+fn main() {
+    let mut st: String = String::from("hello world");
+
+    // word will get the value 5
+    let word: usize = first_word(&st);
+
+    // st is mutable
+    // So this empties the String to ""
+    st.clear();
+
+    // word still has the value 5 here
+    // but there is no more string that we could
+    // meaningfully use the value 5 with.
+    // word[5] no longer makes sense!
+    // word is now totally invalid!
+}
+```
+
+- The program compiles without error
+  - For the compiler, `word` is *not connected to the state of `st` at all*
+  - Using `word` as index on `st` would cause a runtime bug
+- **Having to worry about an index getting out of sync with the data is tedious and error prone**
+  - What if we also want to return the index of the second word, Third word,... as tuple?
+  - We might need to return the `start` and `end` indices
+  - This can get complicated fast: *We have multiple unrelated variables floating around that need to be kept in sync*
+- The better solution is to use `Slice`
+
+### Solving Problem Using `String Slice`
+
+- A *String Slice* is a *reference* to *part* of a `String`
+- *NOTE: This is a familiar approach to Python and Go*
+
+```rs
+// Example of Solving Problem Using Slice
+// --------------------------------------
+// NOTE: String can be mutated
+println!("Example of Solving Problem Using Slice:");
+println!("---------------------------------------");
+
+let st: String = String::from("Hello again world!");
+
+let hello: &str = &st[0..5];
+let again: &str = &st[6..11];
+let world: &str = &st[12..18];
+
+println!("Sentence: {st}");
+println!("1st word: {hello}");
+println!("2nd word: {again}");
+println!("3rd word: {world}");
+```
+
+- `hello`, `again`, and `world` are references to a portion of the `String`
+- **We create *String Slices* using a *range of index* on the `String`**
+  - `&String[start...end]`
+  - `start` index is inclusive
+  - `end` index is exclusive (up-to-but-not-including)
+- **Internally, the `Slice` data structure stores `start` and `slice_length`**
+  - $SliceLength=end-start$
+  - **The `Slice` is a *pointer* to the `start` index of the original `String` (`s`), and for a specific `slice_length`**
+- **We can think of *Slice* as a *window* to look through part of the String**
+
+<img src="./img/String-Slice.png" width="25%" />
+
+#### NOTE: Range Syntax
+
+- The range syntax allows to drop the `start` or `end` to mean *from the start* or *to the end*
+- We can also drop both value to mean *grab everything*
+
+```rs
+let st: String = String::from("hello");
+
+// These syntax are equivalent: From the start
+let slice: &str = &st[0..2];
+let slice: &str = &st[..2];
+
+// These syntax are equivalent: To the end
+let slice = &st[3..st.len()];
+let slice = &st[3..];
+
+// These syntax are equivalent: Grab everything
+let slice = &st[0..st.len()];
+let slice = &st[..];
+```
+
+- **NOTE: String slice range indices must occur at valid UTF-8 character boundaries**
+  - Attempting to create a string slice in the middle of a multibyte character will create an runtime error
+
+```rs
+// Example of Slicing at Non-UTF-8 Character Boundary
+// --------------------------------------------------
+println!("Example of Slicing at Non-UTF-8 Character Boundary:");
+println!("---------------------------------------------------");
+
+let st: String = String::from("Hello ❤️!");
+let st_len: usize = st.len();
+println!("{st_len}"); // 13
+
+// Attempting to index in the middle of the ❤️ character
+let bad_utf_index: &str = &st[7..10];
+println!("{bad_utf_index}");
+// Error: byte index 7 is not a char boundary; it is inside '❤' (bytes 6..9) of `Hello ❤️!`
+```
+
+#### Rewriting `first_word()` With Slice
+
+- Rewriting `first_word()` to return a `String` slice
+- Same approach as before
+- However, when we find a space, we return a string slice using the `start` of the string as starting index and the index of the space as ending index
+- We get back a single value that is *tied to the underlying data*
+  - Under the hood, the value is made up of *a reference to the starting point of the slice* and *the slice length*
+
+```rs
+fn main() {
+    // Example of resolving Problem Using Slice
+    // ----------------------------------------
+    // NOTE: String can be mutated
+    println!("Example of resolving Problem Using Slice:");
+    println!("-----------------------------------------");
+
+    let original: String = String::from("Hello World!");
+    let hello: &str = first_word_slice(&original);
+    println!("Hello World! -> {hello}");
+
+    let original: String = String::from("Abracadabra");
+    let abraca: &str = first_word_slice(&original);
+    println!("Abracadabra! -> {abraca}");
+}
+
+/// Get the first word of a string,
+/// or the original string if it is a single word.
+fn first_word_slice(st: &String) -> &str {
+    // Convert the string to bytes
+    let bytes: &[u8] = st.as_bytes();
+
+    // Loop through the bytes
+    for (i, &item) in bytes.iter().enumerate() {
+        // If ' ' found, return the string slice
+        if item == b' ' {
+            return &st[0..i];
+        }
+    }
+
+    // If no ' ' found, return the entire string
+    &st[..]
+}
+```
+
+- Same approach can be made for `second_word_slice()`, `third_word_slice()`... with no further complications
+  - Straightforward API that is much harder to mess up
+  - The compiler ensures that the references into the `String` remain valid
+  - The earlier bug involving `st.clear()` would be caught during compile-time
+
+```rs
+fn main() {
+    let mut st: String = String::from("hello world");
+
+    // word will get the value "hello"
+    let word: &str = first_word_slice(&s);
+
+    // This cause a compile-time error!!
+    // The compiler ensures that references into st remain valid
+    st.clear();
+    // error[E0502]: cannot borrow `st` as mutable because it is also borrowed as immutable
+
+    println!("The first word is: {word}");
+}
+```
+
+- Borrowing Rule reminder: *If we have an immutable reference to something, we cannot also take a mutable reference for the same*
+  - `.clear()` needs a *mutable reference* to truncate the `String`
+  - `word` is an *immutable reference* and is used in the following `println!`
+  - The immutable reference must still be active at that point
+  - So the conflict between `.clear()` and `word` causes a compile-time error
+
+### String Literals As Slices
+
+- **String Literals `&str` are essentially Slices**
+  - They are compiled as part of the executable binary
+  - A slice pointing to that specific point of the compiled executable binary
+- This is also why string literals are always immutable
+  - **`&str` is an immutable reference to the executable binary**
+
+```rs
+let st: &str = "Hello, world!";
+```
+
+### String Slices As Parameters
+
+- We can take slices of literals and `String` values
+- Both slices would be typed as `&str`
+  - Slice of `String` => `&str`
+  - Slice of string literal `&str` => `&str`
+- **Using `&str` as parameter type for *Slice of string* allows us to use the same function on both `&String` values and `&str` values**
+  - If we have a string slice, we can pass that directly
+  - If we have a `String`, we can pass a slice of the `String` or a reference to the `String`
+  - This flexibility takes advantage of a feature called *Deref Coercion*
+
+```rs
+// Change parameter type from &String to &str
+fn first_word_slice(st: &str) -> &str {
+    ...
+}
+```
+
+- **Defining a function to take *a string slice* (`&str`) instead of *a reference to a `String`* (`&String`) makes an API more general and useful without losing any functionality**
+  - The following examples all works in the same way
+
+```rs
+// Example of Using string slice vs Reference to a String
+// ------------------------------------------------------
+println!("Example of Using string slice vs Reference to a String:");
+println!("-------------------------------------------------------");
+let my_string: String = String::from("hello world");
+println!("my_string: String = {my_string}");
+
+// `first_word_slice` works on slices of `String`s, whether partial or whole
+let word1: &str = first_word_slice(&my_string[0..6]);
+let word2: &str = first_word_slice(&my_string[..]);
+println!("\tPartial Slice = {word1}");
+println!("\tWhole Slice = {word2}");
+
+// `first_word_slice` also works on references to `String`s,
+// which are equivalent to whole slices of `String`s
+let word3: &str = first_word_slice(&my_string);
+println!("\tReference to String = {word3}");
+println!();
+
+let my_string_literal: &str = "hello world again";
+println!("my_string_literal: &str = {my_string_literal}");
+
+// `first_word_slice` works on slices of string literals, whether partial or whole
+let word4: &str = first_word_slice(&my_string_literal[0..6]);
+let word5: &str = first_word_slice(&my_string_literal[..]);
+println!("\tPartial Slice = {word4}");
+println!("\tWhole Slice = {word5}");
+
+// Because string literals *are* string slices already,
+// this works too, without the slice syntax!
+let word6: &str = first_word_slice(my_string_literal);
+println!("\tJust String Literal = {word6}");
+```
+
+### Other Slices
+
+- String slices are specific to strings
+- There are more general slice type too
+- For example, for arrays: `&[<type>]`
+- **We can refer to a *slice* of any collections**
+  - Work the same way as string slices
+  - Storing a reference to the first element and a length
+
+```rs
+// Example of Slice of Array
+// -------------------------
+println!("Example of Slice of Array");
+println!("-------------------------");
+
+// Original array
+let arr: [i32; 5] = [10, 20, 30, 40, 50];
+// Array Slice
+let arr_slice: &[i32] = &arr[1..3];
+
+let is_equal: bool = arr_slice == &[20, 30];
+print!("arr = ");
+for el in arr {
+    print!("{el} ");
+}
+println!();
+print!("arr_slice = ");
+for el in arr_slice {
+    print!("{el} ");
+}
+println!();
+println!("arr_slice == &[20, 30] ? => {is_equal}"); // true
+```
+
+### Slice Similarities In Other Languages
+
+- Rust's slice has similar concepts *but not fully-equivalent implementations* with other languages, such as Python and Go
+- *However, in Python, the slice is transfered by value, not by reference*
+- Also, *Python strings are always immutable*
+
+```py
+st: str = "hello world"
+
+# world is not a reference to st but an actual new value in memory
+world: str = st[6:11]
+
+print(st)
+print(world)
+```
+
+- Go uses *Pointers* and is closer in concept to Rust's slice (but differences still applies)
+- [Check here](https://github.com/maevadevs/Go-Developer-Advanced/tree/main/03-Composite-Types#slices) for more details on how Go makes use of slices

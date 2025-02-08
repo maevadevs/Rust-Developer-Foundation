@@ -24,16 +24,22 @@
    - Comments
    - Control Flow: `if`-`else if`-`else`
    - Loops: `loop`, `while`, `for`
-4. [**Ownership System**](./04.Ownership/)
+4. [**Ownership, Borrowing, and Slices**](./04.Ownership-Borrowing-Slices/)
    - Stack vs Heap
    - Ownership Rules
    - Variable Scope
    - `String` Type
-   - Memory and Allocation
+   - Memory and Allocation: *Move*, *Clone*, *Copy*
    - Ownership and Functions
    - Return Values and Scope
    - References and Borrowing
+   - Immutable Reference and Mutable Reference
+   - Dangling Reference
+   - Rules of References
    - `Slice` Type
+   - Range Syntax
+   - String Slices
+   - Slice Similarities In Other Languages
 5. Structs and Methods
    - Custom types
 6. Enums, Pattern Matching, and Control Flow
