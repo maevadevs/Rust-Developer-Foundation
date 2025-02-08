@@ -1043,5 +1043,6 @@ print(st)
 print(world)
 ```
 
-- Go uses *Pointers* and is closer in concept to Rust's slice (but differences still applies)
+- Go's array and slice use *Pointers* and might be closer in concept to Rust's slice and/or vector
+  - But differences still applies
 - [Check here](https://github.com/maevadevs/Go-Developer-Advanced/tree/main/03-Composite-Types#slices) for more details on how Go makes use of slices
