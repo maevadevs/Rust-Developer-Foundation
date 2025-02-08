@@ -162,7 +162,7 @@ fn first_word_slice(st: &str) -> &str {
 // Check:               $ cargo check
 // Build:               $ cargo build
 // Build + Run:         $ cargo run
-// Execute:             $ ./target/debug/ownership
+// Execute:             $ ./target/debug/slice
 // Build Release:       $ cargo build --release
 // Build + Run Release: $ cargo run --release
-// Execute Release:     $ ./target/release/ownership
+// Execute Release:     $ ./target/release/slice
