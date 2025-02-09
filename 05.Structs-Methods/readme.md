@@ -92,7 +92,7 @@ fn main() {
 - It returns a new struct instance as value
 - We can use it as the return value of a function
 - It usually makes sense to name the function parameters the same as the struct fields
-  - ***Field Init Shorthand* syntax: When the function parameter names and the struct field names are exactly the same, we can use simply specify the names when instantiating the struct**
+  - ***Field Init Shorthand* syntax: When the function parameter names and the struct field names are exactly the same, we can simply specify the names when instantiating the struct**
 
 ```rs
 fn main() {
