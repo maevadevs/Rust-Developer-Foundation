@@ -40,7 +40,7 @@
    - Range Syntax
    - String Slices
    - Slice Similarities In Other Languages
-5. Structs and Methods
+5. [**Structs and Methods**](./05.Structs-Methods/)
    - Custom types
 6. Enums, Pattern Matching, and Control Flow
    - `match` expression
