@@ -46,6 +46,7 @@ fn main() {
     // Constants are always immutable
     // They are basically always read-only
     // Constant values must be determined at compile-time
+    // Constants can be declared in any scope, including the global scope
     println!("Examples of Constants:");
     println!("----------------------");
     println!("SECONDS_IN_HOUR = {SECONDS_IN_HOUR}");

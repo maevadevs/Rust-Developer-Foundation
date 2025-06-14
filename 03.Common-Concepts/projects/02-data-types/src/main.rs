@@ -137,8 +137,8 @@ fn main() {
     println!("Example of Array:");
     println!("-----------------");
     println!("arr = {arr:?}");
-    println!("MONTHS = {MONTHS:#?}");
     println!("arr_10 = {arr_10:?}");
+    println!("MONTHS = {MONTHS:#?}"); 
     println!();
 
     // Example of Accessing Array Elements

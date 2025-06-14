@@ -98,12 +98,12 @@ fn main() {
 - Constants are declared using `const` keyword
   - **Type *must* be annotated**: Constant's types cannot be inferred
   - **Can be declared in any scope**, including the *global* scope
-  - Useful to set globally-fixed values that all parts of an app need to know about
-- Also designed to be bound once to a name and not change
+  - Useful for setting globally-fixed values that all parts of an app need to know about
+- Also designed to be bound once to a name and never change
   - **Cannot be set `mut`: Constants are *always* immutable**
   - Constants are basically *Always-Read-Only* values
 - Differences with *Immutable Variables*:
-  - **The value of a constant must be determined at compile-time**
+  - **The value of a constant must be determined once at compile-time**
   - **Can only be set to a *limited set of fixed-constant expressions***
   - **Cannot be the results of runtime computations**
 - **Constant Naming Convention: *Use all-uppercase with underscores between words***
@@ -129,18 +129,20 @@ println!();
   - Gives meaning to the value of the derived constant
 - **Constants are valid for the duration of the program-run**
   - **But only valid within the scope in which they were declared**
-- Useful for storing global values used throughout the app
+- Useful for storing global values that are used throughout the app
   - Conveys the meaning of that value to future maintainers of the code
   - Helps to have only one place to change if the hardcoded values need to change
 
 ### Shadowing
 
-- **We can declare a new variable with the same name as a previously-declared variable**
+- **We can redeclare a variable with the same name as a previously-declared variable**
   - The first variable is *shadowed* by the second
   - The second variable is what the compiler will see past that point in that scope
   - The second variable takes any further uses of the variable name to itself
   - **Until either it itself is *shadowed* or the scope ends**
-- **NOTE: A new scope can be created using any block `{}`**
+- **NOTE:**
+  - **Rust is a block-scoped language**
+  - **A new scope can be created using any block `{}`**
 
 ```rs
 fn main() {
@@ -547,8 +549,8 @@ const MONTHS: [&str; 12] = [
 println!("Example of Array:");
 println!("-----------------");
 println!("arr = {arr:?}");
-println!("MONTHS = {MONTHS:#?}");
 println!("arr_10 = {arr_10:?}");
+println!("MONTHS = {MONTHS:#?}");
 ```
 
 ##### Accessing Array Elements
@@ -588,7 +590,7 @@ println!("second = {second}");
   - As long as they are accessible in the scope of the caller
 
 ```rs
-fn <func_name>(param: <param_type>) -> <return_type> {
+fn <func_name>(param: <param_type>) -> <optional_return_type> {
     // Function body defined here
 }
 ```
@@ -604,7 +606,7 @@ fn main() {
 
 /// Example of a Function.
 fn some_func() {
-    println!("This is printing from some_func().");
+    println!("This is printing from some_func()");
 }
 ```
 
@@ -691,7 +693,7 @@ let x = (let y = 6);
   - Most of Rust codes are expressions
   - Expressions can be part of a statement
   - Any math operation is an expression
-  - Calling a function/macro is also an expression
+  - Calling a function or macro is also an expression
   - *A new block scope created with curly-braces `{}` is also an expression*
 - **Expressions do not end with semicolons**
   - *An expression with a semicolon is a statement*
@@ -830,7 +832,7 @@ pub fn new(name: &str) -> Person {
 ### `if-else` Expression
 
 - Allows to branch code depending on conditions
-- Blocks of code associated with the conditions are called *arms*
+- Blocks of code associated with the conditions are called *Arms*
 - We can give an optional `else` expression
   - An alternative block of code to execute if the condition evaluates to `false`
   - `else` block is optional: If not given, the execution just moves on
@@ -853,7 +855,7 @@ if number < 5 {
   - If not, we get a compile-time error
   - **Rust will not automatically try to convert non-Boolean types to a Boolean**
     - Rust does not interpret *Truthy* and *Falsy* values
-    - I.e. The value of the condition expression needs to evaluate an exact boolean
+    - I.e. The value of the condition expression needs to evaluate to an exact boolean
 
 #### `else if` Expression
 
@@ -953,11 +955,11 @@ println!("Example of Controlled Loop Using `loop` and `break`:");
 println!("----------------------------------------------------");
 let mut i: i32 = 0;
 loop {
+    println!("run again! {i}");
+    i += 1;
     if i == 10 {
         break;
     }
-    println!("run again! {i}");
-    i += 1;
 }
 println!();
 ```
@@ -1024,7 +1026,6 @@ let mut count: i32 = 0;
         }
         remaining -= 1;
     }
-
     count += 1;
 }
 println!("End count = {count}");
@@ -1049,7 +1050,6 @@ while number != 0 {
     print!("{number}... ");
     number -= 1;
 }
-
 println!("LIFTOFF!!!");
 ```
 

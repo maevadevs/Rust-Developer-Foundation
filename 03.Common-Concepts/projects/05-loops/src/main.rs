@@ -16,11 +16,11 @@ fn main() {
     println!("----------------------------------------------------");
     let mut i: i32 = 0;
     loop {
+        println!("run again! {i}");
+        i += 1;
         if i == 10 {
             break;
         }
-        println!("run again! {i}");
-        i += 1;
     }
     println!();
 
@@ -66,7 +66,6 @@ fn main() {
             }
             remaining -= 1;
         }
-
         count += 1;
     }
     println!("End count = {count}");
@@ -82,7 +81,6 @@ fn main() {
         print!("{number}... ");
         number -= 1;
     }
-
     println!("LIFTOFF!!!");
     println!();
 

@@ -187,7 +187,7 @@ Command|Docs For
 Command|Description
 :-|:-
 `rustc --version`|Check installed Rust Compiler version
-`rustup docs` or `rustup doc`|Open local documentations index
+`rustup docs`<br>`rustup doc`|Open local documentations index
 `rustup update`|Update all installed `rustup` components
 `rustup self uninstall`|Uninstall Rust and all its components
 
@@ -331,7 +331,7 @@ Folder or File|Description
 - **NOTE: Git-related files are not generated if already within an existing Git repository**
 - `Cargo.toml` can have multiple sections but the following are defaulted
   - **`[package]`**
-    - **Configure the project as a package**
+    - **Configure the project as a Cargo package**
     - Also adds compiler info
       - `name` - Name of the Package
       - `version` - Version of the Package

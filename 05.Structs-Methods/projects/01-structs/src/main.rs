@@ -8,19 +8,19 @@ fn main() {
         username: String::from("someusername123"),
         email: String::from("someone@example.com"),
         active: true,
-        sign_in_count: 1,
+        signin_count: 1,
     };
 
     // Modifying a field's value
-    // NOTE: The Struct needs to be mutable
-    user1.sign_in_count += 1;
+    // NOTE: The Struct instance needs to be mutable
+    user1.signin_count += 1;
 
     // Accessing Struct fields
     // We cannot use `.` directly in string interpolations
     // Use *borrow* so the ownership does not *move*
     let user_name: &String = &user1.username;
     let user_email: &String = &user1.email;
-    let user_signin_count: &u64 = &user1.sign_in_count;
+    let user_signin_count: &u64 = &user1.signin_count;
 
     println!("Your username is {user_name}.");
     println!("You email is {user_email}.");
@@ -93,7 +93,7 @@ struct User {
     active: bool,
     username: String,
     email: String,
-    sign_in_count: u64,
+    signin_count: u64,
 }
 
 /// Example of function that returns a struct instance.
@@ -110,7 +110,7 @@ fn build_user(email: String, username: String) -> User {
         // Field Init Shorthand syntax
         username, // username: username,
         email, // email: email,
-        sign_in_count: 1,
+        signin_count: 1,
     }
 }
 

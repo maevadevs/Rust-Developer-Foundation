@@ -22,17 +22,18 @@
 ## Defining and Instantiating Structs
 
 - Structs are similar to Tuples, but more flexible
-  - *Hold multiple related values*
-  - The pieces of a Struct can be different types
-  - However, we need to name each piece of data in a Struct so it is clear what the values mean
+  - *Hold multiple related `key: value` pairs*
+  - Each `key: value` of a Struct can be of different types
+  - However, we need to name each `key` in a Struct so it is clear what the contained value mean
   - *Unlike Tuples, we do not have to rely on the order of the data to specify or access the values of an instance*
-- Use the `struct` keyword to define
+  - Similar concept to `struct` in Go and `dict` in Python
+- **Use the `struct` keyword to define a Struct**
   - The struct name should describe the significance of the pieces of data being grouped together
-  - Each *field* is defined as the name and type of the pieces of data
-  - **The fields are unordered**
-- **Each `struct` we define is its own type**
+  - Each *field* is defined as the *name* and *type* of the pieces of data
+  - **The *fields* are unordered**
+- **NOTE: Each `struct` we define is its own type**
   - Even though the fields within the structs might have the same types
-  - A function that takes a parameter of type `struct Color` cannot take a `struct Point` as an argument, even if they are both made up of three `i32` values
+  - E.g. A function that takes a parameter of type `struct Color` cannot take a `struct Point` as an argument, even if they are both made of three `i32` values
 
 ```rs
 // Example of defining a Struct
@@ -41,22 +42,22 @@ struct User {
     active: bool,
     username: String,
     email: String,
-    sign_in_count: u64,
+    signin_count: u64,
 }
 ```
 
 - **To use a Struct, we *instantiate* from it**
-  - Specify concrete values for each of the fields
+  - Specify concrete values for each of the defined fields
   - State the name of the Struct and add curly brackets containing `key: value` pairs
-  - Keys are the names of the fields
-  - Values are the data we want to store in those fields
+  - *Keys* are the names of the fields
+  - *Values* are the data we want to store in those fields
   - *The order of the fields does not matter*
-- To access a specific field, we use the `.` operator
-  - **NOTE: We cannot use *field access expression* using `.` directly in string interpolations**
+- **To access a specific field, we use the `.` operator**
+- **NOTE: We cannot use *field access expression* using `.` directly in string interpolations**
   - Pull into a variable first, then use in string interpolation
   - Use *borrow* so the ownership does not *move*
 - If the instance is mutable, we can modify the field's value using `.` operator
-  - **NOTE: To allow mutability, the entire instance must be mutable**
+- **NOTE: To allow mutability, the entire struct instance must be mutable**
   - We cannot mark *only certain fields* as mutable
 
 ```rs
@@ -69,19 +70,19 @@ fn main() {
         username: String::from("someusername123"),
         email: String::from("someone@example.com"),
         active: true,
-        sign_in_count: 1,
+        signin_count: 1,
     };
 
     // Modifying a field's value
-    // NOTE: The Struct needs to be mutable for this to work
-    user1.sign_in_count += 1;
+    // NOTE: The Struct instance needs to be mutable for this to work
+    user1.signin_count += 1;
 
     // Accessing Struct fields
     // We cannot use `.` directly in string interpolations
     // Use *borrow* so the ownership does not *move*
     let user_name: &String = &user1.username;
     let user_email: &String = &user1.email;
-    let user_signin_count: &u64 = &user1.sign_in_count;
+    let user_signin_count: &u64 = &user1.signin_count;
 
     println!("Your username is {user_name}.");
     println!("You email is {user_email}.");
@@ -128,14 +129,14 @@ fn build_user(email: String, username: String) -> User {
         // Field Init Shorthand syntax
         username, // username: username,
         email, // email: email,
-        sign_in_count: 1,
+        signin_count: 1,
     }
 }
 ```
 
 ### Creating Instances from Other Instances with *Struct Update Syntax*
 
-- It is often useful to create a new instance of a struct that includes most of the values from another instance
+- We can create a new instance of a struct that includes most of the values from an existing instance
   - Then we apply some changes to customize the new instance
   - We can do this with *Struct Update Syntax*
 - We can specify the fields that we want to have different values
