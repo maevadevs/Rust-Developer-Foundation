@@ -1,7 +1,5 @@
 # Introduction
 
----
-
 - [Installation](#installation)
   - [`rustup`](#rustup)
   - [`cargo`](#cargo)
@@ -187,7 +185,7 @@ Command|Docs For
 Command|Description
 :-|:-
 `rustc --version`|Check installed Rust Compiler version
-`rustup docs`<br>`rustup doc`|Open local documentations index
+`rustup doc`<br>`rustup docs`|Open local documentations index
 `rustup update`|Update all installed `rustup` components
 `rustup self uninstall`|Uninstall Rust and all its components
 
@@ -243,7 +241,7 @@ fn main() {
   - Produces a single executable file
   - Similar to C, C++, Go
   - Compiler: `rustc`
-- On Windows, compiling also outputs a `.pdb` file for debugging info
+- On Windows, compiling also outputs a [`.pdb` file](https://docs.rs/pdb/latest/pdb/) for debugging info
 
 ```sh
 # Compiling on Linux
@@ -263,7 +261,7 @@ rustc src\main.rs -o target\main.exe
 
 - **NOTE: `rustc` alone is not enough for larger projects**
   - **We use `cargo` instead**
-  - `cargo` allows to better manage a larger project
+  - `cargo` allows to manage a larger project better
 
 ## Hello Cargo
 
@@ -323,36 +321,30 @@ hello-cargo/
 
 Folder or File|Description
 :-|:-
-`.git`|Default *Version Control System (VCS)*<br>Not generated if already within a Git project<br>Can override with `--vcs` flag
-`.gitignore`|Default *Version Control System (VCS)* is Git<br>Not generated if already within a Git project<br>Can override with `--vcs` flag
+`.git`|Git is the default *Version Control System (VCS)*<br>Not generated if already within a Git project<br>Can override with `--vcs` flag
+`.gitignore`|Git is the default *Version Control System (VCS)*<br>Not generated if already within a Git project<br>Can override with `--vcs` flag
 `Cargo.toml`|Manage project configs and dependencies/crates
 `src/main.rs`|The entrance of the program
 
 - **NOTE: Git-related files are not generated if already within an existing Git repository**
 - `Cargo.toml` can have multiple sections but the following are defaulted
-  - **`[package]`**
-    - **Configure the project as a Cargo package**
-    - Also adds compiler info
-      - `name` - Name of the Package
-      - `version` - Version of the Package
-      - `edition` - The Rust edition to use
-    - See more keys and their definitions at [Cargo Reference](https://doc.rust-lang.org/cargo/reference/manifest.html)
-    - See more details about Rust Editions at [The Rust Edition Guide](https://doc.rust-lang.org/edition-guide/editions/)
-  - **`[dependencies]`**
-    - **List of crates dependencies for the project**
-    - If none is listed, then the project will install no additional dependency crates
+
+Section|Description
+:-|:-
+**`[package]`**|- **Configure the project as a Cargo package**<br>- Also adds compiler info<br>- `name` - Name of the Package<br>- `version` - Version of the Package<br>- `edition` - The Rust edition to use<br>- See more keys and their definitions from the [Cargo Book](https://doc.rust-lang.org/cargo/reference/manifest.html)<br>- See more details about Rust Editions from [The Rust Edition Guide](https://doc.rust-lang.org/edition-guide/editions/)
+**`[dependencies]`**|- **List of crates dependencies for the project**<br>- If none is listed, then the project will install no additional dependency crates
 
 ```toml
 [package]
 name = "hello-cargo"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 
 [dependencies]
 ```
 
 - **All source codes should live in `src`**
-  - Except for non-source code files, which can be in top-level project directory:
+  - Except for non-source code files which can be in top-level project directory
     - README files
     - License information
     - Configuration files: `Cargo.toml`, `Cargo.lock`
@@ -404,7 +396,7 @@ cargo build
 
 #### Build And Run At Once
 
-- We can run `cargo run` to build and run at once
+- We can use `cargo run` to build and run at once
 - Convenience for *`cargo build` + run binaries*
 
 ```sh
@@ -420,7 +412,7 @@ cargo run
 - `cargo check` allows to check if a project can build without generating the binaries
 - Much faster than `cargo build`
   - Skips the step of producing an executable
-  - Still generates `target` but not the executable file
+  - Still generates `target`folder but not the executable file
   - Helpful for multiple periodical compiling-checks when writing code (e.g. watching for changes, debugging errors)
 
 ```sh
