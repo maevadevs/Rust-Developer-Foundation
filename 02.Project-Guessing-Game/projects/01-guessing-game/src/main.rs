@@ -1,14 +1,20 @@
-/// Guessing Game: Try to guess a randomly-generated number.
+/************************************************************/
+/* Guessing Game: Try to guess a randomly-generated number. */
+/************************************************************/
 
 // Import libraries/modules
-use rand::Rng;
+use rand::RngExt;
 use std::cmp::Ordering;
 use std::io;
+use std::io::Stdin;
 
 /// The entry-point of the program.
 fn main() {
     // Generate a random integer between 1 and 100, inclusive
     let secret_num: u32 = rand::rng().random_range(1..=100);
+
+    // Create a reader
+    let reader: Stdin = io::stdin();
 
     loop {
         // Prompt the player to enter a guess
@@ -18,9 +24,8 @@ fn main() {
         let mut guess: String = String::new();
 
         // Check that the input is in the expected form
-        io::stdin()
-            .read_line(&mut guess)
-            .expect("Failed to read line");
+        reader.read_line(&mut guess)
+              .expect("Failed to read line");
 
         // Set explicit cast to u32
         // Handle user input errors

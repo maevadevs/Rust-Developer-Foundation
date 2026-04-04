@@ -11,9 +11,10 @@
   - [Storing Values With Variables](#storing-values-with-variables)
   - [Getting User Input](#getting-user-input)
 - [Generating a Secret Number](#generating-a-secret-number)
-  - [Using Crates](#using-crates)
+  - [Increasing Functionality with a Crate](#increasing-functionality-with-a-crate)
   - [Ensuring Reproducible Builds with the `Cargo.lock` File](#ensuring-reproducible-builds-with-the-cargolock-file)
   - [Updating a Crate to Get a New Version](#updating-a-crate-to-get-a-new-version)
+  - [Generate Documentation of Used Crates](#generate-documentation-of-used-crates)
   - [Generating A Random Number](#generating-a-random-number)
 - [Comparing Guess vs Secret Number](#comparing-guess-vs-secret-number)
 - [Loop: Allowing Multiple Guesses](#loop-allowing-multiple-guesses)
@@ -47,7 +48,9 @@ cd guessing-game
 1. Confirm the user's guess
 
 ```rs
-/// Guessing Game: Try to guess a randomly-generated number.
+/************************************************************/
+/* Guessing Game: Try to guess a randomly-generated number. */
+/************************************************************/
 
 // Import libraries/modules
 use std::io;
@@ -76,7 +79,7 @@ fn main() {
 - **Rust Prelude**
   - By default, Rust brings *a set of items predefined in the `std` library* into the scope of every program
   - But this does not include all of `std`, only a portion called *Prelude*
-  - [The list of *Rust Prelude* can be found here](https://doc.rust-lang.org/std/prelude)
+  - [The list of *Rust Prelude* can be found here](https://doc.rust-lang.org/stable/std/prelude/)
   - **For things not in the *Prelude*, we have to manually import with `use` statements**
 
 ### `fn main()`
@@ -204,7 +207,7 @@ io::stdin()
   - But there are some third-party crates that we can use
   - We can use the `rand` crate
 
-### Using Crates
+### Increasing Functionality with a Crate
 
 - **Crate**
   - Collection of Rust source code files
@@ -230,7 +233,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-rand = "^0.9.0"
+rand = "^0.10.0"
 ```
 
 - Everything that follows a `[header]` is part of that section that continues until another section starts
@@ -270,11 +273,17 @@ cargo update
 - Figure out all the latest versions that fit the specifications in `Cargo.toml`
 - **To update to higher versions, modify the requirements in `Cargo.toml`**
 
+### Generate Documentation of Used Crates
+
+- Each crate has documentation with instructions for using it
+- `cargo doc --open` allows to gather documentation for all the project's crate dependencies
+  - Build and open this documentation locally
+
 ### Generating A Random Number
 
 ```rs
 // Import libraries/modules
-use rand::Rng;
+use rand::RngExt;
 use std::io;
 
 fn main() {
@@ -282,27 +291,28 @@ fn main() {
     let secret_num: u32 = rand::rng().random_range(1..=100);
 
     // Ask for user input
-    println!("Take a guess, what number?");
+    println!("Take a guess, what number between 1 and 100?");
 
     // Process the user input
     let mut guess: String = String::new();
 
+    // Create a reader
+    let reader: Stdin = io::stdin();
+
     // Check that the input is in the expected form
-    io::stdin()
-       .read_line(&mut guess)
-       .expect("Failed to read line");
+    reader.read_line(&mut guess)
+          .expect("Failed to read line");
 
     // Confirm user's guess
     println!("You guessed: {guess}");
 }
 ```
 
-- **`rand::Rng` is a *Trait***
+- **`rand::RngExt` is a *Trait***
   - Defines methods that random number generators implement
   - Must be in-scope to use those methods
 - `rand::rng()`
   - Gives the particular random number generator
-  - A handle to a local `ThreadRng`, the current thread of execution
   - Seeded by the operating system
   - Call the `random_range(start..=end)` method on the random number generator
     - Takes a *range* expression as an argument
@@ -317,8 +327,8 @@ use std::cmp::Ordering;
 fn main() {
     //...
     match guess.cmp(&secret_num) {
-        Ordering::Less => println!("Sorry, too small!"),
-        Ordering::Greater => println!("Sorry, too big!"),
+        Ordering::Less => println!("Too small!"),
+        Ordering::Greater => println!("Too big!"),
         Ordering::Equal => println!("You win!"),
     }
 }
@@ -357,9 +367,12 @@ fn main() {
     //...
     let mut guess: String = String::new();
 
-    io::stdin()
-       .read_line(&mut guess)
-       .expect("Failed to read line");
+    // Create a reader
+    let reader: Stdin = io::stdin();
+
+    // Check that the input is in the expected form
+    reader.read_line(&mut guess)
+          .expect("Failed to read line");
 
     // Set explicit cast
     let guess: u32 = guess.trim().parse().expect("Please type a number!");
@@ -376,7 +389,7 @@ fn main() {
   - **Note that the original data type is gone past this point**
 - **`guess.trim().parse()`**
   - `trim()` eliminates any whitespace at the beginning and end of the string
-    - User press `Enter` when submitting the guess
+    - User presses `Enter` when submitting the guess
     - This creates a `\n` in the user input
     - We need to remove the extra `\n` before converting to `u32`
 - **When comparing `guess` and `secret_num`, Rust will infer that `secret_num` should be a `u32` as well**
@@ -396,6 +409,9 @@ fn main() {
 // Generate a random integer between 1 and 100, inclusive
 let secret_num: u32 = rand::rng().random_range(1..=100);
 
+// Create a reader
+let reader: Stdin = io::stdin();
+
 loop {
     // Prompt the player to enter a guess
     println!("Take a guess, what number between 1 and 100?");
@@ -404,9 +420,8 @@ loop {
     let mut guess: String = String::new();
 
     // Check that the input is in the expected form
-    io::stdin()
-        .read_line(&mut guess)
-        .expect("Failed to read line");
+    reader.read_line(&mut guess)
+          .expect("Failed to read line");
 
     // Set explicit cast to u32
     let guess: u32 = guess.trim().parse().expect("Please type a number!");
@@ -471,17 +486,23 @@ let guess: u32 = match guess.trim().parse() {
 ## Final Program Overall
 
 ```rs
-/// Guessing Game: Try to guess a randomly-generated number.
+/************************************************************/
+/* Guessing Game: Try to guess a randomly-generated number. */
+/************************************************************/
 
 // Import libraries/modules
-use rand::Rng;
+use rand::RngExt;
 use std::cmp::Ordering;
 use std::io;
+use std::io::Stdin;
 
 /// The entry-point of the program.
 fn main() {
     // Generate a random integer between 1 and 100, inclusive
     let secret_num: u32 = rand::rng().random_range(1..=100);
+
+    // Create a reader
+    let reader: Stdin = io::stdin();
 
     loop {
         // Prompt the player to enter a guess
@@ -491,9 +512,8 @@ fn main() {
         let mut guess: String = String::new();
 
         // Check that the input is in the expected form
-        io::stdin()
-            .read_line(&mut guess)
-            .expect("Failed to read line");
+        reader.read_line(&mut guess)
+              .expect("Failed to read line");
 
         // Set explicit cast to u32
         // Handle user input errors
@@ -528,4 +548,13 @@ fn main() {
         }
     }
 }
+
+// Check:               $ cargo check
+// Build:               $ cargo build
+// Build + Run:         $ cargo run
+// Execute:             $ ./target/debug/guessing-game
+// Build Release:       $ cargo build --release
+// Build + Run Release: $ cargo run --release
+// Execute Release:     $ ./target/release/guessing-game
+
 ```
