@@ -13,8 +13,7 @@
 - [Hello World](#hello-world)
   - [Compiling Rust Code](#compiling-rust-code)
 - [Hello Cargo](#hello-cargo)
-  - [Main Commands](#main-commands)
-  - [Check `cargo` Version](#check-cargo-version)
+  - [Main Cargo Commands](#main-cargo-commands)
   - [Creating A Project](#creating-a-project)
   - [Building A Project](#building-a-project)
     - [Build And Run At Once](#build-and-run-at-once)
@@ -57,6 +56,7 @@ Environment Variable|`CARGO_HOME`|`~/.cargo`
 
 - Need a *C-Compiler & Linker*
 - Used to join compiled outputs into one file
+- Also, some common Rust packages depend on C code
 
 ### Installation For Linux/MacOS
 
@@ -115,8 +115,8 @@ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
   - Choose *Desktop Development with C++*
   - Choose appropriate *Windows SDK*
   - To check the version of the compiler, call with no argument:
-    - **x64**: `C:\"Program Files"\"Microsoft Visual Studio"\2022\Community\VC\Tools\MSVC\<<version>>\bin\Hostx64\x64\cl.exe`
-    - **x86**: `C:\"Program Files"\"Microsoft Visual Studio"\2022\Community\VC\Tools\MSVC\<<version>>\bin\Hostx64\x86\cl.exe`
+    - **x64**: `C:\"Program Files"\"Microsoft Visual Studio"\18\Community\VC\Tools\MSVC\<<version>>\bin\Hostx64\x64\cl.exe`
+    - **x86**: `C:\"Program Files"\"Microsoft Visual Studio"\18\Community\VC\Tools\MSVC\<<version>>\bin\Hostx64\x86\cl.exe`
 - Check if `rustup` is installed
 
 ```sh
@@ -222,18 +222,18 @@ fn main() {
 //      Execute: .\target\main.exe
 ```
 
-- **`main()` function is the entry-point in every *executable* Rust program**
-  - No parameters
-  - No return values
+- **`main()` function is always the entry-point in every *executable* Rust program**
 - **Rust requires curly brackets around all function bodies**
-  - Recommended style to place the opening curly bracket on the same line as the function declaration
+  - Recommended style is to place the opening curly bracket on the same line as the function declaration
   - Automatic formatter tool `rustfmt` is used with `cargo`
   - **Rust style is to indent with 4 spaces, not tabs**
 - **`macroname!()` is a macro**
+  - Macros are a way to write code that generates code to extend Rust syntax
   - Functions and Macros are different in Rust
   - Macros do not always follow the same rules as Functions
   - E.g. `println!()` is a macro
-- **Most lines in Rust end with a semicolon (`;`), but not all of them (see expression vs statement)**
+- **Most lines in Rust end with a semicolon `;`**
+  - But not all of them (see *expression vs statement*)
 
 ### Compiling Rust Code
 
@@ -279,7 +279,7 @@ rustc src\main.rs -o target\main.exe
 rustup docs --cargo
 ```
 
-### Main Commands
+### Main Cargo Commands
 
 - The commands are the same no matter which operating system
 
@@ -287,20 +287,15 @@ Command|Description
 :-|:-
 `cargo new`|Create a new project
 `cargo build`|Compile the source codes in the current project (debug mode)
-`cargo build --release`|Compile the source codes with optimizations (release mode)
+`cargo build --release`|Compile the source codes in the current project with optimizations (release mode)
 `cargo run`|Build + Run the project (debug mode)
 `cargo run --release`|Build + Run the project (release mode)
-`cargo check`|Check compile status without compiling (debug mode)
+`cargo check`|Check compile status without actually compiling (debug mode)
+`cargo --version`|Check `cargo` version
 
 - **NOTE: Always use `--release` when building for final production**
   - Can greatly improve the size of binary
   - Also adds additional optimizations
-
-### Check `cargo` Version
-
-```sh
-cargo --version
-```
 
 ### Creating A Project
 
@@ -323,7 +318,7 @@ Folder or File|Description
 :-|:-
 `.git`|Git is the default *Version Control System (VCS)*<br>Not generated if already within a Git project<br>Can override with `--vcs` flag
 `.gitignore`|Git is the default *Version Control System (VCS)*<br>Not generated if already within a Git project<br>Can override with `--vcs` flag
-`Cargo.toml`|Manage project configs and dependencies/crates
+`Cargo.toml`|Manage project configs and crates dependencies
 `src/main.rs`|The entrance of the program
 
 - **NOTE: Git-related files are not generated if already within an existing Git repository**
