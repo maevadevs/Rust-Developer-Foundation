@@ -10,10 +10,11 @@
   - [`println!()`](#println)
   - [Storing Values With Variables](#storing-values-with-variables)
   - [Getting User Input](#getting-user-input)
+  - [Handling Potential Failure with `Result`](#handling-potential-failure-with-result)
 - [Generating a Secret Number](#generating-a-secret-number)
   - [Increasing Functionality with a Crate](#increasing-functionality-with-a-crate)
   - [Ensuring Reproducible Builds with the `Cargo.lock` File](#ensuring-reproducible-builds-with-the-cargolock-file)
-  - [Updating a Crate to Get a New Version](#updating-a-crate-to-get-a-new-version)
+  - [Updating Dependencies to Get Newer Versions](#updating-dependencies-to-get-newer-versions)
   - [Generate Documentation of Used Crates](#generate-documentation-of-used-crates)
   - [Generating A Random Number](#generating-a-random-number)
 - [Comparing Guess vs Secret Number](#comparing-guess-vs-secret-number)
@@ -75,12 +76,13 @@ fn main() {
 
 ### `use std::io;`
 
-- **For input/ouput operations, we use `std::io` package**
+- **For input/ouput operations, we use `std::io` library**
+  - In order to use it, we need to bring it into scope
 - **Rust Prelude**
   - By default, Rust brings *a set of items predefined in the `std` library* into the scope of every program
   - But this does not include all of `std`, only a portion called *Prelude*
   - [The list of *Rust Prelude* can be found here](https://doc.rust-lang.org/stable/std/prelude/)
-  - **For things not in the *Prelude*, we have to manually import with `use` statements**
+- **For things not in the *Prelude*, we have to manually import with `use` statements**
 
 ### `fn main()`
 
@@ -101,14 +103,17 @@ fn main() {
 ```rs
 let x: i32 = 5;
 let y: i32 = 10;
-let res: i32 = y + 2;
+let result: i32 = y + 2;
 
 // The following will result in error: Trying to interpolate an expression
 // println!("x = {x} and y + 2 = {y + 2}");
 
 // This will work
-println!("x = {x} and y + 2 = {res}");
+println!("x = {x} and y + 2 = {result}");
+
 ```
+
+- **NOTE: To print the literal `{}`, we use `{{}}` to escape them**
 
 ### Storing Values With Variables
 
@@ -118,7 +123,7 @@ let mut guess: String = String::new();
 
 - `let`
   - Keyword to create a new variable
-  - Allows to bind a value to the variable
+  - Allows to bind a value to a variable
 
 ```rs
 // Immutable variable
@@ -127,10 +132,10 @@ let apple: i32 = 5;
 
 - **In Rust, variables are *immutable* by default**
   - Once we give the variable a value, the value will not change
-  - **It is almost like a constant, but a constant does not necessarily guarantee immutability**
+  - **It is similar to a constant, but a constant does not necessarily guarantee immutability**
     - `const` is evaluated during compile-time
     - Immutability is evaluated and assured even during runtime
-  - *To make a variable mutable, add `mut` before the variable name when defining it*
+- **To make a variable mutable, add `mut` before the variable name when defining it**
 
 ```rs
 // Mutable variable
@@ -181,22 +186,24 @@ io::stdin()
     - **Like variables, references are immutable by default**
       - `&guess` == Immutable
       - `&mut guess` == Mutable
-- **Handling Potential Failure with `Result`**
-  - `read_line()` also returns a `Result<usize, Error>` value
-  - `Result` is an *Enum*
-    - Can be in one of multiple possible states
-    - Each possible state is a *Variant*
-  - `Result` types is to encode error-handling information
-  - **`Result`’s variants are `Ok` and `Err`**
-    - `Ok` - Success and contains the successfully generated value
-    - `Err` - Failure and contains the failure information
-  - **Values of `Result` type have methods**
-    - `expect()` Method
-    - If `Err` - Crash the program and display the message argument
-    - If `Ok` - Return the value in `Ok` (Number of bytes in the user’s input)
-  - **If we do not call `expect`, the program will compile, but we will get a warning**
-    - This is part of Rust's *Error Handling*
-    - The proper way to handle this is with *Error Handling*
+
+### Handling Potential Failure with `Result`
+
+- `read_line()` also returns a `Result<usize, Error>` value
+- `Result` is an *Enum*
+  - Can be in one of multiple possible states
+  - Each possible state is a *Variant*
+- `Result` types is to encode error-handling information
+- **`Result`’s variants are `Ok` and `Err`**
+  - `Ok` - Success and contains the successfully generated value
+  - `Err` - Failure and contains the failure information
+- **Values of `Result` type have methods**
+  - `expect()` Method
+  - If `Err` - Crash the program and display the message argument
+  - If `Ok` - Return the value in `Ok` (Number of bytes in the user’s input)
+- **If we do not call `expect`, the program will compile, but we will get a warning**
+  - This is part of Rust's *Error Handling*
+  - The proper way to handle this is with *Error Handling*
 
 ## Generating a Secret Number
 
@@ -205,21 +212,22 @@ io::stdin()
   - Use a random number between 1 and 100
 - *Random number generator is not part of Rust's Standard Library*
   - But there are some third-party crates that we can use
-  - We can use the `rand` crate
+  - We can use the [`rand`](https://crates.io/crates/rand) crate
 
 ### Increasing Functionality with a Crate
 
 - **Crate**
   - Collection of Rust source code files
   - Similar to *Module* in Python
-- **Binary Crate**
-  - An executable crate
-- **Library Crate**
-  - Contains code that is intended to be used in other programs
-  - Cannot be executed on its own
-  - E.g. `rand` crate
+  - There are 2 types or Crates
+    - **Binary Crate**
+      - An executable crate
+    - **Library Crate**
+      - Contains code that is intended to be used in other programs
+      - Cannot be executed on its own
+      - E.g. [`rand`](https://crates.io/crates/rand) crate
 - **Cargo manages Crates**
-  - Modify the `Cargo.toml` file to include the `rand` crate as a dependency
+  - Modify the `Cargo.toml` file to include the crate as a dependency
   - **NOTE: `Cargo.toml` follows [*Semantic Versioning*](https://semver.org/)**
   - The default SemVer specifier is `^`
 
@@ -228,45 +236,48 @@ io::stdin()
 [package]
 name = "guessing-game"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+# See more keys and their definitions at
+# https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-rand = "^0.10.0"
+rand = "^0.10.2"
 ```
 
-- Everything that follows a `[header]` is part of that section that continues until another section starts
+- Everything that follows a `[<header>]` is part of that section that continues until another section starts
+  - `[dependencies]` specifies external crates and their versions that the project depends on
 - **Run `cargo build` after changing `Cargo.toml`**
-  - Cargo fetches the latest compatible versions of everything that the dependency needs from the *registry*
-  - The *registry* is a copy of data from [Crates.io](https://crates.io/)
+  - Cargo fetches the latest compatible versions of everything that the dependency needs from the *registry*, a copy of data from [Crates.io](https://crates.io/)
   - Collection of open-sourced Rust projects
 - **After updating the registry, Cargo checks the `[dependencies]` section**
   - Downloads any crates listed that are not already downloaded
-  - Also grabs all the dependencies of the dependencies (all the dependency-chain)
-  - Rust compiles them and then compiles the project with the dependencies available
-  - **Cargo only downloads or builds when needed and what changed**
+  - Grabs all the dependency-tree
+  - Rust compiles them and then compiles the project
+  - **Cargo only downloads or builds as needed on what has changed**
 
 ### Ensuring Reproducible Builds with the `Cargo.lock` File
 
 - Rebuild the same artifact every time you or anyone else builds your code
-  - Only use the specified versions of the dependencies
-  - **Rust creates the `Cargo.lock` file for the first time `cargo build` is run**
+- Only use the specified versions of the dependencies
+- **Rust creates the `Cargo.lock` file for the first time `cargo build` is run**
   - All the versions of the dependencies that fit the criteria
   - **If `Cargo.lock` file exists, Rust uses the versions specified rather than doing all the work of figuring out versions again**
-- Allows to have a reproducible build automatically
+  - Allows to have a reproducible build automatically
 - **`Cargo.lock` is often checked into source control**
   - Check-in for binaries/applications
   - Ignore for libraries
   - **When in doubt, check `Cargo.lock` in version control**
   - For details: [Why have `Cargo.lock` in version control?](https://doc.rust-lang.org/cargo/faq.html#why-have-cargolock-in-version-control)
-- **To force to redownload all dependencies, delete `Cargo.lock` and re-run `cargo build`**
-  - Or run `cargo update`
 
-### Updating a Crate to Get a New Version
+### Updating Dependencies to Get Newer Versions
 
 ```sh
+# Update all dependencies
 cargo update
+
+# Update specific dependencies
+cargo update -p package_name
 ```
 
 - Ignores the `Cargo.lock` file
@@ -315,6 +326,7 @@ fn main() {
   - Gives the particular random number generator
   - Seeded by the operating system
   - Call the `random_range(start..=end)` method on the random number generator
+    - Defined in the `rand::RngExt` Trait
     - Takes a *range* expression as an argument
     - Generates a random number in the range
     - `start..=end` means *inclusive on both end*
@@ -392,13 +404,15 @@ fn main() {
     - User presses `Enter` when submitting the guess
     - This creates a `\n` in the user input
     - We need to remove the extra `\n` before converting to `u32`
-- **When comparing `guess` and `secret_num`, Rust will infer that `secret_num` should be a `u32` as well**
-  - Comparison between 2 values of the same type
-- **`parse()` only works on characters that can logically be converted into numbers**
-  - It will fail if the string is not a number
-  - Same as with `read_line()`, it returns a `Result` type
-    - `parse()` returns an `Err Result` variant if it **cannot** create a number from the string
-    - `parse()` returns an `Ok Result` variant if it **can** create a number from the string
+  - `parse()` method on strings converts a string to another type
+    - The type we want to parse into is specified in the receiving variable type
+    - **When comparing `guess` and `secret_num`, Rust will infer that `secret_num` should be a `u32` as well**
+    - Comparison between 2 values of the same type
+    - **`parse()` only works on characters that can logically be converted into numbers**
+      - It will fail if the string is not a number
+      - Same as with `read_line()`, it returns a `Result` type
+        - `parse()` returns an `Err Result` variant if it **cannot** create a number from the string
+        - `parse()` returns an `Ok Result` variant if it **can** create a number from the string
 
 ## Loop: Allowing Multiple Guesses
 
