@@ -40,15 +40,11 @@
 
 - Variables are declared using `let` keyword
   - Types can be explicitly declared or implicitly inferred
-  - It is better to explicitly declare the type for ease of reading
-- **By default, variables in Rust are immutable**
-  - Once a value is bound to a *name*, it cannot be changed
-  - **Reassigning to an immutable variable is a compile-time error**
-  - Immutability ensures safety and easy-concurrency
-  - *Mutability can lead to bugs if not managed properly*
-  - Cause of bug can be difficult to track down after the fact
-  - Immutability-by-default makes code easier to reason with
+  - It is better to explicitly declare the type for ease of understanding
 - **Variable Naming Convention: *Use all-lowercase with underscores between words***
+- **By default, variables in Rust are immutable**
+  - The value of an immutable variable cannot be changed
+  - Attempting to change the value creates a compile-time error
 
 ```rs
 fn main() {
@@ -68,11 +64,12 @@ fn main() {
 }
 ```
 
-- **We can still change variables to be mutable when needed**
+- **However, we can still change variables to be mutable when needed**
   - But we have to ***explicitly*** make a variable mutable: **Add `mut` keyword**
   - Explicitly conveys intent that other parts of the code will change this variable
   - Deciding to use mutability is up to you
   - Depends on what you think is clearest in that particular situation
+  - **The Rust compiler guarantees that when you state that a value won’t change, it really won’t change**
 
 ```rs
 fn main() {
@@ -93,6 +90,13 @@ fn main() {
 }
 ```
 
+- When a variable is immutable, once a value is bound to it, it cannot be changed
+  - **Reassigning to an immutable variable is a compile-time error**
+  - Immutability ensures safety and easy-concurrency
+  - *Mutability can sometimes lead to bugs if not managed properly*
+  - Cause of bug can be difficult to track down after the fact
+  - Immutability-by-default makes code easier to reason with
+
 ### Constants
 
 - Constants are declared using `const` keyword
@@ -103,7 +107,7 @@ fn main() {
   - **Cannot be set `mut`: Constants are *always* immutable**
   - Constants are basically *Always-Read-Only* values
 - Differences with *Immutable Variables*:
-  - **The value of a constant must be determined once at compile-time**
+  - **The value of a constant must be determined at compile-time**
   - **Can only be set to a *limited set of fixed-constant expressions***
   - **Cannot be the results of runtime computations**
 - **Constant Naming Convention: *Use all-uppercase with underscores between words***
@@ -123,11 +127,11 @@ println!("PI = {PI}");
 println!();
 ```
 
-- There is a [limited set of expressions](https://doc.rust-lang.org/reference/const_eval.html) that can be used for constants
+- **There is a [limited set of expressions](https://doc.rust-lang.org/reference/const_eval.html) that can be used for constants**
   - Only a subset of all expressions can be evaluated at compile-time
   - Can make code easier to understand
   - Gives meaning to the value of the derived constant
-- **Constants are valid for the duration of the program-run**
+- **Constants are valid for the entire duration of the program-run**
   - **But only valid within the scope in which they were declared**
 - Useful for storing global values that are used throughout the app
   - Conveys the meaning of that value to future maintainers of the code

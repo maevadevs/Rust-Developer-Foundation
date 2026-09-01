@@ -22,8 +22,7 @@ fn main() {
     println!();
 
     // Reassigning to an immutable variable is a compile-time error
-    // my_int = 6;
-    // => error[E0384]: cannot assign twice to immutable variable `my_int`
+    // my_int = 6; // => error[E0384]: cannot assign twice to immutable variable `my_int`
 
     // Mutable Variable
     // ----------------
@@ -67,7 +66,7 @@ fn main() {
     {
         // In a different scope, this also shadows the same my_int above
         // In this block, the "outside" variable temporarily halt from being seen
-        let my_int: i32 = my_int * 2;
+        let my_int: i32 = my_int * 22;
         println!("Inside-Scope: my_int = {my_int}");
     }
     // After the scope ends, the shadowing also ends
@@ -80,9 +79,9 @@ fn main() {
     println!("Example of Changing Variable Type While Shadowing:");
     println!("--------------------------------------------------");
     let spaces: &str = "   x    ";          // String type: Non-mutable
-    println!("Before: spaces = {spaces}");
+    println!("Before: spaces and &str = {spaces}");
     let spaces: usize = spaces.len();       // Number type: Non-mutable
-    println!("After: spaces = {spaces}");
+    println!("After: spaces and usize = {spaces}");
 
     println!();
 }
