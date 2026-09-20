@@ -106,7 +106,7 @@ fn main() {
   - Constants are basically *Always-Read-Only* values
 - Differences with *Immutable Variables*:
   - **The value of a constant must be determined at compile-time**
-  - **Can only be set to a *limited set of fixed-constant expressions***
+  - **Can only be set to a [*limited set of fixed-constant expressions*](https://doc.rust-lang.org/reference/const_eval.html)**
   - **Cannot be the results of runtime computations**
 - **Constant Naming Convention: *Use all-uppercase with underscores between words***
 
@@ -144,7 +144,7 @@ println!();
   - **Until either it itself is *shadowed* or the scope ends**
 - **NOTE:**
   - **Rust is a block-scoped language**
-  - **A new scope can be created using any block `{}`**
+  - **A new scope can be created using any block `{ }`**
 
 ```rs
 fn main() {
@@ -208,9 +208,10 @@ let mut spaces = "   ";         // String type
 
 - Rust is a statically-typed language
   - **Every value in Rust is of a specific data type**
-  - **All types of all variables must be known at compile time**
+  - **All the types of all variables must be known at compile-time**
 - Compiler can infer the type based on the initial value
   - *However, when many types are possible (E.g. integers), we must specify a type annotation*
+  - It is better to explicitly declare the type for ease of understanding
 
 ```rs
 // Explicit type: Unsigned Integer-32
@@ -239,18 +240,18 @@ let guess: u32 = "42".parse().expect("Not a number!");
 - Signed numbers are stored using *[Two’s Complement](https://en.wikipedia.org/wiki/Two%27s_complement)* representation
 - **Default Integer Type: `i32`**
 
-Length|Signed|Unsigned
-:-|:-:|:-:
-8-bit|`i8`|`u8`
-16-bit|`i16`|`u16`
-32-bit|`i32`|`u32`
-64-bit|`i64`|`u64`
-128-bit|`i128`|`u128`
-archvar|`isize`|`usize`
+| Length  | Signed Type | Unsigned Type |
+| :------ | :---------: | :-----------: |
+| 8-bit   |    `i8`     |     `u8`      |
+| 16-bit  |    `i16`    |     `u16`     |
+| 32-bit  |    `i32`    |     `u32`     |
+| 64-bit  |    `i64`    |     `u64`     |
+| 128-bit |   `i128`    |    `u128`     |
+| archvar |   `isize`   |    `usize`    |
 
 - **With $n$ as the length in bit:**
-  - **Each *signed variant* can store numbers from $-(2^{n-1})$ to $2^{n-1} - 1$ inclusive**
-  - **Each *unsigned variant* can store numbers from $0$ to $2^{n} - 1$ inclusive**
+  - **Each *signed variant* can store numbers from $-(2^{n-1})$ ... $2^{n-1} - 1$ inclusive**
+  - **Each *unsigned variant* can store numbers from $0$ ... $2^{n} - 1$ inclusive**
 - *`isize` and `usize` depend on the architecture of the computer*
   - 64 bits on 64-bit architecture
   - 32 bits on 32-bit architecture
@@ -262,13 +263,13 @@ archvar|`isize`|`usize`
   - `1_000_000`
   - `987_654_321`
 
-Supported Integer literals|Examples
-:-:|:-
-Decimal|`98222`, `98_222`
-Hex|`0xff`, `0xef_54_ab`
-Octal|`0o77`, `0o7_7_7`
-Binary|`0b11110000`, `0b1111_0000`
-Byte (`u8` only)|`b'A'`
+| Supported Integer literals | Examples                    |
+| :------------------------: | :-------------------------- |
+|          Decimal           | `98222`, `98_222`           |
+|        Hexadecimal         | `0xff`, `0xef_54_ab`        |
+|           Octal            | `0o77`, `0o7_7_7`           |
+|           Binary           | `0b11110000`, `0b1111_0000` |
+|      Byte (`u8` only)      | `b'A'`                      |
 
 ```rs
 // Examples of Signed Integers
@@ -313,12 +314,12 @@ println!("u128 = {ullong}");
 - ***NOTE: Relying on integer overflow’s wrap-around behavior is considered an error***
   - **All possible overlfow should be handled explicitly**
 
-Handling Approach|Description
-:-|:-
-`wrapping_*` Methods|Wrap in all modes. E.g `wrapping_add()`
-`checked_*` Methods|Return the `None` value if there is overflow
-`overflowing_*` Methods|Return the value and a boolean indicating whether there was overflow
-`saturating_*` Methods|Saturate at the value’s minimum or maximum values
+| Handling Approach       | Description                                                          |
+| :---------------------- | :------------------------------------------------------------------- |
+| `wrapping_*` Methods    | Wrap in all modes. E.g `wrapping_add()`                              |
+| `checked_*` Methods     | Return the `None` value if there is overflow                         |
+| `overflowing_*` Methods | Return the value and a boolean indicating whether there was overflow |
+| `saturating_*` Methods  | Saturate at the value’s minimum or maximum values                    |
 
 #### Floats
 
@@ -329,10 +330,10 @@ Handling Approach|Description
 - **All floats are signed**
 - **Represented according to the IEEE-754 standard**
 
-Length|Type
-:-|:-
-32-bit|`f32`
-64-bit|`f64`
+| Length | Type  |
+| :----- | :---- |
+| 32-bit | `f32` |
+| 64-bit | `f64` |
 
 ```rs
 // Examples of Floats
@@ -393,7 +394,7 @@ println!("43.5 % 5.6 = {remainder_f64}");
 
 - 2 possible values: `true` or `false`
 - 1 byte in size
-- **Specified using `bool`**
+- **Specified using `bool`** type
 - **Booleans are mostly used for *Conditionals***
 
 ```rs
@@ -512,10 +513,10 @@ println!("z == tup.2 ? {equal_z}");
   - To ensure we always have a fixed number of elements
 - **The array's type is specified with square brackets `[<type>; <length>]`**
 
-Placeholder|Meaning
-:-|:-
-`<type>`|The type of the contained elements
-`<length>`|The number of elements in the array (array-length)
+| Placeholder | Meaning                                            |
+| :---------- | :------------------------------------------------- |
+| `<type>`    | The type of the contained elements                 |
+| `<length>`  | The number of elements in the array (array-length) |
 
 ```rs
 // Example of an Array
@@ -531,6 +532,7 @@ let arr_10: [i8; 10] = [0; 10];
 
 - **NOTE: A `vector` is the dynamic version of an `array`**
   - Allowed to grow and shrink in size
+  - Heap-based instead of Stack-based
   - Provided by the standard library
   - Most of the time, a `vector` is what we want to use
   - **Arrays are more useful when the number of elements will not change**
@@ -575,9 +577,10 @@ println!("second = {second}");
 ```
 
 - **NOTE: Entering index beyond the end of the array result in *Runtime `panic` with `index out of bounds` error***
-  - Rust checks for index bounds during runtime
+  - Rust checks for index boundaries during runtime
   - In other low-level languages, this check is non-existent
   - Rust ensures proper memory safety principles
+  - This check happens at runtime
 
 ## Functions
 
@@ -663,10 +666,10 @@ fn print_labeled_measurement(value: i32, unit_label: &str) {
 - **Rust is an expression-based language**
   - *It is important to understand the difference between expression and statement in Rust*
 
-Term|Definition
-:-|:-
-**Expressions**|Evaluate and *result in a value*
-**Statements**|Instructions that perform some action and *do not return a value*
+| Term            | Definition                                                        |
+| :-------------- | :---------------------------------------------------------------- |
+| **Expressions** | Evaluate and *result in a value*                                  |
+| **Statements**  | Instructions that perform some action and *do not return a value* |
 
 ```rs
 // Example of Statements
@@ -783,11 +786,11 @@ fn plus_one(x: i32) -> i32 {
 - Mainly helpful for reading codes and for documentation
 - There are 3 types of comments in Rust
 
-Type|Description
-:-|:-
-**Inline Comment**|- Start with `//`<br>- Ignored until the end of the line
-**Block Comment**|- Start with `/*`<br>- Ignored until `*/`<br>- Does not nest
-**Docstring Comment**|- Used for documenting functions and "objects"<br>- Start with `///`<br>- Same effect as *Inline Comments*<br>- These are picked-up by `rustdoc` and compiled into documentations<br>- Supports Markdown<br>- Rust codes can be put inside triple-ticks <code>```</code>
+| Type                  | Description                                                                                                                                                                                                                                                              |
+| :-------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Inline Comment**    | - Start with `//`<br>- Ignored until the end of the line                                                                                                                                                                                                                 |
+| **Block Comment**     | - Start with `/*`<br>- Ignored until `*/`<br>- Does not nest                                                                                                                                                                                                             |
+| **Docstring Comment** | - Used for documenting functions and "objects"<br>- Start with `///`<br>- Same effect as *Inline Comments*<br>- These are picked-up by `rustdoc` and compiled into documentations<br>- Supports Markdown<br>- Rust codes can be put inside triple-ticks <code>```</code> |
 
 ```rs
 // Inline Comment
