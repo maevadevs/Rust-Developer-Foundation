@@ -1,7 +1,5 @@
 # Common Programming Concepts
 
----
-
 - [Variables and Mutability](#variables-and-mutability)
   - [Constants](#constants)
   - [Shadowing](#shadowing)

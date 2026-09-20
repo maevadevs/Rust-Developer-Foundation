@@ -1,7 +1,5 @@
 # Project: Guessing Game
 
----
-
 - [How It Works](#how-it-works)
 - [Project Setup](#project-setup)
 - [Processing A Guess](#processing-a-guess)

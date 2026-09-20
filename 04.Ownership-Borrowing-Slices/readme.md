@@ -1,7 +1,5 @@
 # Ownership, Borrowing, and Slices
 
----
-
 - [What Is Ownership](#what-is-ownership)
   - [Stack and Heap](#stack-and-heap)
     - [Stack](#stack)

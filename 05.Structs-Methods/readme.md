@@ -1,7 +1,5 @@
 # Structs and Methods
 
----
-
 - [Defining and Instantiating Structs](#defining-and-instantiating-structs)
   - [Struct Instantiation Is An *Expression*](#struct-instantiation-is-an-expression)
   - [Creating Instances from Other Instances with *Struct Update Syntax*](#creating-instances-from-other-instances-with-struct-update-syntax)
