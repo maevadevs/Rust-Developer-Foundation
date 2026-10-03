@@ -699,7 +699,7 @@ let x = (let y = 6);
   - Expressions can be part of a statement
   - Any math operation is an expression
   - Calling a function or macro is also an expression
-  - *A new block scope created with curly-braces `{}` is also an expression*
+  - *A new block scope created with curly-braces `{ }` is also an expression*
 - **Expressions do not end with semicolons**
   - *An expression with a semicolon is a statement*
   - *Statements do not return a value*
